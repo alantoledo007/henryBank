@@ -1,0 +1,23 @@
+{
+  "name": "henry-bank",
+  "version": "1.0.0",
+  "description": "Billetera virtual",
+  "main": "index.js",
+  "dependencies": {
+    "moleculer": "^0.14.11"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alantoledo007/henryBank.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alantoledo007/henryBank/issues"
+  },
+  "homepage": "https://github.com/alantoledo007/henryBank#readme"
+}
