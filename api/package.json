@@ -1,23 +1,45 @@
 {
-  "name": "henry-bank",
+  "name": "HenryBank",
   "version": "1.0.0",
-  "description": "Billetera virtual",
-  "main": "index.js",
-  "dependencies": {
-    "moleculer": "^0.14.11"
-  },
-  "devDependencies": {},
+  "description": "My Moleculer-based microservices project",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "moleculer-runner --repl --hot services/**/*.service.js",
+    "start": "moleculer-runner",
+    "cli": "moleculer connect NATS",
+    "ci": "jest --watch",
+    "test": "jest --coverage",
+    "dc:up": "docker-compose up --build -d",
+    "dc:logs": "docker-compose logs -f",
+    "dc:down": "docker-compose down"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/alantoledo007/henryBank.git"
-  },
+  "keywords": [
+    "microservices",
+    "moleculer"
+  ],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/alantoledo007/henryBank/issues"
+  "devDependencies": {
+    "jest": "^26.4.2",
+    "jest-cli": "^26.4.2",
+    "moleculer-repl": "^0.6.4"
   },
-  "homepage": "https://github.com/alantoledo007/henryBank#readme"
+  "dependencies": {
+    "moleculer": "^0.14.10",
+    "moleculer-db": "^0.8.10",
+    "moleculer-db-adapter-mongo": "^0.4.7",
+    "moleculer-db-adapter-mongoose": "^0.8.8",
+    "moleculer-web": "^0.9.0",
+    "mongoose": "^5.10.7",
+    "nats": "^1.4.12"
+  },
+  "engines": {
+    "node": ">= 10.x.x"
+  },
+  "jest": {
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node",
+    "rootDir": "./services",
+    "roots": [
+      "../test"
+    ]
+  }
 }
