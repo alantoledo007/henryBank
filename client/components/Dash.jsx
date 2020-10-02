@@ -7,11 +7,11 @@ import { Link } from 'react-router-native';
 //actions
 import {setName} from '../redux/actions/user';
 
-function Home({name,setName}){
+function Dash({name,setName}){
     return (
         <View style={styles.container}>
 
-            <Text style={{ fontSize:40,flex:1 }}>HenryBank</Text>
+            <Text style={{ fontSize:40,flex:1 }}>Tablero</Text>
             
             <View style={styles.buttonsContainer}>
                 <View>
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Home);
+)(Dash);
