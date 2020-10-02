@@ -10,15 +10,19 @@ const User = require("../models/User");
 
 module.exports = {
 	name: "users",
-	adapter: new MongooseAdapter("mongodb://localhost/moleculer-demo"),
-	mixins: [DbMixin("products")],
+	adapter: new MongooseAdapter("mongodb://localhost/henry-bank"),
+	mixins: [DbService],
 	model:User,
 
 	/**
 	 * Settings
 	 */
 	settings: {
-
+		fields: [
+			"_id",
+			"name",
+			"email"
+		],
 	},
 
 	/**

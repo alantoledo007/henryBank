@@ -22,7 +22,7 @@ module.exports = mongoose.model("User", mongoose.Schema({
         default: 'client'
     },
     balance: {type: 'number', default: 0.00},
-    email: {type: 'string', unique:true},
+    email: {type: 'string', unique:true, required:true},
     address_street: {type: 'string'},
     address_number: {type: 'number'},
     locality: {type:'string'},
