@@ -674,6 +674,7 @@
 						}
 					}
 
+					console.log(body ? JSON.stringify(body) : null);
 					return fetch(url, {
 						method,
 						body: body ? JSON.stringify(body) : null,
