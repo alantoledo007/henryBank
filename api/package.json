@@ -1,5 +1,5 @@
 {
-  "name": "HenryBank",
+  "name": "henrybank",
   "version": "1.0.0",
   "description": "My Moleculer-based microservices project",
   "scripts": {
