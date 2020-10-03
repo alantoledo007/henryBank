@@ -1,5 +1,6 @@
-const {User} = require('../../db');
+const { User } = require("../../db");
 module.exports = async (ctx) => {
-    const user = await User.create(ctx.params);
-    return user;
-}
+	const newUser = await User.create(ctx.params);
+	newUser.password = await newUser.encryptPassword(newUser.password);
+	await newUser.save();
+};
