@@ -1,7 +1,8 @@
 "use strict";
 const DbMixin = require("../mixins/db.mixin");
 const DbService = require("moleculer-db");
-const MongooseAdapter = require("moleculer-db-adapter-mongoose");
+const SequelizeAdapter = require('moleculer-db-adapter-sequelize');
+const config = require('../config');
 
 const User = require("../models/User");
 /**
@@ -10,7 +11,7 @@ const User = require("../models/User");
 
 module.exports = {
 	name: "users",
-	adapter: new MongooseAdapter("mongodb://localhost/henry-bank"),
+	adapter: new SequelizeAdapter(config.db_uri),
 	mixins: [DbService],
 	model:User,
 
