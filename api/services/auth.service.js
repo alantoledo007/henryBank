@@ -75,6 +75,18 @@ module.exports = {
 				country:"string"
 			},
 			handler: controller.client_registration
+		},
+		login: {
+			rest: {
+				method: "POST",
+				path: "/login"
+			},
+			params: {
+				email: "email",
+				password: "string"
+			},
+			handler:controller.login
+			
 		}
 	},
 
