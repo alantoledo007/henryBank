@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
   },
   titleWrapper: {
-    flex: 0.7,
+    // flex: 0.7,
     justifyContent: "flex-end",
     paddingTop: 10,
   },
@@ -143,11 +143,11 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_600SemiBold",
   },
   inputWrapper: {
-    flex: 1.7,
+    // flex: 1.7,
     justifyContent: "flex-start",
   },
   inputs: {
-    flex: 0.5,
+    // flex: 0.5,
     justifyContent: "space-around",
   },
   input: {
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_600SemiBold",
   },
   buttonsContainer: {
-    flex: 2,
+    // flex: 2,
     flexDirection: "row",
   },
   forgotPass: {
