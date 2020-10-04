@@ -50,12 +50,32 @@ module.exports = {
                 path: "/register",
             },
 			params: {
-				name: "string"
+				email: "string",
+				password:"string"
 			},
 			/** @param {Context} ctx  */
 			handler: controller.register
 		},
-
+		client_registration:{
+			rest:{
+				method:"PUT",
+				path:"/client_registration",
+			},
+			params:{
+				doc_type:"string",
+				doc_number:"number",
+				name:"string",
+				surname:"string",
+				birthdate:"string",
+				phone_number:"number",
+				address_street:"string",
+				address_number:"number",
+				locality:"string",
+				province:"string",
+				country:"string"
+			},
+			handler: controller.client_registration
+		},
 		login: {
 			rest: {
 				method: "POST",
@@ -67,6 +87,17 @@ module.exports = {
 			},
 			handler:controller.login
 			
+		},
+		restore_password: {
+			rest:{
+				method: "PUT",
+				path:"/restore"
+			},
+			params:{
+				email : "string",
+				newPassword: "string"
+			},
+			handler: controller.restore_password
 		}
 	},
 
