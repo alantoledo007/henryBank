@@ -35,6 +35,9 @@ function RegisterStepTwo({name,setName}){
                 <TextInput
                    placeholder='Telefono'
                    style={styles.input}
+                   keyboardType='numeric'
+                   
+
 
                 />
 
@@ -57,6 +60,7 @@ function RegisterStepTwo({name,setName}){
                 <TextInput
                    placeholder='Documento'
                    style={styles.input}
+                   keyboardType='numeric'
                 />
                 
             </View>

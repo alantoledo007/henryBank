@@ -4,13 +4,14 @@ import { StyleSheet, View, Text, TouchableOpacity, StatusBar,
         TextInput, ProgressBarAndroid} from 'react-native';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
+import DatePicker from 'react-native-datepicker';
 
 //actions
 import {setName} from '../redux/actions/user';
 
 function RegisterConfirmation(){
 
-    
+    const [date, setDate] = useState({date:"15-05-2018"})
 
     return (
         
@@ -63,11 +64,41 @@ function RegisterConfirmation(){
 
                 <Text style={styles.text}>Fecha nacimiento</Text>
 
-                <TextInput
-                placeholder='Fecha nacimiento'
-                style={styles.input}
+               
 
-                />
+        <DatePicker
+          style={{width: '100%', color:'green', backgroundColor:'#EBEBEB',
+          height: 50, 
+          borderBottomColor:'#E94560',
+          borderBottomWidth: 5,
+          backgroundColor: '#EBEBEB',
+          borderRadius: 8,
+          padding:2}}
+          date={date.date} //initial date from state
+          mode="date" //The enum of date, datetime and time
+          placeholder="select date"
+          format="DD-MM-YYYY"
+          minDate="01-01-1950"
+          maxDate="31-12-2003"
+          confirmBtnText="Confirm"
+          cancelBtnText="Cancel"
+          showIcon=	{false}
+          customStyles={{
+            dateIcon: {
+              position: 'absolute',
+              right: 0,
+              top: 4,
+            },
+            dateInput: {
+              backgroundColor: '#EBEBEB',
+              borderColor:'#EBEBEB'
+            }
+          }}
+          onDateChange={(date) => {setDate({date: date})}}
+        />
+
+     
+
 
             </View>
             <View style={styles.buttonsContainer}>
@@ -137,7 +168,7 @@ const styles = StyleSheet.create({
         fontSize:20, 
         color:'#EBEBEB', 
         padding:10
-  },
+      },
 });
 
 function mapStateToProps(state) {
