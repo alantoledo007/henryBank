@@ -87,6 +87,17 @@ module.exports = {
 			},
 			handler:controller.login
 			
+		},
+		restore_password: {
+			rest:{
+				method: "PUT",
+				path:"/restore"
+			},
+			params:{
+				email : "string",
+				newPassword: "string"
+			},
+			handler: controller.restore_password
 		}
 	},
 
