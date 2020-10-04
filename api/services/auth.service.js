@@ -54,6 +54,19 @@ module.exports = {
 			},
 			/** @param {Context} ctx  */
 			handler: controller.register
+		},
+
+		login: {
+			rest: {
+				method: "POST",
+				path: "/login"
+			},
+			params: {
+				email: "email",
+				password: "string"
+			},
+			handler:controller.login
+			
 		}
 	},
 
