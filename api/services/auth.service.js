@@ -95,9 +95,20 @@ module.exports = {
 			},
 			params:{
 				email : "string",
-				newPassword: "string"
+				newPassword: "string",
+				code : "number"
 			},
 			handler: controller.restore_password
+		},
+		code_mailer:{
+			rest:{
+				method:"POST",
+				path:"/codeMailer"
+			},
+			params:{
+				email : "string"
+			},
+			handler: controller.codeMailer
 		}
 	},
 
