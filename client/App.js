@@ -7,6 +7,8 @@ import Register from './components/Register';
 import RegisterConfirmation from './components/RegisterConfirmation';
 import Login from './components/Login';
 import Dash from './components/Dash';
+import RegisterStepTwo from './components/RegisterStepTwo';
+import RegisterStepThree from './components/RegisterStepThree';
 import { Provider } from 'react-redux';
 import store from './redux/store/index';
 
@@ -20,6 +22,8 @@ export default function App() {
           <Route exact path="/register-confirmation" component={RegisterConfirmation} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/dash" component={Dash} />
+          <Route exact path="/register-step-two" component={RegisterStepTwo} />
+          <Route exact path="/register-step-three" component={RegisterStepThree} />
         </NativeRouter>
       </Provider>
     </React.Fragment>
