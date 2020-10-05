@@ -56,10 +56,10 @@ module.exports = {
 			/** @param {Context} ctx  */
 			handler: controller.register
 		},
-		client_registration:{
+		register_confirmation:{
 			rest:{
 				method:"PUT",
-				path:"/client_registration",
+				path:"/register_confirmation",
 			},
 			params:{
 				doc_type:"string",
@@ -74,7 +74,7 @@ module.exports = {
 				province:"string",
 				country:"string"
 			},
-			handler: controller.client_registration
+			handler: controller.register_confirmation
 		},
 		login: {
 			rest: {
