@@ -20,6 +20,7 @@ import { login } from "../redux/actions/auth";
 //Otros
 import axios from "axios";
 import { AppLoading } from "expo";
+import env from '../env';
 
 //Estilos
 import colors from "./style/colors";
@@ -62,7 +63,7 @@ function Login({ login }) {
 
   const onSubmit = (data) => {
     axios
-      .post("http://192.168.0.19:3000/api/auth/login", JSON.stringify(data), {
+      .post(env.API_URI + "/auth/login", JSON.stringify(data), {
         headers: {
           "Content-Type": "application/json",
         },

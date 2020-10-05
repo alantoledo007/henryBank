@@ -11,7 +11,7 @@ function Register({name,setName}){
     return (
         <View style={styles.container}>
 
-            <Text style={{ fontSize:40,flex:1 }}>Registrarse</Text>
+            <Text style={{ fontSize:40,flex:1 }}>Registrarse: {name}</Text>
             
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity onPress={setName}>
@@ -33,6 +33,7 @@ function Register({name,setName}){
 
 function mapStateToProps(state) {
     return {
+        name: state.auth.name
     }
 }
 
