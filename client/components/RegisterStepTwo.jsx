@@ -1,14 +1,15 @@
 //general
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
     TextInput, Picker, ProgressBarAndroid} from 'react-native';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 
 //actions
-import {setName} from '../redux/actions/user';
+// import {setName} from '../redux/actions/user';
 
-function RegisterStepTwo({name,setName}){
+function RegisterStepTwo(){
+
 
     const [selectedValue, setSelectedValue] = useState("");
 
@@ -49,7 +50,6 @@ function RegisterStepTwo({name,setName}){
                         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
                         
                     >
-                        <Picker.Item label="Tipo de documento" />
                         <Picker.Item label="DNI" value="DNI" />
                         <Picker.Item label="Pasaporte" value="Pasaporte" />
                     </Picker>
@@ -66,18 +66,18 @@ function RegisterStepTwo({name,setName}){
             </View>
 
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={setName}>
+                <TouchableOpacity >
                     <Link to="/register-confirmation" style={styles.button}>
                         <Text style={styles.buttonText}>Atras</Text>
                     </Link>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={setName}>
+                <TouchableOpacity >
                     <Link to="/register-step-three" style={styles.button}>
                         <Text style={styles.buttonText}>Siguiente</Text>
                     </Link>
                 </TouchableOpacity>    
             </View>
-            <Text style={{  color:'#FFBD69', padding: 20 }}>HenryBank</Text>
+            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>
     
         </View>
     )
@@ -148,13 +148,13 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        name: state.user.name
+        
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        setName: () => dispatch(setName())
+        
     }
 }
 

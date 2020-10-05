@@ -1,17 +1,38 @@
 //general
 import React, { useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
-        TextInput, ProgressBarAndroid} from 'react-native';
-import { connect } from 'react-redux';
+        TextInput, ProgressBarAndroid, Button} from 'react-native';
+import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-native';
-import DatePicker from 'react-native-datepicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
-//actions
-import {setName} from '../redux/actions/user';
+
 
 function RegisterConfirmation(){
 
-    const [date, setDate] = useState({date:"15-05-2018"})
+    const dispatch = useDispatch()
+
+    const [date, setDate] = useState(new Date(1598051730000));
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+    setDate(currentDate);
+    };
+
+    const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+    };
+
+    const showDatepicker = () => {
+    showMode('date');
+    };
+    
+    const [name, onChangeName] = useState('');
+    const [surname, onChangeSurname] = useState('');
 
     return (
         
@@ -51,6 +72,10 @@ function RegisterConfirmation(){
                 <TextInput
                    placeholder='Nombre'
                    style={styles.input}
+                   value={name}
+                   onChangeText={(text) => onChangeName(text)}
+                   
+
 
                 />
 
@@ -59,57 +84,40 @@ function RegisterConfirmation(){
                 <TextInput
                    placeholder='Apellido'
                    style={styles.input}
+                   onChangeText={(text) => onChangeSurname(text)}
 
                 />
 
                 <Text style={styles.text}>Fecha nacimiento</Text>
 
-               
-
-        <DatePicker
-          style={{width: '100%', color:'green', backgroundColor:'#EBEBEB',
-          height: 50, 
-          borderBottomColor:'#E94560',
-          borderBottomWidth: 5,
-          backgroundColor: '#EBEBEB',
-          borderRadius: 8,
-          padding:2}}
-          date={date.date} //initial date from state
-          mode="date" //The enum of date, datetime and time
-          placeholder="select date"
-          format="DD-MM-YYYY"
-          minDate="01-01-1950"
-          maxDate="31-12-2003"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
-          showIcon=	{false}
-          customStyles={{
-            dateIcon: {
-              position: 'absolute',
-              right: 0,
-              top: 4,
-            },
-            dateInput: {
-              backgroundColor: '#EBEBEB',
-              borderColor:'#EBEBEB'
-            }
-          }}
-          onDateChange={(date) => {setDate({date: date})}}
-        />
-
-     
-
+        <View>
+            <View style={styles.input}>
+                <TouchableOpacity onPress={showDatepicker}>
+                        <Text style={styles.date}>{date.toDateString()}</Text>                 
+                </TouchableOpacity>
+            </View>
+            {show && (
+                <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+                />
+            )}
+            </View>    
 
             </View>
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity >
-                    <Link to="/register-step-two" style={styles.button}>
+                    <Link to="/register-step-two" style={styles.button} >
                         <Text style={styles.buttonText}>Siguiente</Text>
                     </Link>
                 </TouchableOpacity>
             </View>
             
-            <Text style={{  color:'#FFBD69', padding: 20 }}>HenryBank</Text>
+            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>
             
 
         </View>
@@ -144,11 +152,9 @@ const styles = StyleSheet.create({
             alignItems: 'center',            
       },
       form: {
-            flex: 1,
             alignContent:'center',
             justifyContent: 'center',
             width: '90%',
-            height: 400,
       },
       input: {
            height: 50, 
@@ -169,17 +175,22 @@ const styles = StyleSheet.create({
         color:'#EBEBEB', 
         padding:10
       },
+      date: {
+          textAlign:'center',
+          color: 'gray',
+      }
 });
 
 function mapStateToProps(state) {
     return {
-        name: state.user.name
+       
+    
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        setName: () => dispatch(setName())
+      
     }
 }
 

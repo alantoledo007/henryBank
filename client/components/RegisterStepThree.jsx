@@ -5,10 +5,8 @@ import { StyleSheet, View, Text, Button, TouchableOpacity, StatusBar,
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 
-//actions
-import {setName} from '../redux/actions/user';
 
-function RegisterStepThree({name,setName}){
+function RegisterStepThree(){
 
     const [selectedValue, setSelectedValue] = useState("");
 
@@ -63,18 +61,18 @@ function RegisterStepThree({name,setName}){
             </View>
 
             <View style={styles.buttonsContainer}>
-                    <TouchableOpacity onPress={setName}>
+                    <TouchableOpacity >
                         <Link to="/register-step-two" style={styles.button}>
                             <Text style={styles.buttonText}>Atras</Text>
                         </Link>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={setName}>
+                    <TouchableOpacity >
                         <Link to="/" style={styles.button}>
                             <Text style={styles.buttonText}>Completar registro</Text>
                         </Link>
                     </TouchableOpacity>           
             </View>  
-            <Text style={{  color:'#FFBD69', padding: 20 }}>HenryBank</Text>                 
+            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>                 
         </View>
     )
 }
@@ -142,13 +140,13 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        name: state.user.name
+        
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        setName: () => dispatch(setName())
+        
     }
 }
 
