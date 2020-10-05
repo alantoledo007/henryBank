@@ -3,14 +3,16 @@ import React, { useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
         TextInput, ProgressBarAndroid, Button} from 'react-native';
 import { connect, useDispatch } from 'react-redux';
-import { Link } from 'react-router-native';
+import { Link, useHistory } from 'react-router-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { nombre } from '../redux/actions/register';
 
 
 
 function RegisterConfirmation(){
 
     const dispatch = useDispatch()
+    const history = useHistory()
 
     const [date, setDate] = useState(new Date(1598051730000));
     const [mode, setMode] = useState('date');
@@ -33,6 +35,12 @@ function RegisterConfirmation(){
     
     const [name, onChangeName] = useState('');
     const [surname, onChangeSurname] = useState('');
+
+    function next () {
+        console.log('flag  | 1', name)
+        nombre(name)
+        history.push('/register-step-two')
+    }
 
 
     return (
@@ -112,10 +120,10 @@ function RegisterConfirmation(){
 
             </View>
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity >
-                    <Link to="/register-step-two" style={styles.button} >
+                <TouchableOpacity style={styles.button} onPress={() => next(name)} >
+                   
                         <Text style={styles.buttonText}>Siguiente</Text>
-                    </Link>
+                    
                 </TouchableOpacity>
             </View>
             
@@ -192,7 +200,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-      
+        nombre: payload => dispatch(nombre(payload)),
     }
 }
 

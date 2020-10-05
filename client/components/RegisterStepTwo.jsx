@@ -10,11 +10,13 @@ import { Link } from 'react-router-native';
 
 function RegisterStepTwo(props){
 
+    const { name } =props;
+
     const [selectedValue, setSelectedValue] = useState("DNI");
     const [telefono, onChangeTelofono] = useState('');
     const [num_doc, onChangeNum_doc] = useState('');
 
-    console.log(selectedValue, telefono, num_doc)
+    console.log('flag  | 2', name)
 
     return (
         <View style={styles.container}>
@@ -154,13 +156,13 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        
+        name: state.register.name
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        
+        nombre: (data) => dispatch(nombre(data)),
     }
 }
 
