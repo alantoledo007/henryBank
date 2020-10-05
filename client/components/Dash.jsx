@@ -1,6 +1,6 @@
 //general
 import React,{useState} from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, StatusBar} from 'react-native';
+import { StyleSheet, Image, View, Text, TouchableOpacity, StatusBar, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 import {Dimensions } from "react-native";
@@ -13,14 +13,14 @@ function Dash({user,token}){
     const initialState = {
         user:{
             name:'Alan',
-            avatar: 'https://ui-avatars.com/api/?name=Alan',
+            avatar: 'https://ui-avatars.com/api/?name=Alan&background=FFBD69&color=000',
         },
         token: undefined
     }
     const [state,setState] = useState(initialState);
 
     return (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
 
             <View style={{ marginBottom:25, ...styles.row}}>
                 <Text style={{ ...styles.nameMessage,...styles.textWhite, borderBottomColor: '#E94560', borderBottomWidth: 3  }}>Hola, {state.user.name}</Text>
@@ -95,7 +95,7 @@ function Dash({user,token}){
                 </Link>
             </View>
             
-        </View>
+        </ScrollView>
     );
 }
 
