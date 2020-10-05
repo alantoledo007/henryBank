@@ -1,5 +1,5 @@
 //general
-import React, { useState, useEffect} from 'react';
+import React,  { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
     TextInput, Picker, ProgressBarAndroid} from 'react-native';
 import { connect } from 'react-redux';
@@ -8,10 +8,13 @@ import { Link } from 'react-router-native';
 //actions
 // import {setName} from '../redux/actions/user';
 
-function RegisterStepTwo(){
+function RegisterStepTwo(props){
 
+    const [selectedValue, setSelectedValue] = useState("DNI");
+    const [telefono, onChangeTelofono] = useState('');
+    const [num_doc, onChangeNum_doc] = useState('');
 
-    const [selectedValue, setSelectedValue] = useState("");
+    console.log(selectedValue, telefono, num_doc)
 
     return (
         <View style={styles.container}>
@@ -37,6 +40,7 @@ function RegisterStepTwo(){
                    placeholder='Telefono'
                    style={styles.input}
                    keyboardType='numeric'
+                   onChangeText={(text) => onChangeTelofono(text)}
                    
 
 
@@ -61,6 +65,8 @@ function RegisterStepTwo(){
                    placeholder='Documento'
                    style={styles.input}
                    keyboardType='numeric'
+                   onChangeText={text => onChangeNum_doc(text)}
+                   
                 />
                 
             </View>

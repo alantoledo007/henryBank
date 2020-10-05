@@ -34,13 +34,15 @@ function RegisterConfirmation(){
     const [name, onChangeName] = useState('');
     const [surname, onChangeSurname] = useState('');
 
+
     return (
         
         <View style={styles.container}>
        
 
             <Text style={{ fontSize:30, color:'#EBEBEB',
-                paddingVertical: 30, justifyContent:'center', textAlign:'center' }}>Gracias por verificar tu correo 
+                paddingVertical: 30, justifyContent:'center', textAlign:'center' }}>
+                    Gracias por verificar tu correo 
             </Text>
 
             <View style = {{

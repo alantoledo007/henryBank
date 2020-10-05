@@ -8,7 +8,12 @@ import { Link } from 'react-router-native';
 
 function RegisterStepThree(){
 
-    const [selectedValue, setSelectedValue] = useState("");
+    const [direccion, setDireccion] = useState("");
+    const [barrio, setBarrio] = useState("");
+    const [ciudad, setCiudad] = useState("");
+    const [pais, setPais] = useState("");
+
+    console.log(direccion, barrio, ciudad, pais)
 
     return (
         <View style={styles.container}>
@@ -32,6 +37,7 @@ function RegisterStepThree(){
                 <TextInput
                    placeholder='Dirección'
                    style={styles.input}
+                   onChangeText={(text) => setDireccion(text)}
 
                 />
 
@@ -40,6 +46,7 @@ function RegisterStepThree(){
                 <TextInput
                    placeholder='Barrio'
                    style={styles.input}
+                   onChangeText={(text) => setBarrio(text)}
 
                 />
 
@@ -48,6 +55,7 @@ function RegisterStepThree(){
                 <TextInput
                    placeholder='Ciudad'
                    style={styles.input}
+                   onChangeText={(text) => setCiudad(text)}
 
                 />
 
@@ -56,6 +64,7 @@ function RegisterStepThree(){
                 <TextInput
                    placeholder='País'
                    style={styles.input}
+                   onChangeText={(text) => setPais(text)}
 
                 />
             </View>
@@ -150,5 +159,5 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-export default connect(mapStateToProps,mapDispatchToProps)
+export default connect(mapStateToProps, mapDispatchToProps)
 (RegisterStepThree);
