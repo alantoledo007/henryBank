@@ -1,5 +1,5 @@
-//general
-import React from "react";
+//React
+import React, { useState } from "react";
 import {
   StyleSheet,
   View,
@@ -14,8 +14,12 @@ import { connect } from "react-redux";
 import { Link } from "react-router-native";
 import { useForm, Controller } from "react-hook-form";
 
-//actions
-import { setName } from "../redux/actions/user";
+//Redux
+import { login } from "../redux/actions/auth";
+
+//Otros
+import axios from "axios";
+import { AppLoading } from "expo";
 
 //Estilos
 import colors from "./style/colors";
@@ -41,87 +45,119 @@ import {
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
 
-function Login({ name, setName }) {
-  const { control, handleSubmit, errors } = useForm();
-  const onSubmit = (data) => console.log(data);
+function Login({ login }) {
+  const { control, handleSubmit } = useForm();
 
-  useFonts({
+  //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
+  const [error, setError] = useState("");
+  const mostrarError = (err) => {
+    setError(err);
+    setTimeout(() => {
+      setError("");
+    }, 5000);
+  };
+
+  const onSubmit = (data) => {
+    axios
+      .post("http://192.168.0.19:3000/api/auth/login", JSON.stringify(data), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        login(res.data.data);
+      })
+      .catch((err) => {
+        //Manejo de errores:
+        if (err.response.data.type == "AUTHENTICATION_FAILED")
+          mostrarError("Dirección de correo o contraseña incorrectos.");
+        if (err.response.data.type == "VALIDATION_ERROR")
+          mostrarError("Por favor ingrese una dirección de correo válida.");
+      });
+  };
+
+  const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_400Regular_Italic,
     Poppins_600SemiBold,
   });
-  return (
-    <View style={styles.container}>
-      <View style={styles.titleWrapper}>
-        <Text style={styles.title}>Iniciar sesión</Text>
-      </View>
-      <View style={styles.inputWrapper}>
-        <View style={styles.inputs}>
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                textContentType="emailAddress"
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                placeholder="Correo electrónico"
-              />
-            )}
-            name="email"
-            rules={{ required: true }}
-            defaultValue=""
-          />
-          {errors.firstName && <Text>This is required.</Text>}
-          <Controller
-            control={control}
-            render={({ onChange, onBlur, value }) => (
-              <TextInput
-                textContentType="password"
-                secureTextEntry={true}
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                placeholder="Contraseña"
-              />
-            )}
-            name="password"
-            rules={{ required: true }}
-            defaultValue=""
-          />
+  if (!fontsLoaded) return <AppLoading />;
+  else
+    return (
+      <View style={styles.container}>
+        <View style={styles.titleWrapper}>
+          <Text style={styles.title}>Iniciar sesión</Text>
         </View>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={handleSubmit(onSubmit)}
-        >
-          <Text style={styles.buttonText}>Ingresar</Text>
+        <View style={styles.inputWrapper}>
+          {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+          <View style={styles.inputs}>
+            <Controller
+              control={control}
+              render={({ onChange, onBlur, value }) => (
+                <TextInput
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  placeholder="Correo electrónico"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                  //No estoy seguro si estos dos siguientes son necesarios así que por las dudas los dejo comentados
+                  // textContentType="emailAddress"
+                  // autoCompleteType="email"
+                />
+              )}
+              name="email"
+              rules={{ required: true }}
+              defaultValue=""
+            />
+            <Controller
+              control={control}
+              render={({ onChange, onBlur, value }) => (
+                <TextInput
+                  secureTextEntry={true}
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  placeholder="Contraseña"
+                />
+              )}
+              name="password"
+              rules={{ required: true }}
+              defaultValue=""
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={handleSubmit(onSubmit)}
+          >
+            <Text style={styles.buttonText}>Ingresar</Text>
+          </TouchableOpacity>
+          <Link to="/">
+            <Text style={styles.forgotPass}>¿Olvidaste tu contraseña?</Text>
+          </Link>
+        </View>
+        <TouchableOpacity style={styles.backButton}>
+          <Link to="/">
+            <Text style={styles.backButtonText}>Volver</Text>
+          </Link>
         </TouchableOpacity>
-        <Link to="/">
-          <Text style={styles.forgotPass}>¿Olvidaste tu contraseña?</Text>
-        </Link>
       </View>
-      <TouchableOpacity style={styles.backButton}>
-        <Link to="/">
-          <Text style={styles.backButtonText}>Volver</Text>
-        </Link>
-      </TouchableOpacity>
-    </View>
-  );
+    );
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   return {
-    name: state.user.name,
+    user: state.auth.user,
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
-    setName: () => dispatch(setName()),
+    login: (data) => dispatch(login(data)),
   };
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -132,23 +168,23 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
   },
   titleWrapper: {
-    // flex: 0.7,
     justifyContent: "flex-end",
     paddingTop: 10,
   },
   title: {
     alignSelf: "center",
     color: colors.blanco,
-    fontSize: 50,
+    fontSize: 55,
+    paddingTop: 70,
     fontFamily: "Poppins_600SemiBold",
   },
   inputWrapper: {
-    // flex: 1.7,
     justifyContent: "flex-start",
+    marginBottom: 50,
   },
   inputs: {
-    // flex: 0.5,
     justifyContent: "space-around",
+    marginBottom: 20
   },
   input: {
     fontFamily: "Poppins_400Regular_Italic",
@@ -163,6 +199,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingLeft: 8,
     paddingBottom: 5,
+  },
+  errorMessage: {
+    color: colors.rosa,
+    alignSelf: "center",
+    fontFamily: "Poppins_400Regular",
   },
   button: {
     justifyContent: "center",
@@ -181,7 +222,6 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins_600SemiBold",
   },
   buttonsContainer: {
-    // flex: 2,
     flexDirection: "row",
   },
   forgotPass: {
