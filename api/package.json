@@ -32,6 +32,8 @@
     "moleculer-web": "^0.9.0",
     "mysql2": "^2.2.5",
     "nats": "^1.4.12",
+    "node-localstorage": "^2.1.6",
+    "nodemailer": "^6.4.13",
     "passport-jwt": "^4.0.0",
     "sequelize": "^6.3.5"
   },

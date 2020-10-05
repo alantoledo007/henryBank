@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 
 //actions
-import {setName} from '../redux/actions/user';
+import {setName} from '../redux/actions/auth';
 
 function RegisterConfirmation(){
 
@@ -142,13 +142,11 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        name: state.user.name
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        setName: () => dispatch(setName())
     }
 }
 
