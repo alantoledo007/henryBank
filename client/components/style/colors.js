@@ -14,9 +14,9 @@
 // R34 G31 B59
 // #221F3B
 
-export default {
-    azul: "#221F3B",
-    blanco: "#EBEBEB",
-    naranja: "#FFBD69",
-    rosa: "#E94560"
+export default { //modificado por Alan Toledo, debe estar en ingles.
+    blue: "#221F3B",
+    white: "#EBEBEB",
+    orange: "#FFBD69",
+    pink: "#E94560"
 }
