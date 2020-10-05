@@ -28,6 +28,14 @@ function Home({name,setName}){
                         </Link>
                     </TouchableOpacity>
                 </View>
+                <View>
+                    <TouchableOpacity onPress={setName}>
+                        <Link to="/dash" style={styles.button}>
+                            <Text style={styles.buttonText}>Tablero</Text>
+                        </Link>
+                    </TouchableOpacity>
+                </View>
+                
             </View>
             
         </View>
