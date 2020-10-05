@@ -1,5 +1,3 @@
-import { LOGIN } from '../actions/auth';
-
 const initialState = {
     token: 'none',
     user: {
@@ -7,14 +5,18 @@ const initialState = {
         email: 'default',
         name: 'default',
         surname: 'default'
-    }
+    },
+    name:'alan'
 }
 
 export default function userReducer(state = initialState, action){
     switch (action.type) {
-        case LOGIN:
-            //console.log('REDUCER AUTH',action.payload);
-            return action.payload;
+        case 'LOGIN':
+            return {
+                ...state,
+                token:action.payload.token,
+                user: action.payload.user
+            };
         default:
             return state;
     }

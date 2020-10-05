@@ -1,15 +1,18 @@
 //general
 import React from 'react';
-import { StyleSheet, View, Text, Button, TouchableOpacity, StatusBar} from 'react-native';
+import { StyleSheet,ScrollView, View, Text, Button, TouchableOpacity, StatusBar} from 'react-native';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 
 //actions
 import {setName} from '../redux/actions/auth';
 
+//UI
+import s from './style/styleSheet';
+
 function Home({name,setName}){
     return (
-        <View style={styles.container}>
+        <ScrollView style={s.container}>
 
             <Text style={{ fontSize:40,flex:1 }}>HenryBank</Text>
             
@@ -35,10 +38,18 @@ function Home({name,setName}){
                         </Link>
                     </TouchableOpacity>
                 </View>
+
+                <View>
+                    <TouchableOpacity onPress={setName}>
+                        <Link to="/email-verifier" style={styles.button}>
+                            <Text style={styles.buttonText}>EmailVerifier</Text>
+                        </Link>
+                    </TouchableOpacity>
+                </View>
                 
             </View>
             
-        </View>
+        </ScrollView>
     );
 }
 
@@ -74,6 +85,7 @@ const styles = StyleSheet.create({
       buttonsContainer: {
         flex:2,
         flexDirection: 'row',
+        flexWrap:'wrap'
       }
 });
 
