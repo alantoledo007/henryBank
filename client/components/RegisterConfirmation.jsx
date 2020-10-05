@@ -9,8 +9,9 @@ import { nombre } from '../redux/actions/register';
 
 
 
-function RegisterConfirmation(){
+function RegisterConfirmation(props){
 
+    const { nombre } = props;
     const dispatch = useDispatch()
     const history = useHistory()
 
