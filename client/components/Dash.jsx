@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 
 //actions
-import {setName} from '../redux/actions/user';
+import {setName} from '../redux/actions/auth';
 
 function Dash({name,setName}){
     return (
@@ -36,13 +36,12 @@ function Dash({name,setName}){
 
 function mapStateToProps(state) {
     return {
-        name: state.user.name
+        name: state.auth.user.name
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        setName: () => dispatch(setName())
     }
 }
 
