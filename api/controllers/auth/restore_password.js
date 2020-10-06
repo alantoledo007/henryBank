@@ -24,29 +24,42 @@ module.exports = async (ctx,res) => {
         // valido : 1) coincide 2) no esta expirado 3) no pasó más de una hora
 
         const codeLocal = JSON.parse(codeStorage.getItem(user.id +""))
-        console.log(codeLocal)
+        
         const limitTime = 3600000;
         if(codeLocal.code !== code || codeLocal.expired === true || Date.now() > codeLocal.createdAt + limitTime){
-            throw new MoleculerError("Invalid code",401,"INVALID_RESTORE_CODE", { nodeID: ctx.nodeID, action:ctx.action.name });
+            throw new MoleculerError("Invalid code or expired",401,"INVALID_RESTORE_CODE", { nodeID: ctx.nodeID, action:ctx.action.name });
         }
 
         //encriptamos la nueva contraseña
         const encryptPassword = async (password) => {
-            const salt = await bcrypt.genSalt(10);
-            const hash = bcrypt.hash(password, salt);
+           // const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(password, 10);
             return hash;
         };
 
         //hacemos un update en la db con la nueva contraseña
 
         User.update({
-            password : encryptPassword(newPassword)
+            password : String(encryptPassword(newPassword))
         },{
             where:{email}
         })
+        .then(() => console.log("password changed") )
+        .catch(err => console.log("ERROR: ",err))
 
-      // todo : cambiar el estado de expiracion
+        // creamos un nuevo objeto para cambiarle el estado en el LOCALSTORAGE
       
+        const password_expired = {
+            code : codeLocal.code,
+            expired : true,
+            createAt : Date.now()
+        }
+
+        //guardamos el objeto con el nuevo estado
+        codeStorage.setItem(user.id, JSON.stringify(password_expired));
+        
+
+
         return "password changed!"
 
     })
