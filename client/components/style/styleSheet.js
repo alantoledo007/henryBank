@@ -50,6 +50,23 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
         }
     },
 
+    input: {
+        height: 50,
+        backgroundColor: colors.white,
+        padding: 15,
+        borderRadius: vars.radius,
+        borderBottomColor: colors.pink,
+        borderBottomWidth: 5,
+        color:colors.pink,
+        fontWeight: 'bold'
+    },
+
+    textColor: color => {
+        return {
+            color: colors[color] || color
+        }
+    },
+
     //helpers
     my: value => {
         return {
