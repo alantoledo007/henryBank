@@ -1,18 +1,26 @@
-import {StyleSheet, StatusBar } from 'react-native';
+import { StyleSheet, StatusBar } from 'react-native';
 import colors from './colors';
 import vars from './vars';
 
 export const styles = { //por si se requiere modificar un estilo dentro de un componente en particular.
-    container:{
-        flex:1,
-        paddingLeft:vars.container_margin,
-        paddingRight:vars.container_margin,
-        paddingTop: vars.container_margin, 
+    container: {
+        flex: 1,
+        paddingLeft: vars.container_margin,
+        paddingRight: vars.container_margin,
+        paddingTop: vars.container_margin,
         backgroundColor: colors.blue,
         marginTop: StatusBar.currentHeight
     },
-    textWhite:{
-        color:"#EBEBEB"
+    textWhite: {
+        color: "#EBEBEB"
+    },
+
+    textCenter: {
+        textAlign: "center"
+    },
+
+    itemsCenter: {
+        alignItems: "center"
     },
 
     bg: (color = 'transparent') => {
@@ -31,22 +39,42 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
         }
     },
 
-
     //grid
-    row:{
-        display:'flex',
-        flexDirection:'row',
-        flexWrap:'wrap'
+    row: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap'
     },
     col: (value = 1, offset = 0) => {
-        if(value < 1) {
+        if (value < 1) {
             throw Error('The min value is: 1');
         }
-        if(value > 12) {
+        if (value > 12) {
             throw Error('The max value is: 12');
         }
         return {
             width: (vars.colFragment * value) - (vars.spacing * offset),
+        }
+    },
+
+    //division-line
+    hr: color => {
+        return {
+            borderBottomWidth: 1,
+            borderBottomColor: colors[color] || color
+        }
+    },
+
+    //font
+    size: value => {
+        return {
+            fontSize: vars.spacing * value
+        }
+    },
+
+    color: color => {
+        return {
+            color: colors[color] || color
         }
     },
 
