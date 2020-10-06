@@ -23,6 +23,7 @@
     "moleculer-repl": "^0.6.4"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",

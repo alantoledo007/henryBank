@@ -10,17 +10,17 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import { connect } from "react-redux";
 import { Link, useHistory } from "react-router-native";
 import { useForm, Controller } from "react-hook-form";
 
 //Redux
+import { connect } from "react-redux";
 import { login } from "../redux/actions/auth";
 
 //Otros
 import axios from "axios";
 import { AppLoading } from "expo";
-import env from '../env';
+import env from "../env";
 
 //Estilos
 import colors from "./style/colors";
@@ -70,8 +70,11 @@ function Login({ login }) {
       })
       .then((res) => {
         const { data } = res.data;
-        //Cargamos el token y los datos del usuario recibidos en la respuesta al store de redux, a auth
+        //Mando la data del usuario (token + id, email, nombre si lo hay, etc) a redux. Redux va a guardarlo en el store y en AsyncStorage
         login(data);
+        return data;
+      })
+      .then((data) => {
         //Si los datos incluyen el nombre, significa que el usuario ya verificó su cuenta, por lo tanto redireccionamos a la posición consolidada
         if (data.user.name) return history.push("/dash");
         //Si no hay nombre, redireccionamos a la pantalla de confirmar registro
@@ -91,6 +94,8 @@ function Login({ login }) {
     Poppins_400Regular_Italic,
     Poppins_600SemiBold,
   });
+
+  //Pantalla de carga para mostrar mientras no hayan cargado aún las fonts
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
@@ -191,7 +196,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: colors.azul,
+    backgroundColor: colors.blue,
     paddingTop: StatusBar.currentHeight,
   },
   titleWrapper: {
@@ -201,7 +206,7 @@ const styles = StyleSheet.create({
   title: {
     alignSelf: "center",
     textAlign: "center",
-    color: colors.blanco,
+    color: colors.white,
     fontSize: 55,
     paddingTop: 70,
     fontFamily: "Poppins_600SemiBold",
@@ -217,23 +222,23 @@ const styles = StyleSheet.create({
   input: {
     fontFamily: "Poppins_400Regular_Italic",
     color: "#221F3B",
-    backgroundColor: colors.blanco,
+    backgroundColor: colors.white,
     fontSize: 20,
     height: 40,
-    borderBottomColor: colors.rosa,
+    borderBottomColor: colors.pink,
     borderBottomWidth: 5,
     paddingLeft: 8,
   },
   email: {
     marginHorizontal: 15,
     width: 290,
-    borderBottomColor: colors.rosa,
+    borderBottomColor: colors.pink,
     borderBottomWidth: 5,
     borderRadius: 5,
     fontSize: 20,
   },
   passwordWrapper: {
-    width: 320,
+    width: 322,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -247,29 +252,28 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 5,
   },
   eyeWrapper: {
-    borderBottomColor: colors.rosa,
+    borderBottomColor: colors.pink,
     height: 40,
     width: 30,
     borderBottomWidth: 5,
-    backgroundColor: colors.blanco,
+    backgroundColor: colors.white,
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     justifyContent: "center",
-    paddingRight: 10,
   },
   eye: {
     height: 25,
     width: 25,
   },
   errorMessage: {
-    color: colors.rosa,
+    color: colors.pink,
     alignSelf: "center",
     fontFamily: "Poppins_400Regular",
   },
   button: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.rosa,
+    backgroundColor: colors.pink,
     alignSelf: "center",
     width: 250,
     height: 60,
@@ -278,7 +282,7 @@ const styles = StyleSheet.create({
   buttonText: {
     textAlign: "center",
     padding: 20,
-    color: colors.blanco,
+    color: colors.white,
     fontSize: 30,
     fontFamily: "Poppins_600SemiBold",
   },
@@ -289,11 +293,11 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingTop: 10,
     fontFamily: "Poppins_400Regular",
-    color: colors.naranja,
+    color: colors.orange,
     fontSize: 20,
   },
   backButton: {
-    backgroundColor: colors.rosa,
+    backgroundColor: colors.pink,
     height: 40,
     width: 80,
     borderRadius: 7,
@@ -303,7 +307,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   backButtonText: {
-    color: colors.blanco,
+    color: colors.white,
     fontSize: 20,
     fontFamily: "Poppins_400Regular",
   },
