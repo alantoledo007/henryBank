@@ -1,6 +1,6 @@
 //general
 import React from 'react';
-import { StyleSheet, ScrollView, View, Text, Button, TouchableOpacity, StatusBar, Image } from 'react-native';
+import { ScrollView, View, Text, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 
@@ -27,7 +27,7 @@ function Home() {
                 <View opacity={0.5} style={{ ...s.hr('white'), ...s.my(10) }}></View>
                 <View>
                     <Link to="/#">
-                        <Text style={{ ...s.textCenter, color: "#FFBD69", ...s.size(4) }}>
+                        <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(4) }}>
                             ¿Necesitás ayuda?
                         </Text>
                     </Link>
