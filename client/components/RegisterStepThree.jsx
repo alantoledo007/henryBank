@@ -3,17 +3,35 @@ import React, { useState} from 'react';
 import { StyleSheet, View, Text, Button, TouchableOpacity, StatusBar, 
     TextInput, Picker, ProgressBarAndroid} from 'react-native';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-native';
+import { Link, useHistory } from 'react-router-native';
+import { stepThree } from '../redux/actions/register';
 
 
-function RegisterStepThree(){
+function RegisterStepThree(props){
+    const history = useHistory()
+
+    const { stepThree } =props;
 
     const [direccion, setDireccion] = useState("");
+    const [altura, setAltura] = useState("");
     const [barrio, setBarrio] = useState("");
     const [ciudad, setCiudad] = useState("");
     const [pais, setPais] = useState("");
 
-    console.log(direccion, barrio, ciudad, pais)
+    function next () {
+        const payload = {
+            address_street: direccion,
+            address_number: altura,
+            locality: barrio,
+            province: ciudad,
+            country: pais
+        }
+
+        stepThree(payload)
+        history.push('/dash')
+    }
+
+    
 
     return (
         <View style={styles.container}>
@@ -34,12 +52,23 @@ function RegisterStepThree(){
 
                 <Text style={styles.text}>Dirección</Text>
 
-                <TextInput
-                   placeholder='Dirección'
-                   style={styles.input}
-                   onChangeText={(text) => setDireccion(text)}
+                <View style={{flexDirection: 'row'}}>
 
-                />
+                    <TextInput
+                    placeholder='Calle'
+                    style={styles.input1}
+                    onChangeText={(text) => setDireccion(text)}
+
+                    />
+                    <TextInput
+                    placeholder='Altura'
+                    style={styles.input2}
+                    onChangeText={(text) => setAltura(text)}
+                    keyboardType='numeric'
+
+                    />
+
+                </View>
 
                 <Text style={styles.text}>Barrio</Text>
 
@@ -75,10 +104,8 @@ function RegisterStepThree(){
                             <Text style={styles.buttonText}>Atras</Text>
                         </Link>
                     </TouchableOpacity>
-                    <TouchableOpacity >
-                        <Link to="/" style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => next()}>
                             <Text style={styles.buttonText}>Completar registro</Text>
-                        </Link>
                     </TouchableOpacity>           
             </View>  
             <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>                 
@@ -126,7 +153,32 @@ const styles = StyleSheet.create({
            borderBottomWidth: 5,
            backgroundColor: '#EBEBEB',
            borderRadius: 8,
-           padding:10
+           padding:10,
+
+      },
+      input2: {
+           height: 50, 
+           borderBottomColor:'#E94560',
+           borderBottomWidth: 5,
+           backgroundColor: '#EBEBEB',
+           borderBottomRightRadius: 8,
+           borderTopRightRadius: 8,
+           padding:10,
+           width: '50%',
+           margin: 0.4
+
+      },
+      input1: {
+           height: 50, 
+           borderBottomColor:'#E94560',
+           borderBottomWidth: 5,
+           backgroundColor: '#EBEBEB',
+           borderBottomLeftRadius: 8,
+           borderTopLeftRadius: 8,
+           
+           padding:10,
+           width: '50%',
+           margin: 0.4
 
       },
       barra: {
@@ -149,15 +201,44 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        
+      
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         
+        stepThree: payload => dispatch(stepThree(payload)),
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)
 (RegisterStepThree);
+
+// const {
+//     user,
+//     name,
+//     surname,
+//     doc_type,
+//     doc_number,
+//     phone_number,
+//     birthdate,
+//     address_street,
+//     address_number,
+//     locality,
+//     province,
+//     country,
+// } = props;
+
+
+//  console.log( 'flag  | finish', name,
+//     surname,
+//     doc_type,
+//     doc_number,
+//     phone_number,
+//     birthdate,
+//     address_street,
+//     address_number,
+//     locality,
+//     province,
+//     country, )

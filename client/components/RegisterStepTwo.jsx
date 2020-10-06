@@ -3,20 +3,29 @@ import React,  { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
     TextInput, Picker, ProgressBarAndroid} from 'react-native';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-native';
-
-//actions
-// import {setName} from '../redux/actions/user';
+import { Link, useHistory } from 'react-router-native';
+import { stepTwo } from '../redux/actions/register';
 
 function RegisterStepTwo(props){
 
-    const { name } =props;
+    const { stepTwo } =props;
+
+    const history = useHistory()
 
     const [selectedValue, setSelectedValue] = useState("DNI");
     const [telefono, onChangeTelofono] = useState('');
     const [num_doc, onChangeNum_doc] = useState('');
 
-    console.log('flag  | 2', name)
+    function next () {
+        const payload = {
+            doc_type: selectedValue,
+            doc_number: num_doc,
+            phone_number: telefono
+        }
+
+        stepTwo(payload)
+        history.push( '/register-step-three' )
+    }
 
     return (
         <View style={styles.container}>
@@ -79,10 +88,8 @@ function RegisterStepTwo(props){
                         <Text style={styles.buttonText}>Atras</Text>
                     </Link>
                 </TouchableOpacity>
-                <TouchableOpacity >
-                    <Link to="/register-step-three" style={styles.button}>
-                        <Text style={styles.buttonText}>Siguiente</Text>
-                    </Link>
+                <TouchableOpacity style={styles.button} onPress={() => next()}>
+                        <Text style={styles.buttonText}>Siguiente</Text>                 
                 </TouchableOpacity>    
             </View>
             <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>
@@ -156,13 +163,13 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        name: state.register.name
+
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        nombre: (data) => dispatch(nombre(data)),
+        stepTwo: payload => dispatch(stepTwo(payload)),
     }
 }
 
