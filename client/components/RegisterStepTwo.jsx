@@ -5,6 +5,8 @@ import { StyleSheet, View, Text, TouchableOpacity, StatusBar,
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-native';
 import { stepTwo } from '../redux/actions/register';
+import colors from "./style/colors";
+
 
 function RegisterStepTwo(props){
 
@@ -12,20 +14,34 @@ function RegisterStepTwo(props){
 
     const history = useHistory()
 
-    const [selectedValue, setSelectedValue] = useState("DNI");
-    const [telefono, onChangeTelofono] = useState('');
-    const [num_doc, onChangeNum_doc] = useState('');
+    const [selectedValue, setSelectedValue] = useState("dni");
+    const [telefono, onChangeTelofono] = useState(null);
+    const [num_doc, onChangeNum_doc] = useState(null);
 
     function next () {
+        if(selectedValue === null || telefono === null || num_doc === null ){
+            return mostrarError('Debe ingresar todos los datos')}
+        if(num_doc.length > 10 || num_doc.length < 8 ){
+            return mostrarError('No es número documento valido')}
+        if(telefono.length >= 20 || telefono.length < 7 ){
+            return mostrarError('No es un teléfono valido')}
         const payload = {
             doc_type: selectedValue,
-            doc_number: num_doc,
-            phone_number: telefono
+            doc_number: parseInt(num_doc),
+            phone_number: parseInt(telefono)
         }
 
         stepTwo(payload)
         history.push( '/register-step-three' )
     }
+
+    const [error, setError] = useState("");
+    const mostrarError = (err) => {
+      setError(err);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    };
 
     return (
         <View style={styles.container}>
@@ -65,8 +81,8 @@ function RegisterStepTwo(props){
                         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
                         
                     >
-                        <Picker.Item label="DNI" value="DNI" />
-                        <Picker.Item label="Pasaporte" value="Pasaporte" />
+                        <Picker.Item label="DNI" value="dni" />
+                        <Picker.Item label="passport" value="passport" />
                     </Picker>
                 </View>
                 
@@ -81,6 +97,8 @@ function RegisterStepTwo(props){
                 />
                 
             </View>
+
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity >
@@ -109,6 +127,11 @@ const styles = StyleSheet.create({
             height: '100%',
 
             padding: 20,
+      },
+      errorMessage: {
+        color: colors.pink,
+        alignSelf: "center",
+        padding: 10,
       },
       button: {
             backgroundColor: '#E94560',

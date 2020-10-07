@@ -1,38 +1,76 @@
 //general
 import React, { useState} from 'react';
 import { StyleSheet, View, Text, Button, TouchableOpacity, StatusBar, 
-    TextInput, Picker, ProgressBarAndroid} from 'react-native';
+    TextInput, Picker, ProgressBarAndroid, Modal,TouchableHighlight,} from 'react-native';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-native';
-import { stepThree } from '../redux/actions/register';
-
+import { resetRegister } from '../redux/actions/register';
+import  axios  from 'axios';
+import env from '../env';
+import colors from "./style/colors";
 
 function RegisterStepThree(props){
     const history = useHistory()
 
-    const { stepThree } =props;
+    const [modalVisible, setModalVisible] = useState(false);
 
-    const [direccion, setDireccion] = useState("");
-    const [altura, setAltura] = useState("");
-    const [barrio, setBarrio] = useState("");
-    const [ciudad, setCiudad] = useState("");
-    const [pais, setPais] = useState("");
+    const { fullState, resetRegister, token } =props;
 
+    const [direccion, setDireccion] = useState(null);
+    const [altura, setAltura] = useState(null);
+    const [barrio, setBarrio] = useState(null);
+    const [ciudad, setCiudad] = useState(null);
+    const [pais, setPais] = useState(null);
+
+    const [error, setError] = useState("");
+    const mostrarError = (err) => {
+      setError(err);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    };
+    
     function next () {
+        if(direccion === null || altura === null || barrio === null ||
+            ciudad === null || pais === null ){
+            return mostrarError('Debe ingresar todos los datos')}
+        if(direccion.length < 4 ){
+            return mostrarError('No es una dirección valida')}
+        
         const payload = {
             address_street: direccion,
             address_number: altura,
             locality: barrio,
             province: ciudad,
-            country: pais
+            country: pais,
+            doc_type: fullState.doc_type,
+            doc_number: fullState.doc_number,
+            phone_number: fullState.phone_number,
+            birthdate: fullState.birthdate,
+            name: fullState.name, 
+            surname: fullState.surname,
         }
+        console.log(payload)
+        axios.put(`${env.API_URI}/auth/register_confirmation`, 
+            payload,
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            console.log(response.data)
+            setModalVisible(true)
+            resetRegister();
 
-        stepThree(payload)
-        history.push('/dash')
+        })
+        .catch((error) => {
+            console.log(error)
+            mostrarError('Dirección no es valida')
+        })     
     }
-
     
-
     return (
         <View style={styles.container}>
 
@@ -63,7 +101,7 @@ function RegisterStepThree(props){
                     <TextInput
                     placeholder='Altura'
                     style={styles.input2}
-                    onChangeText={(text) => setAltura(text)}
+                    onChangeText={(text) => setAltura(parseInt(text))}
                     keyboardType='numeric'
 
                     />
@@ -98,6 +136,8 @@ function RegisterStepThree(props){
                 />
             </View>
 
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+
             <View style={styles.buttonsContainer}>
                     <TouchableOpacity >
                         <Link to="/register-step-two" style={styles.button}>
@@ -108,7 +148,50 @@ function RegisterStepThree(props){
                             <Text style={styles.buttonText}>Completar registro</Text>
                     </TouchableOpacity>           
             </View>  
-            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>                 
+            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>   
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+            }}
+            >
+
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        
+                        <Text style={{...styles.modalText, color:'#221F3B', fontSize: 50}}>Bienvenido</Text>
+                        <View style = {{
+                            borderWidth: 1,
+                            borderColor:'#221F3B',
+                            width: 220,
+                            margin: 10
+                        }} />
+                        <Text style={{...styles.modalText, color:'#FFBD69'}}>Registro completado.</Text>
+            
+                        <TouchableHighlight
+                            style={{ ...styles.openButton, backgroundColor: "#E94560" }}
+                            onPress={() => {
+                            setModalVisible(!modalVisible);
+                            history.push('/dash')
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Continuar</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>    
+
+            <TouchableHighlight
+        style={{...styles.openButton, backgroundColor:'yellow'}}
+        onPress={() => {
+          setModalVisible(true);
+        }}
+      >
+        <Text style={styles.textStyle}>Show Modal</Text>
+      </TouchableHighlight>    
         </View>
     )
 }
@@ -123,6 +206,12 @@ const styles = StyleSheet.create({
             width: '100%',
             height: '100%',
             padding: 20,
+            marginTop: 22
+      },
+      errorMessage: {
+        color: colors.pink,
+        alignSelf: "center",
+        padding: 10,
       },
       button: {
             backgroundColor: '#E94560',
@@ -190,6 +279,12 @@ const styles = StyleSheet.create({
         color:'#EBEBEB', 
         padding:10
       },
+      centeredView: {
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 22
+        },
       documento: { 
            height: 50, 
            borderBottomColor:'#E94560',
@@ -197,48 +292,52 @@ const styles = StyleSheet.create({
            backgroundColor: '#EBEBEB',
            borderRadius: 8,
     },
+      modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+          width: 0,
+          height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5
+      },
+      openButton: {
+        backgroundColor: "#F194FF",
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+      },
+      textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center",
+        backgroundColor:'#E94560'
+      },
+      modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+      }
 });
 
 function mapStateToProps(state) {
     return {
-      
+        fullState: state.register,
+        token: state.auth.token
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         
-        stepThree: payload => dispatch(stepThree(payload)),
+        resetRegister: () => dispatch(resetRegister()),
     }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)
 (RegisterStepThree);
-
-// const {
-//     user,
-//     name,
-//     surname,
-//     doc_type,
-//     doc_number,
-//     phone_number,
-//     birthdate,
-//     address_street,
-//     address_number,
-//     locality,
-//     province,
-//     country,
-// } = props;
-
-
-//  console.log( 'flag  | finish', name,
-//     surname,
-//     doc_type,
-//     doc_number,
-//     phone_number,
-//     birthdate,
-//     address_street,
-//     address_number,
-//     locality,
-//     province,
-//     country, )
