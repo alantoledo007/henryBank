@@ -183,15 +183,7 @@ function RegisterStepThree(props){
                     </View>
                 </View>
             </Modal>    
-
-            <TouchableHighlight
-        style={{...styles.openButton, backgroundColor:'yellow'}}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      >
-        <Text style={styles.textStyle}>Show Modal</Text>
-      </TouchableHighlight>    
+              
         </View>
     )
 }
