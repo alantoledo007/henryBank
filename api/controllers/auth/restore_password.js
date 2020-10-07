@@ -4,7 +4,14 @@ const jwt = require('jsonwebtoken');
 const LocalStorage = require('node-localstorage').LocalStorage; //localStorage backend-side
 const {User} = require('../../db');
 const bcrypt = require("bcrypt");
+const sender = require('../../emails/sender');
 
+
+const encryptPassword = async (password) => {
+            const salt = await bcrypt.genSalt(10);
+            const hash = await bcrypt.hash(password, salt);
+            return hash;
+        };
 
 module.exports = async (ctx,res) => {
     const codeStorage = new LocalStorage('./storage');
@@ -26,21 +33,17 @@ module.exports = async (ctx,res) => {
         const codeLocal = JSON.parse(codeStorage.getItem(user.id +""))
         
         const limitTime = 3600000;
-        if(codeLocal.code !== code || codeLocal.expired === true || Date.now() > codeLocal.createdAt + limitTime){
+        //if(codeLocal.code !== code || codeLocal.expired === true || Date.now() > codeLocal.createdAt + limitTime){
+        if(codeLocal.code !== code || Date.now() > codeLocal.createdAt + limitTime){
             throw new MoleculerError("Invalid code or expired",401,"INVALID_RESTORE_CODE", { nodeID: ctx.nodeID, action:ctx.action.name });
         }
 
-        //encriptamos la nueva contraseña
-        const encryptPassword = async (password) => {
-           // const salt = await bcrypt.genSalt(10);
-            const hash = await bcrypt.hash(password, 10);
-            return hash;
-        };
+      
 
-        //hacemos un update en la db con la nueva contraseña
+        //hacemos un update en la db con la nueva contraseña encriptada
 
         User.update({
-            password : String(encryptPassword(newPassword))
+            password : await encryptPassword(newPassword)
         },{
             where:{email}
         })
@@ -59,6 +62,14 @@ module.exports = async (ctx,res) => {
         codeStorage.setItem(user.id, JSON.stringify(password_expired));
         
 
+        //enviamos un correo avisando que la contraseña fue restablecida de forma satisfactoria
+
+        await sender({
+            to:email,
+            subject:'Cambio de contraseña',
+            html: 'email_pass_restore_confirmation',
+            data:{app_name:'Quantum', code}
+        });
 
         return "password changed!"
 
