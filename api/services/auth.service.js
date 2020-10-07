@@ -91,7 +91,7 @@ module.exports = {
 		restore_password: {
 			rest:{
 				method: "PUT",
-				path:"/restore"
+				path:"/restore_password"
 			},
 			params:{
 				email : "string",

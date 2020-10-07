@@ -166,7 +166,7 @@ function Login({ login }) {
           >
             <Text style={styles.buttonText}>Ingresar</Text>
           </TouchableOpacity>
-          <Link to="/">
+          <Link to="/passwordreset">
             <Text style={styles.forgotPass}>¿Olvidaste tu contraseña?</Text>
           </Link>
         </View>
