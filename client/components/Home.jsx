@@ -33,8 +33,7 @@ function Home() {
                     </Link>
                 </View>
             </View>
-
-        </ScrollView >
+        </ScrollView>
     );
 }
 
