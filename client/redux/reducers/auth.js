@@ -1,10 +1,11 @@
 const initialState = {
-    token: 'none',
+    token: null,
     user: {
-        id: 'none',
-        email: 'default',
-        name: 'default',
-        surname: 'default'
+        id: null,
+        email: null,
+        name: null,
+        surname: null,
+        avatar: null
     }
 }
 

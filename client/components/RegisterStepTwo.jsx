@@ -1,24 +1,54 @@
 //general
-import React, { useState, useEffect} from 'react';
+import React,  { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
     TextInput, Picker, ProgressBarAndroid} from 'react-native';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-native';
-
-//actions
-// import {setName} from '../redux/actions/user';
-
-function RegisterStepTwo(){
+import { Link, useHistory } from 'react-router-native';
+import { stepTwo } from '../redux/actions/register';
+import colors from "./style/colors";
 
 
-    const [selectedValue, setSelectedValue] = useState("");
+function RegisterStepTwo(props){
+
+    const { stepTwo } =props;
+
+    const history = useHistory()
+
+    const [selectedValue, setSelectedValue] = useState("dni");
+    const [telefono, onChangeTelofono] = useState(null);
+    const [num_doc, onChangeNum_doc] = useState(null);
+
+    function next () {
+        if(selectedValue === null || telefono === null || num_doc === null ){
+            return mostrarError('Debe ingresar todos los datos')}
+        if(num_doc.length > 10 || num_doc.length < 8 ){
+            return mostrarError('No es número documento valido')}
+        if(telefono.length >= 20 || telefono.length < 7 ){
+            return mostrarError('No es un teléfono valido')}
+        const payload = {
+            doc_type: selectedValue,
+            doc_number: parseInt(num_doc),
+            phone_number: parseInt(telefono)
+        }
+
+        stepTwo(payload)
+        history.push( '/register-step-three' )
+    }
+
+    const [error, setError] = useState("");
+    const mostrarError = (err) => {
+      setError(err);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    };
 
     return (
         <View style={styles.container}>
 
             <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
                 paddingVertical: 8}}>
-                Completa tus datos
+                Completá tus datos
             </Text>
 
             <ProgressBarAndroid
@@ -34,9 +64,10 @@ function RegisterStepTwo(){
                 <Text style={styles.text}>Número teléfono</Text>
                 
                 <TextInput
-                   placeholder='Telefono'
+                   placeholder='Teléfono'
                    style={styles.input}
                    keyboardType='numeric'
+                   onChangeText={(text) => onChangeTelofono(text)}
                    
 
 
@@ -50,31 +81,33 @@ function RegisterStepTwo(){
                         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
                         
                     >
-                        <Picker.Item label="DNI" value="DNI" />
-                        <Picker.Item label="Pasaporte" value="Pasaporte" />
+                        <Picker.Item label="DNI" value="dni" />
+                        <Picker.Item label="passport" value="passport" />
                     </Picker>
                 </View>
                 
-                <Text style={styles.text}>Numero documento</Text>
+                <Text style={styles.text}>Número documento</Text>
 
                 <TextInput
                    placeholder='Documento'
                    style={styles.input}
                    keyboardType='numeric'
+                   onChangeText={text => onChangeNum_doc(text)}
+                   
                 />
                 
             </View>
 
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity >
                     <Link to="/register-confirmation" style={styles.button}>
-                        <Text style={styles.buttonText}>Atras</Text>
+                        <Text style={styles.buttonText}>Atrás</Text>
                     </Link>
                 </TouchableOpacity>
-                <TouchableOpacity >
-                    <Link to="/register-step-three" style={styles.button}>
-                        <Text style={styles.buttonText}>Siguiente</Text>
-                    </Link>
+                <TouchableOpacity style={styles.button} onPress={() => next()}>
+                        <Text style={styles.buttonText}>Siguiente</Text>                 
                 </TouchableOpacity>    
             </View>
             <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>
@@ -94,6 +127,11 @@ const styles = StyleSheet.create({
             height: '100%',
 
             padding: 20,
+      },
+      errorMessage: {
+        color: colors.pink,
+        alignSelf: "center",
+        padding: 10,
       },
       button: {
             backgroundColor: '#E94560',
@@ -148,13 +186,13 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-        
+
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        
+        stepTwo: payload => dispatch(stepTwo(payload)),
     }
 }
 
