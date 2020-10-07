@@ -76,7 +76,7 @@ function RegisterStepThree(props){
 
             <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
                 paddingVertical: 15}}>
-                Completa tus datos
+                Completá tus datos
             </Text>
 
             <ProgressBarAndroid
@@ -117,10 +117,10 @@ function RegisterStepThree(props){
 
                 />
 
-                <Text style={styles.text}>Ciudad</Text>
+                <Text style={styles.text}>Provincia</Text>
 
                 <TextInput
-                   placeholder='Ciudad'
+                   placeholder='Provincia'
                    style={styles.input}
                    onChangeText={(text) => setCiudad(text)}
 
@@ -141,11 +141,11 @@ function RegisterStepThree(props){
             <View style={styles.buttonsContainer}>
                     <TouchableOpacity >
                         <Link to="/register-step-two" style={styles.button}>
-                            <Text style={styles.buttonText}>Atras</Text>
+                            <Text style={styles.buttonText}>Atrás</Text>
                         </Link>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.button} onPress={() => next()}>
-                            <Text style={styles.buttonText}>Completar registro</Text>
+                            <Text style={styles.buttonText}>Completar</Text>
                     </TouchableOpacity>           
             </View>  
             <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>   
@@ -169,7 +169,7 @@ function RegisterStepThree(props){
                             width: 220,
                             margin: 10
                         }} />
-                        <Text style={{...styles.modalText, color:'#FFBD69'}}>Registro completado.</Text>
+                        <Text style={{...styles.modalText, color:'#FFBD69'}}>Registro completo.</Text>
             
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#E94560" }}

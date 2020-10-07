@@ -48,7 +48,7 @@ function RegisterStepTwo(props){
 
             <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
                 paddingVertical: 8}}>
-                Completa tus datos
+                Completá tus datos
             </Text>
 
             <ProgressBarAndroid
@@ -64,7 +64,7 @@ function RegisterStepTwo(props){
                 <Text style={styles.text}>Número teléfono</Text>
                 
                 <TextInput
-                   placeholder='Telefono'
+                   placeholder='Teléfono'
                    style={styles.input}
                    keyboardType='numeric'
                    onChangeText={(text) => onChangeTelofono(text)}
@@ -86,7 +86,7 @@ function RegisterStepTwo(props){
                     </Picker>
                 </View>
                 
-                <Text style={styles.text}>Numero documento</Text>
+                <Text style={styles.text}>Número documento</Text>
 
                 <TextInput
                    placeholder='Documento'
@@ -103,7 +103,7 @@ function RegisterStepTwo(props){
             <View style={styles.buttonsContainer}>
                 <TouchableOpacity >
                     <Link to="/register-confirmation" style={styles.button}>
-                        <Text style={styles.buttonText}>Atras</Text>
+                        <Text style={styles.buttonText}>Atrás</Text>
                     </Link>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.button} onPress={() => next()}>
