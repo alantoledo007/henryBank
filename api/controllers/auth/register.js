@@ -30,7 +30,7 @@ module.exports = async (ctx) => {
 	await newUser.save();
 
 	const localStorage = new LocalStorage("./email_validation_storage");
-	const code = Math.floor(Math.random() * 899999 + 999999);
+	const code = String(Math.floor(100000 + Math.random() * 900000));
 
 	await sendMail(newUser.email, code);
 

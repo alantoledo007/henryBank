@@ -1,12 +1,12 @@
 const initialState = {
-    token: 'none',
+    token: null,
     user: {
-        id: 'none',
-        email: 'default',
-        name: 'default',
-        surname: 'default'
-    },
-    name:'alan'
+        id: null,
+        email: null,
+        name: null,
+        surname: null,
+        avatar: null
+    }
 }
 
 export default function userReducer(state = initialState, action){
