@@ -1,8 +1,8 @@
 //general
 import React, { useState } from 'react';
 import { ScrollView, View, Image, Text, TextInput, TouchableWithoutFeedback, TouchableOpacity } from 'react-native';
-import { useHistory } from 'react-router-native';
 import { useForm, Controller } from "react-hook-form";
+import { Link } from "react-router-native";
 import axios from 'axios';
 import env from "../env";
 
@@ -14,13 +14,12 @@ import { register } from "../redux/actions/auth";
 import s from './style/styleSheet';
 
 function Register({ register }) {
-    const history = useHistory();
     const { control, handleSubmit } = useForm();
     const [hidePassword, setHidePassword] = useState(true);
 
     //Muestra error por 5 segundos, igual que en login
     const [error, setError] = useState("");
-    const mostrarError = (err) => {
+    const showError = err => {
         setError(err);
         setTimeout(() => {
             setError("");
@@ -34,18 +33,14 @@ function Register({ register }) {
             }
         })
             .then(res => {
-                const { data } = res.data;
+                const { data } = res;
                 //Envío de data al store
                 register(data);
                 return data;
             })
-            .then((data) => {
-                //Redireccionamos a la pantalla de confirmar registro
-                history.push("/register-confirmation");
-            })
             .catch(err => {
                 //Manejo de errores:
-                console.log("hola" + err)
+                return showError("¡El correo ingresado ya está en uso!");
             });
     };
 
@@ -85,7 +80,7 @@ function Register({ register }) {
                         render={({ onChange, onBlur, value }) => (
                             <View style={{ flexDirection: "row" }}>
                                 <TextInput
-                                    style={{ ...s.input, ...s.textColor('black'), width: "90%", borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+                                    style={{ ...s.input, ...s.textColor('rgb(75,75,75)'), fontWeight: "normal", ...s.size(3.5), width: "90%", borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                                     secureTextEntry={hidePassword}
                                     onBlur={onBlur}
                                     onChangeText={value => onChange(value)}
@@ -110,12 +105,20 @@ function Register({ register }) {
                         rules={{ required: true }}
                         defaultValue=""
                     />
+                </View>
+                <View style={s.mt(5)}>
+                    {error ? <Text style={{ ...s.textWhite, fontWeight: "bold", ...s.size(3), ...s.mb(1) }}>{error}</Text> : null}
                     <TouchableOpacity
-                        style={{ ...s.btn(), ...s.mt(7) }}
+                        style={{ ...s.btn(), ...s.mb(10) }}
                         onPress={handleSubmit(onSubmit)}
                     >
                         <Text style={{ ...s.textWhite, ...s.size(5) }}>Crear cuenta</Text>
                     </TouchableOpacity>
+                    <Link to="/Login">
+                        <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
+                            ¿Ya estás registrado? Iniciá sesión
+                        </Text>
+                    </Link>
                 </View>
             </View>
         </ScrollView>

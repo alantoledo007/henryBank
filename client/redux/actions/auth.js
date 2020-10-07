@@ -15,6 +15,9 @@ export const login = data => {
 }
 
 export const register = data => {
+    AsyncStorage.setItem('auth', JSON.stringify(data), err => {
+        if (err) console.log('ERROR en AsyncStorage.setItem en redux/actions/auth, en register', err);
+    });
     return {
         type: REGISTER,
         payload: data

@@ -27,7 +27,7 @@ function Home() {
                 <View opacity={0.5} style={{ ...s.hr('white'), ...s.my(10) }}></View>
                 <View>
                     <Link to="/#">
-                        <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(4) }}>
+                        <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
                             ¿Necesitás ayuda?
                         </Text>
                     </Link>
