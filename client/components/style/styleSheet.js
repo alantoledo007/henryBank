@@ -39,6 +39,13 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
         }
     },
 
+    model:{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 'auto'
+    },
+
     //grid
     row: {
         display: 'flex',
