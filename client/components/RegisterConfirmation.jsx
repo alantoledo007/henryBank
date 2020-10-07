@@ -2,17 +2,19 @@
 import React, { useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
         TextInput, ProgressBarAndroid, Button} from 'react-native';
-import { connect, useDispatch } from 'react-redux';
-import { Link } from 'react-router-native';
+import { connect } from 'react-redux';
+import { useHistory } from 'react-router-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { stepOne } from '../redux/actions/register';
+import colors from "./style/colors";
 
 
+function RegisterConfirmation(props){
 
-function RegisterConfirmation(){
+    const { stepOne } = props;
+    const history = useHistory()
 
-    const dispatch = useDispatch()
-
-    const [date, setDate] = useState(new Date(1598051730000));
+    const [date, setDate] = useState(new Date(null));
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
 
@@ -31,8 +33,33 @@ function RegisterConfirmation(){
     showMode('date');
     };
     
-    const [name, onChangeName] = useState('');
-    const [surname, onChangeSurname] = useState('');
+    const [name, onChangeName] = useState(null);
+    const [surname, onChangeSurname] = useState(null);
+
+    const [error, setError] = useState("");
+    const mostrarError = (err) => {
+      setError(err);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    };
+
+    function next () {
+        if(name === null || surname === null || date === null ){
+            return mostrarError('Debe ingresar todos los datos')}
+        if(name.length < 2 || surname.length < 2 ){
+            return mostrarError('Los datos no son validos')}
+        const payload = {
+            birthdate: `${date}`,
+            name: name, 
+            surname: surname,
+            
+        }
+
+        stepOne(payload)
+        history.push('/register-step-two')
+    }
+
 
     return (
         
@@ -40,7 +67,8 @@ function RegisterConfirmation(){
        
 
             <Text style={{ fontSize:30, color:'#EBEBEB',
-                paddingVertical: 30, justifyContent:'center', textAlign:'center' }}>Gracias por verificar tu correo 
+                paddingVertical: 30, justifyContent:'center', textAlign:'center' }}>
+                    Gracias por verificar tu correo 
             </Text>
 
             <View style = {{
@@ -104,16 +132,19 @@ function RegisterConfirmation(){
                 is24Hour={true}
                 display="default"
                 onChange={onChange}
+                minimumDate={new Date(1950, 0, 1)}
+                maximumDate={new Date(2003, 12, 31)} 
                 />
             )}
-            </View>    
+        </View>    
+        {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
             </View>
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity >
-                    <Link to="/register-step-two" style={styles.button} >
+                <TouchableOpacity style={styles.button} onPress={() => next(name)} >
+                   
                         <Text style={styles.buttonText}>Siguiente</Text>
-                    </Link>
+                    
                 </TouchableOpacity>
             </View>
             
@@ -135,6 +166,11 @@ const styles = StyleSheet.create({
             width: '100%',
             height: '100%',
             padding: 20,
+      },
+      errorMessage: {
+        color: colors.pink,
+        alignSelf: "center",
+        padding: 10,
       },
       button: {
             backgroundColor: '#E94560',
@@ -183,14 +219,13 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
     return {
-       
-    
+        
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-      
+        stepOne: payload => dispatch(stepOne(payload)),
     }
 }
 

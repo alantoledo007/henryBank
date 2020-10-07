@@ -23,11 +23,9 @@ export default function App() {
           <Route exact path="/register-confirmation" component={RegisterConfirmation} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/dash" component={Dash} />
-
           <Route exact path="/register-step-two" component={RegisterStepTwo} />
           <Route exact path="/register-step-three" component={RegisterStepThree} />
           <Route exact path="/email-verifier" component={EmailVerifier} />
-
         </NativeRouter>
       </Provider>
     </React.Fragment>
