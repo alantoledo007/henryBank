@@ -10,6 +10,8 @@ import Dash from './components/Dash';
 import RegisterStepTwo from './components/RegisterStepTwo';
 import RegisterStepThree from './components/RegisterStepThree';
 import EmailVerifier from './components/EmailVerifier';
+import PasswordReset from './components/PasswordReset/Index'
+import Reset from './components/PasswordReset/Reset';
 import { Provider } from 'react-redux';
 import store from './redux/store/index';
 
@@ -23,6 +25,8 @@ export default function App() {
           <Route exact path="/register-confirmation" component={RegisterConfirmation} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/dash" component={Dash} />
+          <Route exact path="/passwordreset" component={PasswordReset} />
+          <Route exact path="/reset" component={Reset} />
           <Route exact path="/register-step-two" component={RegisterStepTwo} />
           <Route exact path="/register-step-three" component={RegisterStepThree} />
           <Route exact path="/email-verifier" component={EmailVerifier} />
