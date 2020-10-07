@@ -100,15 +100,15 @@ module.exports = {
 			},
 			handler: controller.restore_password
 		},
-		code_mailer:{
+		send_restore_code:{
 			rest:{
 				method:"POST",
-				path:"/codeMailer"
+				path:"/send_restore_code"
 			},
 			params:{
 				email : "string"
 			},
-			handler: controller.codeMailer
+			handler: controller.send_restore_code
 		},
 
 		send_code_email_verifier:{
