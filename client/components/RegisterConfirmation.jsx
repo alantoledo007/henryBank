@@ -81,7 +81,7 @@ function RegisterConfirmation(props){
             
             <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
                 paddingVertical: 8}}>
-                Completa tus datos
+                Completá tus datos
             </Text>
 
             <ProgressBarAndroid
