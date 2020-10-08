@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { stepOne } from '../redux/actions/register';
 import colors from "./style/colors";
+import s from "./style/styleSheet"
 
 
 function RegisterConfirmation(props){
@@ -99,7 +100,7 @@ function RegisterConfirmation(props){
                 
                 <TextInput
                    placeholder='Nombre'
-                   style={styles.input}
+                   style={s.input}
                    value={name}
                    onChangeText={(text) => onChangeName(text)}
                    
@@ -111,7 +112,7 @@ function RegisterConfirmation(props){
 
                 <TextInput
                    placeholder='Apellido'
-                   style={styles.input}
+                   style={s.input}
                    onChangeText={(text) => onChangeSurname(text)}
 
                 />
@@ -119,7 +120,7 @@ function RegisterConfirmation(props){
                 <Text style={styles.text}>Fecha nacimiento</Text>
 
         <View>
-            <View style={styles.input}>
+            <View style={s.input}>
                 <TouchableOpacity onPress={showDatepicker}>
                         <Text style={styles.date}>{date.toDateString()}</Text>                 
                 </TouchableOpacity>
@@ -136,23 +137,23 @@ function RegisterConfirmation(props){
                 maximumDate={new Date(2003, 12, 31)} 
                 />
             )}
+
+            <View style={s.mt(5)}>
+                <TouchableOpacity style={{ ...s.btn(), ...s.mb(10), height: 50}} onPress={() => next(name)} >          
+                        <Text style={{ ...s.textWhite, ...s.size(4), textAlign:'center' }}>Siguiente</Text>              
+                </TouchableOpacity>
+            </View>
         </View>    
         {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
             </View>
-            <View style={styles.buttonsContainer}>
-                <TouchableOpacity style={styles.button} onPress={() => next(name)} >
-                   
-                        <Text style={styles.buttonText}>Siguiente</Text>
-                    
-                </TouchableOpacity>
-            </View>
             
-            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>
+            
+            <Text style={{  color:'#FFBD69', padding: 0 }}>Quantum</Text>
             
 
         </View>
-      
+   
     );
 }
 
@@ -166,6 +167,7 @@ const styles = StyleSheet.create({
             width: '100%',
             height: '100%',
             padding: 20,
+            marginTop: 22
       },
       errorMessage: {
         color: colors.pink,
@@ -209,7 +211,7 @@ const styles = StyleSheet.create({
       text: { 
         fontSize:20, 
         color:'#EBEBEB', 
-        padding:10
+        paddingVertical:10
       },
       date: {
           textAlign:'center',

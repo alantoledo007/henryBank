@@ -8,6 +8,7 @@ import { resetRegister } from '../redux/actions/register';
 import  axios  from 'axios';
 import env from '../env';
 import colors from "./style/colors";
+import s from "./style/styleSheet"
 
 function RegisterStepThree(props){
     const history = useHistory()
@@ -108,11 +109,11 @@ function RegisterStepThree(props){
 
                 </View>
 
-                <Text style={styles.text}>Barrio</Text>
+                <Text style={styles.text}>Localidad</Text>
 
                 <TextInput
-                   placeholder='Barrio'
-                   style={styles.input}
+                   placeholder='Localidad'
+                   style={s.input}
                    onChangeText={(text) => setBarrio(text)}
 
                 />
@@ -121,7 +122,7 @@ function RegisterStepThree(props){
 
                 <TextInput
                    placeholder='Provincia'
-                   style={styles.input}
+                   style={s.input}
                    onChangeText={(text) => setCiudad(text)}
 
                 />
@@ -130,24 +131,26 @@ function RegisterStepThree(props){
 
                 <TextInput
                    placeholder='País'
-                   style={styles.input}
+                   style={s.input}
                    onChangeText={(text) => setPais(text)}
 
                 />
+
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity style={styles.button}>
+                        <Link to="/register-step-two" >
+                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Atrás</Text>
+                        </Link>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => next()}>
+                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Completar</Text>
+                    </TouchableOpacity>           
+                </View>  
             </View>
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
-            <View style={styles.buttonsContainer}>
-                    <TouchableOpacity >
-                        <Link to="/register-step-two" style={styles.button}>
-                            <Text style={styles.buttonText}>Atrás</Text>
-                        </Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => next()}>
-                            <Text style={styles.buttonText}>Completar</Text>
-                    </TouchableOpacity>           
-            </View>  
+            
             <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>   
 
             <Modal
@@ -206,22 +209,26 @@ const styles = StyleSheet.create({
         padding: 10,
       },
       button: {
-            backgroundColor: '#E94560',
-            borderRadius: 7,
-            width: 150,
-      },
-      buttonText: {
-            textAlign: 'center',
-            padding: 10,
-            color: 'white',
-      },
-      buttonsContainer: {
-            padding: 10,          
-            width: '100%',
-            alignItems: 'center',       
-            flexDirection: 'row',
-            justifyContent: 'space-around' 
-      },
+        marginVertical: 10,
+        borderRadius: 5,
+        backgroundColor: '#E94560',
+        alignItems: 'center',
+        height: 50,
+        width: '50%',
+        justifyContent:'center',
+        textAlignVertical: 'center',
+        marginHorizontal: 1
+        },
+        buttonText: {
+                textAlign: 'center',
+                padding: 10,
+                color: 'white',
+        },
+        buttonsContainer: {
+                paddingVertical: 20,          
+                width: '100%',      
+                flexDirection: 'row',
+        },
       form: {
             alignContent:'center',
             justifyContent: 'flex-start',
@@ -242,11 +249,12 @@ const styles = StyleSheet.create({
            borderBottomColor:'#E94560',
            borderBottomWidth: 5,
            backgroundColor: '#EBEBEB',
-           borderBottomRightRadius: 8,
-           borderTopRightRadius: 8,
+           borderBottomRightRadius: 5,
+           borderTopRightRadius: 5,
            padding:10,
            width: '50%',
-           margin: 0.4
+           margin: 0.4,
+           fontWeight: 'bold'
 
       },
       input1: {
@@ -254,9 +262,9 @@ const styles = StyleSheet.create({
            borderBottomColor:'#E94560',
            borderBottomWidth: 5,
            backgroundColor: '#EBEBEB',
-           borderBottomLeftRadius: 8,
-           borderTopLeftRadius: 8,
-           
+           borderBottomLeftRadius: 5,
+           borderTopLeftRadius: 5,
+           fontWeight: 'bold',
            padding:10,
            width: '50%',
            margin: 0.4
@@ -269,7 +277,7 @@ const styles = StyleSheet.create({
       text: { 
         fontSize:20, 
         color:'#EBEBEB', 
-        padding:10
+        paddingVertical:10
       },
       centeredView: {
             flex: 1,
