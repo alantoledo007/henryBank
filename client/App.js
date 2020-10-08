@@ -14,12 +14,14 @@ import PasswordReset from './components/PasswordReset/Index'
 import Reset from './components/PasswordReset/Reset';
 import { Provider } from 'react-redux';
 import store from './redux/store/index';
+import Fox from './components/Fox';
 
 export default function App() {
   return (
     <React.Fragment>
       <Provider store={store}>
         <NativeRouter>
+          <Fox />
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
           <Route exact path="/register-confirmation" component={RegisterConfirmation} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Button, StyleSheet, StatusBar, Alert, ActivityIndicator } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, StatusBar, Alert, ActivityIndicator, ScrollView } from 'react-native'
 import { Link, useHistory } from 'react-router-native'
 import colors from "../style/colors";
 import { useForm, Controller } from "react-hook-form";
@@ -12,116 +12,10 @@ import env from '../../env';
 import { connect } from "react-redux";
 import { passwordReset } from "../../redux/actions/PasswordReset";
 
+//UI
+import s from '../style/styleSheet';
+
 function Index({ email, passwordReset }) {
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: StatusBar.currentHeight,
-        },
-        header: {
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            width: '100%',
-            height: StatusBar.currentHeight * 2,
-            backgroundColor: colors.orange,
-        },
-        headerText: {
-            fontSize: 30,
-        },
-        content: {
-            flex: 5,
-            paddingTop: 60,
-            backgroundColor: "rgb(34,31,59)",
-            width: '100%'
-        },
-        titleWrapper: {
-            // flex: 0.7,
-            justifyContent: "center",
-            alignItems: 'center',
-            alignSelf: 'center',
-            paddingTop: 10,
-            width: '90%',
-        },
-        title: {
-            alignSelf: "center",
-            color: colors.white,
-            fontSize: 35,
-            fontFamily: "Poppins_600SemiBold",
-            textAlign: 'center',
-        },
-        subTitle: {
-            color: 'gray',
-            alignSelf: 'center',
-            fontSize: 20,
-            paddingTop: 10,
-            textAlign: 'center',
-
-        },
-        inputWrapper: {
-            // flex: 1.7,
-            alignItems: "center",
-            marginTop: 40,
-            marginBottom: 10,
-        },
-        inputs: {
-            // flex: 0.5,
-            justifyContent: "space-around",
-        },
-        input: {
-            fontFamily: "Poppins_400Regular_Italic",
-            color: "#221F3B",
-            backgroundColor: colors.white,
-            margin: 10,
-            height: 50,
-            width: 250,
-            borderBottomColor: colors.pink,
-            borderBottomWidth: 5,
-            borderRadius: 5,
-            fontSize: 20,
-            paddingLeft: 8,
-            paddingBottom: 5,
-        },
-        button: {
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: colors.pink,
-            alignSelf: "center",
-            width: 250,
-            height: 60,
-            borderRadius: 5,
-        },
-        buttonText: {
-            textAlign: "center",
-            padding: 20,
-            color: colors.white,
-            fontSize: 20,
-            fontFamily: "Poppins_600SemiBold",
-        },
-        backButton: {
-            backgroundColor: colors.pink,
-            height: 40,
-            width: 80,
-            borderRadius: 7,
-            alignSelf: "center",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 20,
-        },
-        backButtonText: {
-            color: colors.white,
-            fontSize: 15,
-            fontFamily: "Poppins_400Regular",
-        },
-        error: {
-            color: colors.white,
-            fontSize: 30,
-
-        }
-    });
     
     /* Dis se utiliza para desabilitar el boton y el input y tambien habilitar el spinner */
     const [ dis, setDis ] = useState(false);
@@ -148,40 +42,51 @@ function Index({ email, passwordReset }) {
     };
     
     return (
-        <View style={styles.container}>
-            <View style={styles.content}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={['rgba(0,0,0,0.8)', 'transparent']}
-                    style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        height: 300,
-                    }}
-                />
-                <TouchableOpacity style={styles.backButton}>
-                    <Link to="/">
-                        <Text style={{ color: 'white', alignSelf: 'flex-start' }}>Volver</Text>
+        <View style={s.container}>
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: 300,
+                }}
+            />
+            <ScrollView>
+                <View style={{ ...s.mb(5)}}>
+                    <Link to="/login" component={TouchableOpacity}>
+                        <Text style={s.textColor('orange')}> &lt; Volver</Text>
                     </Link>
-                </TouchableOpacity>
-                <View style={styles.titleWrapper}>
-                    <Text style={styles.title}>Recuperar Contraseña</Text>
-                    <Text style={styles.subTitle}>Se le enviará un correo electronico con un código que debera utilizar a continuación</Text>
                 </View>
-                <View style={styles.inputWrapper}>
+                
+                <View>
+                    <Image source={require("../../Logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
+                </View>
+
+                <View>
+                <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(1) }}>
+                    Recuperar Contraseña
+                </Text>
+                <Text style={{ ...s.textColor("#777"),...s.size(3.2) }}>Se le enviará un correo electronico con un código que debera utilizar a continuación</Text>
+                </View>
+
+                <View style={s.mb(4)}>
                 <ActivityIndicator animating={dis} size="large" color={colors.pink} />
-                    <Controller
+                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Correo electrónico</Text>
+                     <Controller
                         control={control}
                         render={({ onChange, onBlur, value }) => (
                             <TextInput
-                                style={styles.input}
+                                style={s.input}
                                 onBlur={onBlur}
                                 onChangeText={value => onChange(value)}
                                 value={value}
                                 placeholder="Ingrese Email"
-                                autoFocus={true}
+                                placeholder="ejemplo@mail.com"    
+                                keyboardType="email-address"
+                                //autoFocus={true}
                                 editable={!dis}
                             />
                         )}
@@ -192,18 +97,128 @@ function Index({ email, passwordReset }) {
 
                 </View>
                 <TouchableOpacity
-                    style={styles.button}
+                    style={s.btn()}
                     onPress={handleSubmit(onSubmit)}
                     disabled={dis}
                 >
-                    <Text style={styles.buttonText}>Enviar código</Text>
+                    <Text style={s.textButton()}>Enviar código</Text>
                 </TouchableOpacity>
                 {errors.email && <View style={styles.titleWrapper}><Text style={styles.error}>Email is required.</Text></View>}
 
-            </View>
+            </ScrollView>
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingTop: StatusBar.currentHeight,
+    },
+    header: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        width: '100%',
+        height: StatusBar.currentHeight * 2,
+        backgroundColor: colors.orange,
+    },
+    headerText: {
+        fontSize: 30,
+    },
+    content: {
+        flex: 5,
+        paddingTop: 60,
+        backgroundColor: "rgb(34,31,59)",
+        width: '100%'
+    },
+    titleWrapper: {
+        // flex: 0.7,
+        justifyContent: "center",
+        alignItems: 'center',
+        alignSelf: 'center',
+        paddingTop: 10,
+        width: '90%',
+    },
+    title: {
+        alignSelf: "center",
+        color: colors.white,
+        fontSize: 35,
+        fontFamily: "Poppins_600SemiBold",
+        textAlign: 'center',
+    },
+    subTitle: {
+        color: 'gray',
+        alignSelf: 'center',
+        fontSize: 20,
+        paddingTop: 10,
+        textAlign: 'center',
+
+    },
+    inputWrapper: {
+        // flex: 1.7,
+        alignItems: "center",
+        marginTop: 40,
+        marginBottom: 10,
+    },
+    inputs: {
+        // flex: 0.5,
+        justifyContent: "space-around",
+    },
+    input: {
+        fontFamily: "Poppins_400Regular_Italic",
+        color: "#221F3B",
+        backgroundColor: colors.white,
+        margin: 10,
+        height: 50,
+        width: 250,
+        borderBottomColor: colors.pink,
+        borderBottomWidth: 5,
+        borderRadius: 5,
+        fontSize: 20,
+        paddingLeft: 8,
+        paddingBottom: 5,
+    },
+    button: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: colors.pink,
+        alignSelf: "center",
+        width: 250,
+        height: 60,
+        borderRadius: 5,
+    },
+    buttonText: {
+        textAlign: "center",
+        padding: 20,
+        color: colors.white,
+        fontSize: 20,
+        fontFamily: "Poppins_600SemiBold",
+    },
+    backButton: {
+        backgroundColor: colors.pink,
+        height: 40,
+        width: 80,
+        borderRadius: 7,
+        alignSelf: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 20,
+    },
+    backButtonText: {
+        color: colors.white,
+        fontSize: 15,
+        fontFamily: "Poppins_400Regular",
+    },
+    error: {
+        color: colors.white,
+        fontSize: 30,
+
+    }
+});
 
 const mapStateToProps = (state) => {
     return {

@@ -23,7 +23,9 @@ import { AppLoading } from "expo";
 import env from "../env";
 
 //Estilos
+import { LinearGradient } from 'expo-linear-gradient';
 import colors from "./style/colors";
+import s from './style/styleSheet';
 import {
   useFonts,
   Poppins_100Thin,
@@ -76,9 +78,9 @@ function Login({ login }) {
       })
       .then((data) => {
         //Si los datos incluyen el nombre, significa que el usuario ya verificó su cuenta, por lo tanto redireccionamos a la posición consolidada
-        if (data.user.name) return history.push("/dash");
+        //if (data.user.name) return history.push("/dash");
         //Si no hay nombre, redireccionamos a la pantalla de confirmar registro
-        history.push("/register-confirmation");
+        //history.push("/register-confirmation");
       })
       .catch((err) => {
         //Manejo de errores:
@@ -99,22 +101,37 @@ function Login({ login }) {
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
-      <View style={styles.container}>
-        <View style={styles.titleWrapper}>
-          <Text style={styles.title}>Iniciar sesión</Text>
+      <View style={s.container}>
+        <LinearGradient
+              // Background Linear Gradient
+              colors={['rgba(0,0,0,0.8)', 'transparent']}
+              style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  height: 300,
+              }}
+          />
+        <View>
+                <Image source={require("../Logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
+                </View>
+        <View>
+          <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(5) }}>Iniciar sesión</Text>
         </View>
-        <View style={styles.inputWrapper}>
+        <View>
           {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
-          <View style={styles.inputs}>
+          <View style={s.mb(4)}>
+            <Text style={{ ...s.textWhite, ...s.size(4) }}>Correo electrónico</Text>
             <Controller
               control={control}
               render={({ onChange, onBlur, value }) => (
                 <TextInput
-                  style={{ ...styles.input, ...styles.email }}
+                  style={{ ...s.input }}
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
-                  placeholder="Correo electrónico"
+                  placeholder="ejemplo@mail.com"
                   keyboardType="email-address"
                   autoCapitalize="none"
                   //No estoy seguro si estos dos siguientes son necesarios así que por las dudas los dejo comentados
@@ -126,17 +143,21 @@ function Login({ login }) {
               rules={{ required: true }}
               defaultValue=""
             />
-            <View style={styles.passwordWrapper}>
+          </View>
+
+          <View>
+            <View style={s.mb(4)}>
+              <Text style={{ ...s.textWhite, ...s.size(4) }}>Contraseña</Text>
               <Controller
                 control={control}
                 render={({ onChange, onBlur, value }) => (
                   <TextInput
                     secureTextEntry={hidePassword}
-                    style={{ ...styles.input, ...styles.password }}
+                    style={{ ...s.input}}
                     onBlur={onBlur}
                     onChangeText={(value) => onChange(value)}
                     value={value}
-                    placeholder="Contraseña"
+                    placeholder="••••••••"
                     autoCapitalize="none"
                   />
                 )}
@@ -144,7 +165,7 @@ function Login({ login }) {
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <View style={styles.eyeWrapper}>
+              <View style={{ position:'absolute', top:40, right: 15 }}>
                 <TouchableWithoutFeedback
                   onPress={() => setHidePassword(!hidePassword)}
                 >
@@ -152,29 +173,30 @@ function Login({ login }) {
                     style={styles.eye}
                     source={
                       hidePassword
-                        ? require("../assets/ojon't.png")
-                        : require("../assets/ojo.png")
+                        ? require("../assets/eye.png")
+                        : require("../assets/eye-slash.png")
                     }
                   />
                 </TouchableWithoutFeedback>
               </View>
+              <Link to="/passwordreset" component={TouchableOpacity}>
+                <Text style={s.textColor('orange')}>¿Olvidaste tu contraseña?</Text>
+              </Link>
             </View>
           </View>
           <TouchableOpacity
-            style={styles.button}
+            style={s.btn()}
             onPress={handleSubmit(onSubmit)}
           >
-            <Text style={styles.buttonText}>Ingresar</Text>
+            <Text style={{ ...s.textWhite, fontWeight:'bold' }}>INGRESAR</Text>
           </TouchableOpacity>
-          <Link to="/passwordreset">
-            <Text style={styles.forgotPass}>¿Olvidaste tu contraseña?</Text>
-          </Link>
+          
         </View>
-        <TouchableOpacity style={styles.backButton}>
-          <Link to="/">
-            <Text style={styles.backButtonText}>Volver</Text>
-          </Link>
-        </TouchableOpacity>
+        <Link to="/register" component={TouchableOpacity} style={s.mt(6)}>
+            <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
+                ¿No tienes una cuenta? Registrate
+            </Text>
+        </Link>
       </View>
     );
 }
@@ -208,8 +230,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: colors.white,
     fontSize: 55,
-    paddingTop: 70,
-    fontFamily: "Poppins_600SemiBold",
+    paddingTop: 70
   },
   inputWrapper: {
     justifyContent: "flex-start",
@@ -250,16 +271,6 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-  },
-  eyeWrapper: {
-    borderBottomColor: colors.pink,
-    height: 40,
-    width: 30,
-    borderBottomWidth: 5,
-    backgroundColor: colors.white,
-    borderTopRightRadius: 5,
-    borderBottomRightRadius: 5,
-    justifyContent: "center",
   },
   eye: {
     height: 25,

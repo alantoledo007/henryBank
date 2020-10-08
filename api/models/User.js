@@ -90,6 +90,11 @@ module.exports = (sequelize) => {
 				type: DataTypes.DATE,
 				allowNull: true,
 			},
+
+			dataCompletedAt: {
+				type: DataTypes.DATE,
+				allowNull: true
+			}
 		},
 		{
 			tableName: "users",

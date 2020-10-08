@@ -1,12 +1,13 @@
 //general
 import React,  { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
-    TextInput, Picker, ProgressBarAndroid} from 'react-native';
+    TextInput, Picker, ProgressBarAndroid, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-native';
 import { stepTwo } from '../redux/actions/register';
 import colors from "./style/colors";
 import s from "./style/styleSheet";
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 function RegisterStepTwo(props){
@@ -22,9 +23,9 @@ function RegisterStepTwo(props){
     function next () {
         if(selectedValue === null || telefono === null || num_doc === null ){
             return mostrarError('Debe ingresar todos los datos')}
-        if(num_doc.length > 10 || num_doc.length < 8 ){
+        if(num_doc.length > 10 || num_doc.length < 7 ){
             return mostrarError('No es número documento valido')}
-        if(telefono.length >= 20 || telefono.length < 7 ){
+        if(telefono.length >= 20 || telefono.length < 10 ){
             return mostrarError('No es un teléfono valido')}
         const payload = {
             doc_type: selectedValue,
@@ -45,22 +46,32 @@ function RegisterStepTwo(props){
     };
 
     return (
-        <View style={styles.container}>
+        <View style={s.container}>
 
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: 300,
+                }}
+            />
+
+            <ScrollView>
             <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
                 paddingVertical: 8}}>
                 Completá tus datos
             </Text>
 
-            <ProgressBarAndroid
-                styleAttr="Horizontal"
-                indeterminate={false}
-                progress={0.6}
-                style={styles.barra}
-            />
+            <View style={s.bg('rgba(0,0,0, .2)')}>
+                <View opacity={0.8} style={{ ...s.col(8),...s.hr('orange', 4) }} />
+            </View>
         
 
-            <View style={styles.form}>
+            <View style={s.mt(4)}>
 
                 <Text style={styles.text}>Número teléfono</Text>
                 
@@ -83,7 +94,7 @@ function RegisterStepTwo(props){
                         
                     >
                         <Picker.Item label="DNI" value="dni" />
-                        <Picker.Item label="passport" value="passport" />
+                        <Picker.Item label="Pasaporte" value="passport" />
                     </Picker>
                 </View>
                 
@@ -97,23 +108,24 @@ function RegisterStepTwo(props){
                    
                 />
 
-                <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={styles.button}>
-                        <Link to="/register-confirmation" >
-                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Atrás</Text>
+                <View style={{ ...s.row, justifyContent:'space-between', ...s.mt(4) }}>
+                    <View style={s.col(6,1)}>
+                        <Link to="/register-confirmation" component={TouchableOpacity} style={{ ...s.btn() }}>
+                                <Text style={{ ...s.textButton() }}>Atrás</Text>
                         </Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => next()}>
-                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Siguiente</Text>                 
-                    </TouchableOpacity>    
+                    </View>
+                    <View style={s.col(6,1)}>
+                        <TouchableOpacity style={{ ...s.btn() }} onPress={() => next()}>
+                                <Text style={{ ...s.textButton() }}>Siguiente</Text>                 
+                        </TouchableOpacity> 
+                    </View>
                 </View>
                 
             </View>
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
-            
-            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>
+            </ScrollView>
     
         </View>
     )
@@ -180,7 +192,7 @@ const styles = StyleSheet.create({
       text: { 
             fontSize:20, 
             color:'#EBEBEB', 
-            paddingVertical:10
+            paddingTop:10
       },
       documento: { 
            height: 50, 
