@@ -3,9 +3,9 @@
 //General
 import { ScrollView, StyleSheet, View, TouchableOpacity, Text, TextInput, Modal, Alert} from 'react-native';
 import React,{ useState, useEffect} from 'react';
-import {Link} from 'react-router-native';
+import {Link, useHistory} from 'react-router-native';
 import { useForm, Controller } from "react-hook-form";
-import {sendEmailVerifier} from '../redux/actions/email_verifier';
+import {sendEmailVerifier, emailVerify} from '../redux/actions/email_verifier';
 
 //Redux
 import {connect} from 'react-redux';
@@ -14,13 +14,13 @@ import {connect} from 'react-redux';
 import s from './style/styleSheet';
 
 
-function EmailVerifier({email, error,sent, sendEmailVerifier}){
+function EmailVerifier({email, error,emailVerify, sendEmailVerifier}){
 
     const { control, handleSubmit, errors } = useForm();
-    const onSubmit = data => console.log(data);
 
     const rules = {
-        email: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i
+        email: /^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+        code: /^[0-9]{6}$/
     }
 
     const [state,setState] = useState({
@@ -28,9 +28,47 @@ function EmailVerifier({email, error,sent, sendEmailVerifier}){
         loading: false
     });
 
+    const verifyCode = data => {
+        data.email = email;
+        setState({
+            ...state,
+            loading:true
+        })
+        emailVerify(data)
+        .then(() => {
+            setState({
+                ...state,
+                needCode:false,
+                loading:false
+            })
+        })
+        .catch(() =>{
+            setState({
+                ...state,
+                loading:false
+            })
+        });
+    }
+
     const sendCode = data => {
-        console.log(data);
-        sendEmailVerifier(data);
+        setState({
+            ...state,
+            loading:true
+        })
+        sendEmailVerifier(data)
+        .then(() => {
+            setState({
+                ...state,
+                needCode:false,
+                loading:false
+            })
+        })
+        .catch(() =>{
+            setState({
+                ...state,
+                loading:false
+            })
+        });
     };
 
     const switchNeedCode = () => {
@@ -101,6 +139,7 @@ function EmailVerifier({email, error,sent, sendEmailVerifier}){
                                 onBlur={onBlur}
                                 onChangeText={value => onChange(value)}
                                 value={value}
+                                editable={false}
                                 //No estoy seguro si estos dos siguientes son necesarios así que por las dudas los dejo comentados
                                 //textContentType="emailAddress"
                                 autoCompleteType="email"
@@ -125,19 +164,38 @@ function EmailVerifier({email, error,sent, sendEmailVerifier}){
 
             {!state.needCode && (
                 <View style={s.mb(4)}>
-                    <TextInput
-                    style={{ ...s.input }}
-                    placeholder="Ingrese el código"
-                    keyboardType='numeric'
-                    //No estoy seguro si estos dos siguientes son necesarios así que por las dudas los dejo comentados
-                    // textContentType="emailAddress"
-                    // autoCompleteType="email"
+                    
+                    <Controller
+                        control={control}
+                        render={({onChange, onBlur, value}) => (
+                            <TextInput
+                                style={{ ...s.input }}
+                                placeholder="Ingrese el código"
+                                keyboardType='numeric'
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value}
+                                //No estoy seguro si estos dos siguientes son necesarios así que por las dudas los dejo comentados
+                                // textContentType="emailAddress"
+                                // autoCompleteType="email"
+                                />
+                        )}
+                        name="code"
+                        rules={{
+                            required: true,
+                            pattern: rules.code
+                        }}
+                        defaultValue={null}
                     />
+                    {errors.code?.type === "required" &&
+                      <Text style={s.textColor('red')}>Debes ingresar el código</Text>}
+                    {errors.code?.type === "pattern" &&
+                      <Text style={s.textColor('red')}>El código ingresado no es válido</Text>}
                 </View>
             )}
 
             <View>
-                {!state.needCode && (<Link component={TouchableOpacity} style={s.btn()}>
+                {!state.needCode && (<Link onPress={handleSubmit(verifyCode)} component={TouchableOpacity} style={s.btn()}>
                     <Text style={{ fontWeight:'bold',...s.textColor('white') }}>
                         {!state.loading && 'VERIFICAR'}
                         {state.loading && 'CARGANDO...'}
@@ -145,7 +203,7 @@ function EmailVerifier({email, error,sent, sendEmailVerifier}){
                 </Link>)}
                 {state.needCode && (<Link onPress={handleSubmit(sendCode)} component={TouchableOpacity} style={s.btn()}>
                     <Text style={{ fontWeight:'bold',...s.textColor('white') }}>
-                        {!state.loading && 'ENVIAR CODIGO'}
+                        {!state.loading && 'REENVIAR CODIGO'}
                         {state.loading && 'CARGANDO...'}
                     </Text>
                 </Link>)}
@@ -164,7 +222,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        sendEmailVerifier: data => dispatch(sendEmailVerifier(data))
+        sendEmailVerifier: data => dispatch(sendEmailVerifier(data)),
+        emailVerify: data => dispatch(emailVerify(data))
     }
 }
 export default connect(

@@ -1,6 +1,6 @@
 //general
 import React from 'react';
-import { ScrollView, View, Text, Image } from 'react-native';
+import { ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 
@@ -15,16 +15,16 @@ function Home() {
             </View>
             <View style={{ flex: 2, width: "100%" }}>
                 <View style={{ width: "100%", ...s.my(5) }}>
-                    <Link to="/login" style={s.btn()}>
+                    <Link to="/login" component={TouchableOpacity} style={s.btn()}>
                         <Text style={{ ...s.textWhite, ...s.size(5) }}>Iniciar sesión</Text>
                     </Link>
                 </View>
                 <View>
-                    <Link to="/register" style={s.btn()}>
-                        <Text style={{ ...s.textWhite, ...s.size(5) }}>Registrarse</Text>
+                    <Link to="/register" component={TouchableOpacity} style={s.btn('white')}>
+                        <Text style={{ ...s.textColor('pink'), ...s.size(5) }}>Registrarse</Text>
                     </Link>
                 </View>
-                <View opacity={0.5} style={{ ...s.hr('white'), ...s.my(10) }}></View>
+                <View opacity={0.2} style={{ ...s.hr('white',3.5), ...s.mt(10), ...s.mb(4) }}></View>
                 <View>
                     <Link to="/#">
                         <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>

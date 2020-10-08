@@ -1,13 +1,16 @@
 //general
 import React, { useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
-        TextInput, ProgressBarAndroid, Button} from 'react-native';
+        TextInput, ProgressBarAndroid, Button, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { stepOne } from '../redux/actions/register';
 import colors from "./style/colors";
 import s from "./style/styleSheet"
+
+import { Link } from 'react-router-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 function RegisterConfirmation(props){
@@ -64,92 +67,96 @@ function RegisterConfirmation(props){
 
     return (
         
-        <View style={styles.container}>
-       
-
-            <Text style={{ fontSize:30, color:'#EBEBEB',
-                paddingVertical: 30, justifyContent:'center', textAlign:'center' }}>
-                    Gracias por verificar tu correo 
-            </Text>
-
-            <View style = {{
-                borderWidth: 0.5,
-                borderColor:'#E94560',
-                margin:10,
-                width: '90%'
-            }} />
-
-            
-            <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
-                paddingVertical: 8}}>
-                Completá tus datos
-            </Text>
-
-            <ProgressBarAndroid
-                styleAttr="Horizontal"
-                indeterminate={false}
-                progress={0.33}
-                style={styles.barra}
+        <View style={s.container}>
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: 300,
+                }}
             />
-        
 
-            <View style={styles.form}>
-
-                <Text style={styles.text}>Nombre</Text>
+            <ScrollView>
+                <View style={{ ...s.mb(5)}}>
+                    <Link to="/" component={TouchableOpacity}>
+                        <Text style={s.textColor('orange')}> &times; Salir</Text>
+                    </Link>
+                </View>
                 
+
                 
-                <TextInput
-                   placeholder='Nombre'
-                   style={s.input}
-                   value={name}
-                   onChangeText={(text) => onChangeName(text)}
-                   
+                <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
+                    paddingVertical: 8}}>
+                    Completá tus datos
+                </Text>
+
+                <View style={s.bg('rgba(0,0,0, .2)')}>
+                    <View opacity={0.8} style={{ ...s.col(4),...s.hr('orange', 4) }} />
+                </View>
+                
+            
+
+                <View style={s.mt(5)}>
+
+                    <Text style={styles.text}>Nombre</Text>
+                    
+                    
+                    <TextInput
+                    placeholder='Nombre'
+                    style={s.input}
+                    value={name}
+                    onChangeText={(text) => onChangeName(text)}
+                    
 
 
-                />
+                    />
 
-                <Text style={styles.text}>Apellido</Text>
+                    <Text style={styles.text}>Apellido</Text>
 
-                <TextInput
-                   placeholder='Apellido'
-                   style={s.input}
-                   onChangeText={(text) => onChangeSurname(text)}
+                    <TextInput
+                    placeholder='Apellido'
+                    style={s.input}
+                    onChangeText={(text) => onChangeSurname(text)}
 
-                />
+                    />
 
-                <Text style={styles.text}>Fecha nacimiento</Text>
+                    <Text style={styles.text}>Fecha nacimiento</Text>
 
-        <View>
-            <View style={s.input}>
-                <TouchableOpacity onPress={showDatepicker}>
-                        <Text style={styles.date}>{date.toDateString()}</Text>                 
-                </TouchableOpacity>
-            </View>
-            {show && (
-                <DateTimePicker
-                testID="dateTimePicker"
-                value={date}
-                mode={mode}
-                is24Hour={true}
-                display="default"
-                onChange={onChange}
-                minimumDate={new Date(1950, 0, 1)}
-                maximumDate={new Date(2003, 12, 31)} 
-                />
-            )}
+            <View>
+                <View style={s.input}>
+                    <TouchableOpacity onPress={showDatepicker}>
+                            <Text style={styles.date}>{date.toDateString()}</Text>                 
+                    </TouchableOpacity>
+                </View>
+                {show && (
+                    <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                    minimumDate={new Date(1950, 0, 1)}
+                    maximumDate={new Date(2003, 12, 31)} 
+                    />
+                )}
 
-            <View style={s.mt(5)}>
-                <TouchableOpacity style={{ ...s.btn(), ...s.mb(10), height: 50}} onPress={() => next(name)} >          
-                        <Text style={{ ...s.textWhite, ...s.size(4), textAlign:'center' }}>Siguiente</Text>              
-                </TouchableOpacity>
-            </View>
-        </View>    
-        {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+                <View style={s.mt(5)}>
+                    <TouchableOpacity style={{ ...s.btn(), ...s.mb(10)}} onPress={() => next(name)} >          
+                            <Text style={{ ...s.textButton() }}>Siguiente</Text>              
+                    </TouchableOpacity>
+                </View>
+            </View>    
+            {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
             </View>
             
             
-            <Text style={{  color:'#FFBD69', padding: 0 }}>Quantum</Text>
+            </ScrollView>
             
 
         </View>
@@ -158,17 +165,7 @@ function RegisterConfirmation(props){
 }
 
 const styles = StyleSheet.create({
-    container: {
-            flex:1,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#221F3B',
-            paddingTop: StatusBar.currentHeight,
-            width: '100%',
-            height: '100%',
-            padding: 20,
-            marginTop: 22
-      },
+
       errorMessage: {
         color: colors.pink,
         alignSelf: "center",
@@ -179,39 +176,15 @@ const styles = StyleSheet.create({
             borderRadius: 7,
             width: 150
       },
-      buttonText: {
-            textAlign: 'center',
-            padding: 10,
-            color: 'white',
-      },
-      buttonsContainer: {
-            paddingVertical:20,          
-            width: '100%',
-            alignItems: 'center',            
-      },
       form: {
             alignContent:'center',
             justifyContent: 'center',
             width: '90%',
       },
-      input: {
-           height: 50, 
-           borderBottomColor:'#E94560',
-           borderBottomWidth: 5,
-           backgroundColor: '#EBEBEB',
-           borderRadius: 8,
-           padding:10
-
-      },
-      barra: {
-            color: '#FFBD69',
-            width: 180,
-            paddingVertical: 10,
-      },
       text: { 
         fontSize:20, 
         color:'#EBEBEB', 
-        paddingVertical:10
+        paddingTop:10
       },
       date: {
           textAlign:'center',

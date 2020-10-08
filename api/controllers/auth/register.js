@@ -5,8 +5,10 @@ const sender = require("../../emails/sender");
 require("dotenv").config();
 
 module.exports = async (ctx) => {
-	const newUser = await User.create(ctx.params);
-	newUser.password = await newUser.encryptPassword(newUser.password);
+	let data = ctx.params;
+	let newUser = new User();
+	newUser.password = await newUser.encryptPassword(data.password);
+	newUser.email = data.email;
 	await newUser.save();
 
 	const localStorage = new LocalStorage("./email_validation_storage");
@@ -29,8 +31,8 @@ module.exports = async (ctx) => {
 		data: { app_name: "Quantum", code },
 	});
 
-	return {
+	return {data:{
 		id: newUser.id,
 		email: newUser.email,
-	};
+	}};
 };

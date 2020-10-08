@@ -10,7 +10,6 @@ export default function email_verifier(state = initialState, action){
         case INIT_EMAIL_VERIFIER:
             return initialState;
         case EMAIL_VERIFIER_SENT:
-            console.log('sent');
             return {
                 ...state,
                 sent: true,

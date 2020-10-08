@@ -65,9 +65,9 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
     },
 
     //division-line
-    hr: color => {
+    hr: (color, size = 1) => {
         return {
-            borderBottomWidth: 1,
+            borderBottomWidth: size,
             borderBottomColor: colors[color] || color
         }
     },
@@ -85,6 +85,11 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
         }
     },
 
+
+    font: {
+        fontFamily:"Poppins_600SemiBold"
+    },
+
     input: {
         height: 50,
         backgroundColor: colors.white,
@@ -92,8 +97,16 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
         borderRadius: vars.radius,
         borderBottomColor: colors.pink,
         borderBottomWidth: 5,
-        color:colors.pink,
+        color:colors.blue,
         fontWeight: 'bold'
+    },
+
+    textButton:(color = '#fff') => {
+        return {
+            color: colors[color] || color,
+            fontWeight: 'bold',
+            textTransform: 'uppercase'
+        }
     },
 
     //helpers

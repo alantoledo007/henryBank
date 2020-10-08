@@ -1,7 +1,7 @@
 //general
 import React, { useState} from 'react';
-import { StyleSheet, View, Text, Button, TouchableOpacity, StatusBar, 
-    TextInput, Picker, ProgressBarAndroid, Modal,TouchableHighlight,} from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
+    TextInput, Picker, ProgressBarAndroid, Modal,TouchableHighlight, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-native';
 import { resetRegister } from '../redux/actions/register';
@@ -9,6 +9,7 @@ import  axios  from 'axios';
 import env from '../env';
 import colors from "./style/colors";
 import s from "./style/styleSheet"
+import { LinearGradient } from 'expo-linear-gradient';
 
 function RegisterStepThree(props){
     const history = useHistory()
@@ -21,7 +22,7 @@ function RegisterStepThree(props){
     const [altura, setAltura] = useState(null);
     const [barrio, setBarrio] = useState(null);
     const [ciudad, setCiudad] = useState(null);
-    const [pais, setPais] = useState(null);
+    const [pais, setPais] = useState('Argentina');
 
     const [error, setError] = useState("");
     const mostrarError = (err) => {
@@ -67,27 +68,35 @@ function RegisterStepThree(props){
 
         })
         .catch((error) => {
-            console.log(error)
+            console.log(error.response)
             mostrarError('Dirección no es valida')
         })     
     }
     
     return (
-        <View style={styles.container}>
-
-            <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
-                paddingVertical: 15}}>
+        <View style={s.container}>
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: 300,
+                }}
+            />
+            
+            <ScrollView>
+            <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB', ...s.mb(2)}}>
                 Completá tus datos
             </Text>
 
-            <ProgressBarAndroid
-                styleAttr="Horizontal"
-                indeterminate={false}
-                progress={0.95}
-                style={styles.barra}
-            />
+            <View style={s.bg('rgba(0,0,0, .2)')}>
+                <View opacity={0.8} style={{ ...s.col(12),...s.hr('orange', 4) }} />
+            </View>
         
-            <View style={styles.form}>
+            <View style={s.mt(5)}>
 
                 <Text style={styles.text}>Dirección</Text>
 
@@ -132,26 +141,28 @@ function RegisterStepThree(props){
                 <TextInput
                    placeholder='País'
                    style={s.input}
+                   editable={false}
                    onChangeText={(text) => setPais(text)}
+                   defaultValue="Argentina"
 
                 />
+                <Text style={s.textWhite}>Se requiere residir en Argentina.</Text>
 
-                <View style={styles.buttonsContainer}>
-                    <TouchableOpacity style={styles.button}>
-                        <Link to="/register-step-two" >
-                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Atrás</Text>
+                <View style={{ ...s.row, justifyContent:'space-between', ...s.mt(4) }}>
+                    <View style={s.col(6,1)}>
+                        <Link to="/register-step-two" component={TouchableOpacity} style={{ ...s.btn() }}>
+                                <Text style={{ ...s.textButton() }}>Atrás</Text>
                         </Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={() => next()}>
-                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Completar</Text>
-                    </TouchableOpacity>           
-                </View>  
+                    </View>
+                    <View style={s.col(6,1)}>
+                        <TouchableOpacity style={s.btn()} onPress={() => next()}>
+                                <Text style={{ ...s.textButton() }}>Completar</Text>
+                        </TouchableOpacity>   
+                    </View>
+                </View>
             </View>
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
-
-            
-            <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>   
 
             <Modal
                 animationType="slide"
@@ -186,6 +197,7 @@ function RegisterStepThree(props){
                     </View>
                 </View>
             </Modal>    
+            </ScrollView>
               
         </View>
     )
@@ -277,7 +289,7 @@ const styles = StyleSheet.create({
       text: { 
         fontSize:20, 
         color:'#EBEBEB', 
-        paddingVertical:10
+        paddingTop:10
       },
       centeredView: {
             flex: 1,

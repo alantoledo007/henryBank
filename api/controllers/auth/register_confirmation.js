@@ -12,25 +12,25 @@ module.exports = async (ctx) => {
 
     //Verificaciones de DNI y número telefónico
     if(doc_type !== "dni" && doc_type !== "passport"){
-        throw new MoleculerError("Invalid document type",401,"DOCUMENTTYPE_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
+        throw new MoleculerError("Invalid document type",422,"DOCUMENTTYPE_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
 
     }
 
     if(`${doc_number}`.length>10){
-        throw new MoleculerError("Invalid document number",401,"DOCUMENT_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
+        throw new MoleculerError("Invalid document number",422,"DOCUMENT_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
 
     }
 
     if(`${phone_number}`.length<10 || `${phone_number}`.length>20){
-        throw new MoleculerError("Invalid phone number",401,"PHONENUMBER_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
+        throw new MoleculerError("Invalid phone number",422,"PHONENUMBER_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
     }
 
 
 
     //Normalización de la dirección del usuario.
     
-    if(address_street.length<5){
-        throw new MoleculerError("Invalid address format",401,"STREET_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
+    if(address_street.length<1){
+        throw new MoleculerError("Invalid address format",422,"STREET_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
 
     }
 
@@ -40,10 +40,9 @@ module.exports = async (ctx) => {
         const information = response.data
 
         if(information.cantidad==0){
-            throw new MoleculerError("Invalid address",401,"CONFIRMATION_FAILED", { nodeID: ctx.nodeID, action:ctx.action.name });
+            throw new MoleculerError("Invalid address",422,"CONFIRMATION_FAILED", { nodeID: ctx.nodeID, action:ctx.action.name });
         }
 
-        console.log(response.data)
         if(information.cantidad !== 0){
             User.update({
                 doc_type,
@@ -56,9 +55,11 @@ module.exports = async (ctx) => {
                 address_number:information.direcciones[0].altura.valor,
                 locality:information.direcciones[0].localidad_censal.nombre,
                 province:information.direcciones[0].provincia.nombre,
-                country
+                country,
+                dataCompletedAt: Date.now()
             },{where:{id}});
-            return 'Register confirmation success'
+
+            return {status: 200, message: 'Register confirmation success'};
         }
     })
 

@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { register } from "../redux/actions/auth";
 
 //UI
+import { LinearGradient } from 'expo-linear-gradient';
 import s from './style/styleSheet';
 
 function Register({ register }) {
@@ -35,8 +36,7 @@ function Register({ register }) {
             .then(res => {
                 const { data } = res;
                 //Envío de data al store
-                register(data);
-                return data;
+                register(data.data);
             })
             .catch(err => {
                 //Manejo de errores:
@@ -45,7 +45,20 @@ function Register({ register }) {
     };
 
     return (
-        <ScrollView style={s.container}>
+        
+        <View style={{ ...s.container}}>
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: 300,
+                }}
+            />
+            <ScrollView style={{ position:'relative',left:0, right:0, margin:0,padding:0, display:'flex'}}>
             <View>
                 <Image source={require("../Logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
                 <Text style={{ ...s.textWhite, ...s.size(4), ...s.textCenter }}>Creá una cuenta y administrá tu plata como quieras, cuando quieras</Text>
@@ -59,11 +72,13 @@ function Register({ register }) {
                         control={control}
                         render={({ onChange, onBlur, value }) => (
                             <TextInput
+                                placeholder="ejemplo@mail.com"
                                 style={{ ...s.input, ...s.textColor('rgb(75,75,75)'), fontWeight: "normal", ...s.size(3.5) }}
                                 onBlur={onBlur}
                                 onChangeText={value => onChange(value)}
                                 value={value}
                                 autoCapitalize="none"
+                                keyboardType="email-address" 
                             />
                         )}
                         name="email"
@@ -85,6 +100,7 @@ function Register({ register }) {
                                     onBlur={onBlur}
                                     onChangeText={value => onChange(value)}
                                     value={value}
+                                    placeholder="••••••••"
                                     autoCapitalize="none"
                                 />
                                 <View style={{ alignItems: "flex-end", width: "10%", height: 50, ...s.input, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
@@ -112,9 +128,9 @@ function Register({ register }) {
                         style={{ ...s.btn(), ...s.mb(10) }}
                         onPress={handleSubmit(onSubmit)}
                     >
-                        <Text style={{ ...s.textWhite, ...s.size(5) }}>Crear cuenta</Text>
+                        <Text style={{ ...s.textWhite, fontWeight:'bold' }}>CREAR CUENTA</Text>
                     </TouchableOpacity>
-                    <Link to="/Login">
+                    <Link to="/login" component={TouchableOpacity}>
                         <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
                             ¿Ya estás registrado? Iniciá sesión
                         </Text>
@@ -122,6 +138,7 @@ function Register({ register }) {
                 </View>
             </View>
         </ScrollView>
+        </View>
     );
 }
 

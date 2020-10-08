@@ -50,7 +50,7 @@ module.exports = {
                 path: "/register",
             },
 			params: {
-				email: "string",
+				email: "email",
 				password:"string"
 			},
 			/** @param {Context} ctx  */
@@ -94,7 +94,7 @@ module.exports = {
 				path:"/restore_password"
 			},
 			params:{
-				email : "string",
+				email : "email",
 				newPassword: "string",
 				code : "number"
 			},
@@ -106,7 +106,7 @@ module.exports = {
 				path:"/send_restore_code"
 			},
 			params:{
-				email : "string"
+				email : "email"
 			},
 			handler: controller.send_restore_code
 		},
