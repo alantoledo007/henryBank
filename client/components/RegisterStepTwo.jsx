@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-native';
 import { stepTwo } from '../redux/actions/register';
 import colors from "./style/colors";
+import s from "./style/styleSheet";
 
 
 function RegisterStepTwo(props){
@@ -65,7 +66,7 @@ function RegisterStepTwo(props){
                 
                 <TextInput
                    placeholder='Teléfono'
-                   style={styles.input}
+                   style={s.input}
                    keyboardType='numeric'
                    onChangeText={(text) => onChangeTelofono(text)}
                    
@@ -75,7 +76,7 @@ function RegisterStepTwo(props){
 
                 <Text style={styles.text}>Tipo de documento</Text>
                 
-                <View style={styles.documento}>
+                <View style={{...s.input, justifyContent:"center"}}>
                     <Picker
                         selectedValue={selectedValue}
                         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
@@ -90,26 +91,28 @@ function RegisterStepTwo(props){
 
                 <TextInput
                    placeholder='Documento'
-                   style={styles.input}
+                   style={s.input}
                    keyboardType='numeric'
                    onChangeText={text => onChangeNum_doc(text)}
                    
                 />
+
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity style={styles.button}>
+                        <Link to="/register-confirmation" >
+                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Atrás</Text>
+                        </Link>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={() => next()}>
+                            <Text style={{ ...s.textWhite, ...s.size(4) }}>Siguiente</Text>                 
+                    </TouchableOpacity>    
+                </View>
                 
             </View>
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
-            <View style={styles.buttonsContainer}>
-                <TouchableOpacity >
-                    <Link to="/register-confirmation" style={styles.button}>
-                        <Text style={styles.buttonText}>Atrás</Text>
-                    </Link>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button} onPress={() => next()}>
-                        <Text style={styles.buttonText}>Siguiente</Text>                 
-                </TouchableOpacity>    
-            </View>
+            
             <Text style={{  color:'#FFBD69', padding: 20 }}>Quantum</Text>
     
         </View>
@@ -125,7 +128,7 @@ const styles = StyleSheet.create({
             paddingTop: StatusBar.currentHeight,
             width: '100%',
             height: '100%',
-
+            marginTop: 22,
             padding: 20,
       },
       errorMessage: {
@@ -134,9 +137,15 @@ const styles = StyleSheet.create({
         padding: 10,
       },
       button: {
+            marginVertical: 10,
+            borderRadius: 5,
             backgroundColor: '#E94560',
-            borderRadius: 7,
-            width: 150,
+            alignItems: 'center',
+            height: 50,
+            width: '50%',
+            justifyContent:'center',
+            textAlignVertical: 'center',
+            marginHorizontal: 1
       },
       buttonText: {
             textAlign: 'center',
@@ -144,11 +153,9 @@ const styles = StyleSheet.create({
             color: 'white',
       },
       buttonsContainer: {
-            padding: 20,          
-            width: '100%',
-            alignItems: 'center',       
+            paddingVertical: 20,          
+            width: '100%',      
             flexDirection: 'row',
-            justifyContent: 'space-around' 
       },
       form: {
             alignContent:'center',
@@ -173,7 +180,7 @@ const styles = StyleSheet.create({
       text: { 
             fontSize:20, 
             color:'#EBEBEB', 
-            padding:10
+            paddingVertical:10
       },
       documento: { 
            height: 50, 
