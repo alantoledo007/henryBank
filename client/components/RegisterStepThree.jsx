@@ -36,7 +36,7 @@ function RegisterStepThree(props){
         if(direccion === null || altura === null || barrio === null ||
             ciudad === null || pais === null ){
             return mostrarError('Debe ingresar todos los datos')}
-        if(direccion.length < 4 ){
+        if(direccion.length < 1 ){
             return mostrarError('No es una dirección valida')}
         
         const payload = {
