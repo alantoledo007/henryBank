@@ -7,6 +7,36 @@ module.exports = async (ctx) => {
     const {doc_type,doc_number,name,surname,birthdate,phone_number,address_street,address_number,locality,province,country} = ctx.params
     const {id} = ctx.meta.user
     
+    let usuario = await User.findOne({where:{id}})
+    
+    //Verificación de usuario eliminado
+    if(usuario == null){
+        throw new MoleculerError("User doesn't exists",410,"USER_NOTFOUND",{ nodeID: ctx.nodeID, action:ctx.action.name })
+    }
+
+    //Verificación de EDAD
+    const getEdad = (dateString) =>{
+        //Tomo la fecha en que se realiza la petición
+        let today = new Date()
+        //Tomo la fecha de cumpleaños
+        let birthdate = new Date(dateString)
+        //Tomo la diferencia de años y meses
+        let yearsOld = today.getFullYear() - birthdate.getFullYear()
+        let months = today.getMonth - birthdate.getMonth()
+        //Si la diferencia de meses es menor a 0, o la diferencia de meses es 0 y el día de cumpleaños es mayor(es después de hoy), entonces le resto un año a la edad
+        if(months < 0 || (months === 0 && today.getDate < birthdate.getDate())){
+            yearsOld--
+        }
+        //Retorno edad
+        return yearsOld
+    }
+
+    //Verifico que la edad que retorna esa función sea mayor a 16
+    if(getEdad(birthdate) < 16){
+        throw new MoleculerError("You have to be over 16 years old",422,"UNDERAGE",{ nodeID: ctx.nodeID, action:ctx.action.name })
+    }
+
+
     //No hice verificación de nombre y apellido porque puede existir cualquier cosa
     //No hice verificación del correo porque en teoría se verificó en el registro
 
@@ -57,13 +87,26 @@ module.exports = async (ctx) => {
                 province:information.direcciones[0].provincia.nombre,
                 country,
                 dataCompletedAt: Date.now()
-            },{where:{id}});
+            },{where:{id}})
+            .then(()=>{
+                
+            })
 
             return {status: 200, message: 'Register confirmation success'};
         }
     })
-
-    return {data}
+    
+    return {data:{
+        user:{
+            id: usuario.id,
+            name: usuario.name,
+            surname: usuario.surname,
+            email: usuario.email,
+            avatar: usuario.avatar,
+            emailVerifiedAt:usuario.emailVerifiedAt,
+            dataCompletedAt:usuario.dataCompletedAt
+        }
+    }}
     
 
 }
