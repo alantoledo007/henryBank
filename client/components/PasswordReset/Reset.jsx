@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Button, StyleSheet, StatusBar, Alert, ActivityIndicator } from 'react-native'
+import { View, Image, Text, TextInput, TouchableOpacity, Button, StyleSheet, StatusBar, Alert, ActivityIndicator, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import { Link, useHistory } from 'react-router-native'
 import colors from "../style/colors";
 import { useForm, Controller } from "react-hook-form";
@@ -11,6 +11,8 @@ import env from '../../env';
 //Redux
 import { connect } from "react-redux";
 import { PasswordReset } from "../../redux/actions/PasswordReset";
+
+import s from '../style/styleSheet';
 
 function Index({ email, passwordReset }) {
     const styles = StyleSheet.create({
@@ -124,11 +126,11 @@ function Index({ email, passwordReset }) {
     });
 
     /* Dis se utiliza para desabilitar el boton y el input y tambien habilitar el spinner */
-    const [ dis, setDis ] = useState(false);
-    const [ hidePassword, setHidePassword ] = useState(true);
-    const [ password, setPassword ] = useState();
-    const [ c_password, setC_Password ] = useState();
-    const [ error, setError ] = useState({ error: false, message: '' })
+    const [dis, setDis] = useState(false);
+    const [hidePassword, setHidePassword] = useState(true);
+    const [password, setPassword] = useState();
+    const [c_password, setC_Password] = useState();
+    const [error, setError] = useState({ error: false, message: '' })
     const history = useHistory();
     const { control, handleSubmit, errors } = useForm();
     //console.log('reset email', email);
@@ -138,7 +140,7 @@ function Index({ email, passwordReset }) {
         data.code = parseInt(data.code)
         setError({ error: false })
         if (password !== c_password) {
-            setError({ error: true, message:'Las contraseñas no coinciden' } )
+            setError({ error: true, message: 'Las contraseñas no coinciden' })
             setDis(false)
         } else {
             /* Se solicita a la api que envie un mail con un codigo */
@@ -147,51 +149,59 @@ function Index({ email, passwordReset }) {
                     "Content-Type": "application/json",
                 },
             })
-            .then((response) => {
-                setDis(false)
-                history.push("/login");
-            })
-            .catch((err) => {
-                setDis(false)
-                setError({ error: true, message: 'Error en la comprobacion. Revise el codigo enviado'})
-            });
+                .then((response) => {
+                    setDis(false)
+                    history.push("/login");
+                })
+                .catch((err) => {
+                    setDis(false)
+                    setError({ error: true, message: 'Error en la comprobacion. Revise el codigo enviado' })
+                });
         }
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.content}>
-                <LinearGradient
-                    // Background Linear Gradient
-                    colors={['rgba(0,0,0,0.8)', 'transparent']}
-                    style={{
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        height: 300,
-                    }}
-                />
-                <TouchableOpacity style={styles.backButton}>
-                    <Link to="/">
-                        <Text style={{ color: 'white', alignSelf: 'flex-start' }}>Volver</Text>
+        <View style={s.container}>
+            <LinearGradient
+                // Background Linear Gradient
+                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    top: 0,
+                    height: 300,
+                }}
+            />
+            <ScrollView>
+                <View style={{ ...s.mb(5) }}>
+                    <Link to="/login" component={TouchableOpacity}>
+                        <Text style={s.textColor('orange')}> &lt; Volver</Text>
                     </Link>
-                </TouchableOpacity>
-                <View style={styles.titleWrapper}>
-                    <Text style={styles.subTitle}>Ingrese el codigo enviado a su correo electrónico</Text>
                 </View>
-                <View style={styles.inputWrapper}>
+                <View>
+                    <Image source={require("../../Logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
+                </View>
+
+                <View>
+                    <Text style={{ ...s.textColor("#fff"), ...s.size(5), textAlign: 'center' }}>Ingrese el codigo enviado a su correo electrónico</Text>
+                </View>
+
+
+                <View>
                     <ActivityIndicator animating={dis} size="large" color={colors.pink} />
+                    {error.error && <View><Text style={{ ...s.textColor("#fff"), ...s.size(5), textAlign: 'center' }}>{error.message}</Text></View>}
+                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Código</Text>
                     <Controller
                         control={control}
                         render={({ onChange, onBlur, value }) => (
                             <TextInput
-                                style={styles.input}
+                                style={{ ...s.input, ...s.mb(3) }}
                                 onBlur={onBlur}
                                 onChangeText={value => onChange(value)}
                                 value={value}
                                 placeholder="Código"
-                                autoFocus={true}
+                                // autoFocus={true}
                                 editable={!dis}
                             />
                         )}
@@ -199,12 +209,14 @@ function Index({ email, passwordReset }) {
                         rules={{ required: true }}
                         defaultValue=""
                     />
+
+                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Nueva Contraseña</Text>
                     <Controller
                         control={control}
                         render={({ onChange, onBlur, value }) => (
                             <TextInput
                                 secureTextEntry={hidePassword}
-                                style={styles.input}
+                                style={{ ...s.input, ...s.mb(3) }}
                                 onBlur={onBlur}
                                 onChangeText={value => {
                                     onChange(value);
@@ -219,12 +231,14 @@ function Index({ email, passwordReset }) {
                         rules={{ required: true }}
                         defaultValue=""
                     />
+                    
+                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Repetir Nueva Contraseña</Text>
                     <Controller
                         control={control}
                         render={({ onChange, onBlur, value }) => (
                             <TextInput
                                 secureTextEntry={hidePassword}
-                                style={styles.input}
+                                style={{ ...s.input, ...s.mb(4) }}
                                 onBlur={onBlur}
                                 onChangeText={value => {
                                     onChange(value)
@@ -238,19 +252,17 @@ function Index({ email, passwordReset }) {
                         name="confirmaPassword"
                         rules={{ required: true }}
                         defaultValue=""
-                    />
-
-                    {error.error && <View style={styles.titleWrapper}><Text style={styles.subTitle}>{error.message}</Text></View>}
+                    />     
                 </View>
                 <TouchableOpacity
-                    style={styles.button}
+                    style={s.btn()}
                     onPress={handleSubmit(onSubmit)}
                     disabled={dis}
                 >
-                    <Text style={styles.buttonText}>Modificar Contraseña</Text>
+                    <Text style={s.textButton()}>Modificar Contraseña</Text>
                 </TouchableOpacity>
 
-            </View>
+            </ScrollView>
         </View>
     )
 }
