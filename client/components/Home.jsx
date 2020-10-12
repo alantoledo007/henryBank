@@ -2,13 +2,15 @@
 import React from 'react';
 import { ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-native';
+import { Link, useHistory } from 'react-router-native';
 
 //UI
 import s from './style/styleSheet';
 import { LinearGradient } from 'expo-linear-gradient';
 
 function Home() {
+
+    const history = useHistory()
     return (
         <View style={s.container}>
             <LinearGradient
@@ -23,6 +25,12 @@ function Home() {
               }}
           />
             <ScrollView>
+                    <View>
+                        <Link to="/send-money" component={TouchableOpacity} style={s.btn('white')}>
+                            <Text style={{ ...s.textColor('pink'), ...s.size(5) }}>Send Money</Text>
+                        </Link>
+                    </View>
+            {/* <TouchableOpacity onPress={() => history.push("/send-money")}> <Text> Send Money</Text></TouchableOpacity> */}
                 <View>
                     <Image source={require("../logoFull.png")} style={{alignSelf: "center" , ...s.mb(8)}}></Image>
                 </View>
