@@ -25,13 +25,13 @@ export default function App({ auth, user }) {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const [ userData, setUserData ] = useState({
+  /*const [ userData, setUserData ] = useState({
     email: null, 
     emailVerifiedAt: null, 
     dataCompletedAt: null,
   });
 
-  const authContext = React.useMemo(() => {
+   const authContext = React.useMemo(() => {
     return {
       signIn: ( data ) => {
         // console.log('context', data);
@@ -61,7 +61,7 @@ export default function App({ auth, user }) {
         setDataCompletedAt(null);
       }
     };
-  }, []);
+  }, []); */
   useEffect( () => {
     setTimeout(() => {
       setIsLoading(false);
@@ -72,12 +72,12 @@ export default function App({ auth, user }) {
 
   return (
     <>
-      <AuthContext.Provider value={authContext}>
+      {/* <AuthContext.Provider value={authContext}> */}
         <Provider store={store}>           
           <StatusBar hidden={true} />
             <IndexRoutes />
         </Provider>
-      </AuthContext.Provider>
+      {/* </AuthContext.Provider> */}
     </>
   );
 }

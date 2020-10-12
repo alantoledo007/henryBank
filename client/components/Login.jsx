@@ -57,7 +57,7 @@ function Login({ login, navigation }) {
 
   const [hidePassword, setHidePassword] = useState(true);
 
-  const { signIn } = React.useContext(AuthContext);
+/*   const { signIn } = React.useContext(AuthContext); */
 
   //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
   const [error, setError] = useState("");
@@ -84,9 +84,8 @@ function Login({ login, navigation }) {
       })
       .then((data) => {
         //Si los datos incluyen el nombre, significa que el usuario ya verificó su cuenta, por lo tanto redireccionamos a la posición consolidada
-        console.log(data)
         // Hacemos un signIn en el context para cargar los datos
-        signIn(data)
+        // signIn(data)
       })
       .catch((err) => {
         //Manejo de errores:
