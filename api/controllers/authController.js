@@ -5,8 +5,6 @@ const restore_password = require("./auth/restore_password");
 const send_restore_code = require("./auth/send_restore_code");
 const send_code_email_verifier = require('./auth/send_code_email_verifier');
 const email_verify = require('./auth/email_verify');
-const send_money = require('./transactions/transactions.js');
-
 
 module.exports = {
 	register,
@@ -16,5 +14,4 @@ module.exports = {
 	send_restore_code,
 	send_code_email_verifier,
 	email_verify,
-	send_money
 };
