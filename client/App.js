@@ -8,16 +8,11 @@ import store from './redux/store/index';
 import s from './components/style/styleSheet'
 import colors from './components/style/colors'
 
-// Navigator
-import { NavigationContainer } from '@react-navigation/native';
-import { 
-  AuthStackScreen, 
-  EmailVerifierStackScreen, 
-  RegisterStackScreen,
-  UserDrawerScreen,
-} from './components/Routes/Routes'
+
 // Context para validar las rutas
 import { AuthContext } from "./components/Context/AuthContext";
+// Validacion de rutas
+import IndexRoutes from './components/Routes/Index';
 
 import { emailVerify } from './redux/actions/email_verifier';
 
@@ -77,17 +72,12 @@ export default function App({ auth, user }) {
 
   return (
     <>
-    <AuthContext.Provider value={authContext}>
-      <Provider store={store}>           
-        <StatusBar hidden={true} />
-        <NavigationContainer>    
-            { userData.email === null ? <AuthStackScreen/>  
-            : !userData.emailVerifiedAt ? <EmailVerifierStackScreen />
-            : !userData.dataCompletedAt ? <RegisterStackScreen />
-            : <UserDrawerScreen /> }        
-        </NavigationContainer>
-      </Provider>
-    </AuthContext.Provider>
+      <AuthContext.Provider value={authContext}>
+        <Provider store={store}>           
+          <StatusBar hidden={true} />
+            <IndexRoutes />
+        </Provider>
+      </AuthContext.Provider>
     </>
   );
 }
