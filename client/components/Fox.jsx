@@ -3,10 +3,9 @@ import { Controller } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-native';
 
-function Fox({auth}){
+function Fox({ auth, navigation }){
     //history.push("/register-confirmation");
     let location = useLocation().pathname;
-    let history = useHistory();
 
     useEffect(() => {
         if(location === '/login'){
@@ -37,12 +36,12 @@ function Fox({auth}){
 function controller(auth, history) {
     console.log(auth);
     if(!auth.user.emailVerifiedAt){
-        return history.push('/email-verifier');
+        return navigation.navigate('email-verifier');
     }
     if(!auth.user.dataCompletedAt){ //no se dio de alta
-        return history.push('/register-confirmation')
+        return navigation.navigate('register-confirmation')
     }
-    return history.push('/dash');
+    return navigation.navigate('dash');
 }
 
 function mapStateToProps(state) {

@@ -13,8 +13,13 @@ import {connect} from 'react-redux';
 //UI
 import s from './style/styleSheet';
 
+// Context de autenticacion
+import { AuthContext } from './Context/AuthContext';
 
-function EmailVerifier({email, error,emailVerify, sendEmailVerifier}){
+function EmailVerifier({email, error, emailVerify, sendEmailVerifier, navigation}){
+
+    // Actualiza los datos en el context 
+    const { changeData } = React.useContext(AuthContext);
 
     const { control, handleSubmit, errors } = useForm();
 
@@ -36,11 +41,13 @@ function EmailVerifier({email, error,emailVerify, sendEmailVerifier}){
         })
         emailVerify(data)
         .then(() => {
+            console.log('dateishon', data)
             setState({
                 ...state,
                 needCode:false,
                 loading:false
             })
+            changeData({email: data.email, emailVerifiedAt: true })
         })
         .catch(() =>{
             setState({

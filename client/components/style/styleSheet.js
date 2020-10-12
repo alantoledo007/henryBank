@@ -9,7 +9,6 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
         paddingRight: vars.container_margin,
         paddingTop: vars.container_margin,
         backgroundColor: colors.blue,
-        marginTop: StatusBar.currentHeight
     },
     textWhite: {
         color: "#EBEBEB"

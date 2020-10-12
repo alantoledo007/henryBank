@@ -48,11 +48,16 @@ import {
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
 
-function Login({ login }) {
+// Context de autenticacion
+import { AuthContext } from './Context/AuthContext'
+
+function Login({ login, navigation }) {
   const history = useHistory();
   const { control, handleSubmit } = useForm();
 
   const [hidePassword, setHidePassword] = useState(true);
+
+  const { signIn } = React.useContext(AuthContext);
 
   //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
   const [error, setError] = useState("");
@@ -64,6 +69,7 @@ function Login({ login }) {
   };
 
   const onSubmit = (data) => {
+    console.log(data)
     axios
       .post(env.API_URI + "/auth/login", JSON.stringify(data), {
         headers: {
@@ -78,12 +84,13 @@ function Login({ login }) {
       })
       .then((data) => {
         //Si los datos incluyen el nombre, significa que el usuario ya verificó su cuenta, por lo tanto redireccionamos a la posición consolidada
-        //if (data.user.name) return history.push("/dash");
-        //Si no hay nombre, redireccionamos a la pantalla de confirmar registro
-        //history.push("/register-confirmation");
+        console.log(data)
+        // Hacemos un signIn en el context para cargar los datos
+        signIn(data)
       })
       .catch((err) => {
         //Manejo de errores:
+        console.log(err)
         if (err.response.data.type == "AUTHENTICATION_FAILED")
           mostrarError("Dirección de correo o contraseña incorrectos.");
         if (err.response.data.type == "VALIDATION_ERROR")
