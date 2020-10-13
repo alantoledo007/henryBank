@@ -40,8 +40,10 @@ const SendMoney = () => {
             return mostrarError('Debe ingresar un contacto')}
         if(toggleCheckBox === false ){
             return mostrarError('Debe aceptar los terminos')}
-        if(money === 0 ){
+        if(money === 0 || money === null || money === undefined ){
             return mostrarError('Debe ingresar el valor de la transferencia')}
+        if(money < 50 ){
+            return mostrarError('Transferencia minima de 50 pesos')}
         history.push('/')
     }
 
@@ -104,7 +106,7 @@ return (
 
             <Text style={{...s.textWhite, ...s.size(4), ...s.py(1)}}>¿Quieres decirle algo?</Text>
             <TextInput style={{...s.input, height:60}} multiline={true} 
-                maxLength={150} onChangeText={text => setDescription(text)}
+                maxLength={100} onChangeText={text => setDescription(text)}
             />
 
             
