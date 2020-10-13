@@ -107,6 +107,7 @@ return (
             <Text style={{...s.textWhite, ...s.size(4), ...s.py(1)}}>¿Quieres decirle algo?</Text>
             <TextInput style={{...s.input, height:60}} multiline={true} 
                 maxLength={100} onChangeText={text => setDescription(text)}
+                placeholder='Escribe tu mensaje aquí'
             />
 
             
