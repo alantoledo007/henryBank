@@ -89,7 +89,7 @@ module.exports = async (ctx) => {
                 dataCompletedAt: Date.now()
             },{where:{id}})
             .then(()=>{
-                
+                usuario = User.findOne({where:id})
             })
 
             return {status: 200, message: 'Register confirmation success'};
