@@ -1,9 +1,11 @@
 //general
 import React, { useState } from 'react';
-import axios from 'axios';
+import  axios  from 'axios';
+import env from '../env';
 import { useHistory } from 'react-router-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View, TextInput, Button,  ScrollView, Text, TouchableOpacity, Picker, StyleSheet } from "react-native";
+import { View, TextInput, Button,  ScrollView, Text, TouchableOpacity, 
+    Picker, StyleSheet, Modal, TouchableHighlight } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
 
 //redux
@@ -12,14 +14,23 @@ import { connect } from "react-redux";
 //UI
 import s from './style/styleSheet';
 
-const SendMoney = () => {
+const SendMoney = (props) => {
+
+    const { token } = props;
 
     const history = useHistory()
-
+    const [modalVisible, setModalVisible] = useState(false);
     const [selectedValue, setSelectedValue] = useState('Contactos');
     const [toggleCheckBox, setToggleCheckBox] = useState(false);
     const [money, setMoney] = useState(0);
     const [description, setDescription] = useState('');
+    const [title, setTitle] = useState('');
+
+     //Prueba
+     const balance = 20000;
+     const amigos = [ {name: 'Fran', id:'9e1be1c5-6697-41bf-ac76-46ebc407a73b'}, 
+                     {name: 'Juan', id:'9e1be1c5-6697-41bf-ac76-46ebc407a73b'},
+                     {name: 'Kenny', id:'9e1be1c5-6697-41bf-ac76-46ebc407a73b'}]
 
     const format = amount => {
     return Number(amount)
@@ -42,19 +53,38 @@ const SendMoney = () => {
             return mostrarError('Debe aceptar los terminos')}
         if(money === 0 || money === null || money === undefined ){
             return mostrarError('Debe ingresar el valor de la transferencia')}
-        if(money < 50 ){
-            return mostrarError('Transferencia minima de 50 pesos')}
-        history.push('/')
+        if(money < 100 ){
+            return mostrarError('Transferencia minima de 100 pesos')}
+        if(isNaN(money)){
+            return mostrarError('El valor debe ser un número')}
+
+        const payload = {
+            amount: money,
+            description: description,
+            user_id: amigos[0].id
+        }
+
+        console.log(payload)
+
+        axios.post(`${env.API_URI}/transactions`, 
+            payload,
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            console.log(response.data)
+            setTitle(response.data.title)
+            setModalVisible(true)
+        })
+        .catch((error) => {
+            console.log(error)
+        })  
+        
     }
 
-
-    //Prueba
-    const balance = 20000;
-    const amigos = ['nicolas', 'juan', 'daniel', 'diego'];
-
-
-
-console.log('amigos:', selectedValue, 'money:', money, 'check:', toggleCheckBox, 'por ultimo el descripcion:', )
 
 return (
          
@@ -84,7 +114,7 @@ return (
                     onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
                 <Picker.Item label='Contactos' value='Contactos' />
                 {amigos && amigos.map((x) =>  (
-                     <Picker.Item label={x} value={x} key={x}/>
+                     <Picker.Item label={x.name} value={x.name} key={x.name}/>
 
                 ))}
                  </Picker>
@@ -100,8 +130,8 @@ return (
                         style={{...s.size(7), borderColor:'rgba(0,0,0,0.0)',
                         color:'rgba(0,0,0,0.0)', width:'70%', height:50, textAlign:'center',
                         marginTop:-50}}
-                        onChangeText={money => setMoney(money)}
-                        keyboardType='numeric'/>
+                        onChangeText={money => setMoney(parseInt(money))}
+                        keyboardType='number-pad'/>
             </View>
 
             <Text style={{...s.textWhite, ...s.size(4), ...s.py(1)}}>¿Quieres decirle algo?</Text>
@@ -133,6 +163,40 @@ return (
                 </TouchableOpacity>
             </View>
 
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+            }}
+            >
+
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        
+                        <Text style={{...styles.modalText, color:'#FFBD69', fontSize: 40}}>Transferencia exitosa.</Text>
+                        <View style = {{
+                            borderWidth: 1,
+                            borderColor:'#221F3B',
+                            width: 220,
+                            margin: 10
+                        }} />
+                        <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title}</Text>
+            
+                        <TouchableHighlight
+                            style={{ ...styles.openButton, backgroundColor: "#E94560" }}
+                            onPress={() => {
+                            setModalVisible(!modalVisible);
+                            history.push('/dash')
+                            }}
+                        >
+                            <Text style={styles.textStyle}>Continuar</Text>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </Modal>  
+
         </ScrollView>
     </View>
         
@@ -150,11 +214,48 @@ const styles = StyleSheet.create ({
     alignSelf: "center",
     paddingVertical: 10,
   },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  openButton: {
+    backgroundColor: "#F194FF",
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+},
+textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+    backgroundColor:'#E94560'
+  },
 })
 
-function mapDispatchToProps () {
+function mapDispatchToProps (state) {
     return {
-
+        token: state.auth.token
     }
 }
 
