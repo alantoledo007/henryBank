@@ -26,11 +26,15 @@ module.exports = async (ctx)=>{
     const {identifier,amount,description} = ctx.params
     const {id} = ctx.meta.user
 
+    const user_id = getUserId(identifier)
+   
+
+
+
     const usuario_emisor = await User.findOne({where:{id}})
     const usuario_receptor = await User.findOne({where:{id:user_id}})
 
-    const user_id = getUserId(identifier)
-
+    
     //Verificacion no mandarse balance a sí mismo
     if(id == user_id){
         throw new MoleculerError(`You can't send money to yourself`,402,"WRONG_RECEPTOR",{ nodeID: ctx.nodeID, action:ctx.action.name })
