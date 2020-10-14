@@ -16,7 +16,7 @@ import s from './style/styleSheet';
 
 const SendMoney = (props) => {
 
-    const { token } = props;
+    const { token, balance } = props;
 
     const history = useHistory()
     const [modalVisible, setModalVisible] = useState(false);
@@ -28,9 +28,6 @@ const SendMoney = (props) => {
     const [titleError, setTitleError] = useState('');
     const [friends, setFriends ] =useState([]);
     const [flag, setFlag] = useState(false)
-
-     //Prueba
-     const balance = 20000;
 
     const contancts = () => {
         axios.get(`${env.API_URI}/contacts`, 
@@ -53,7 +50,7 @@ const SendMoney = (props) => {
     const format = amount => {
     return Number(amount)
         .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, '$&.');
+        .replace(/\d(?=(\d{3})+\.)/g, '$&,');
     };
 
     const [error, setError] = useState("");
@@ -129,7 +126,7 @@ return (
         <ScrollView style={{width:'100%'}}>
 
             <View style={{ ...s.mb(5)}}>
-                <Link to="/" component={TouchableOpacity}>
+                <Link to="/dash" component={TouchableOpacity}>
                     <Text style={s.textColor('orange')}> &lt; Volver</Text>
                 </Link>
             </View>
@@ -152,7 +149,7 @@ return (
                  </Picker>
             </View>
 
-            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: ${balance}</Text>
+            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: ${format(balance)}</Text>
                     
             <View style={{...s.my(4), justifyContent:'center', alignItems:'center', height:50}}>
                     <Text style={{...s.textWhite, ...s.size(7), ...s.textCenter}}>
@@ -287,7 +284,8 @@ textStyle: {
 
 function mapDispatchToProps (state) {
     return {
-        token: state.auth.token
+        token: state.auth.token,
+        balance: state.auth.user.balance
     }
 }
 
