@@ -6,11 +6,30 @@ const {MoleculerError} = require('moleculer').Errors;
 
 module.exports = async (ctx)=>{
 
-    const {user_id,amount,description} = ctx.params
+    const getUserId = async (identifier) =>{
+        const userId = identifier //si le pasan el id de usuario no deberia hacer nada más
+
+        //revisamos si hay un @, lo que quiere decir que es un email
+        for(let i = 0;i < identifier.length ; i++){
+            if(identifier[i] === '@'){
+                //entonces buscamos el id de ese usuario y lo devolvemos. 
+                userId = await User.findOne({where:{email:identifier}})
+                return userId
+            }
+        }
+        
+
+        return userId
+    }
+
+
+    const {identifier,amount,description} = ctx.params
     const {id} = ctx.meta.user
 
     const usuario_emisor = await User.findOne({where:{id}})
     const usuario_receptor = await User.findOne({where:{id:user_id}})
+
+    const user_id = getUserId(identifier)
 
     //Verificacion no mandarse balance a sí mismo
     if(id == user_id){
