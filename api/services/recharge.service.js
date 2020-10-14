@@ -1,12 +1,11 @@
 "use strict";
-const { conn } = require("../db.js");
-const { User } = require("../db");
+const controller = require("../controllers/rechargeController");
 /**
  * @typedef {import('moleculer').Context} Context Moleculer's Context
  */
 
 module.exports = {
-	name: "database",
+	name: "recharge",
 
 	/**
 	 * Settings
@@ -21,7 +20,15 @@ module.exports = {
 	/**
 	 * Actions
 	 */
-	actions: {},
+	actions: {
+		recharge: {
+			rest: {
+				method: "POST",
+				path: "/",
+			},
+			handler: controller.make_recharge,
+		},
+	},
 
 	/**
 	 * Events
@@ -36,20 +43,12 @@ module.exports = {
 	/**
 	 * Service created lifecycle event handler
 	 */
-	created() {
-		conn.sync(/*{force:true}*/).then(() => {});
-	},
+	created() {},
 
 	/**
 	 * Service started lifecycle event handler
 	 */
-	async started() {
-		await User.create({
-			email: "cce_user@gmail.com",
-			password: "1234567",
-			role: "CCE",
-		});
-	},
+	async started() {},
 
 	/**
 	 * Service stopped lifecycle event handler

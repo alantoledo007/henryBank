@@ -39,7 +39,7 @@ module.exports = (sequelize) => {
 				allowNull: true,
 			},
 			role: {
-				type: DataTypes.ENUM(["client", "admin"]),
+				type: DataTypes.ENUM(["client", "admin", "CCE"]),
 				allowNull: false,
 				defaultValue: "client",
 			},
@@ -93,8 +93,8 @@ module.exports = (sequelize) => {
 
 			dataCompletedAt: {
 				type: DataTypes.DATE,
-				allowNull: true
-			}
+				allowNull: true,
+			},
 		},
 		{
 			tableName: "users",

@@ -31,3 +31,10 @@ export const resetRegister = () => {
         type: RESET_REGISTER,
     }
 }
+
+export const loadAuth = (data) => {
+    return {
+        type:'REGISTER_CONFIRMATION',
+        payload: data
+    }
+}
