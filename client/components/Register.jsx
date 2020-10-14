@@ -60,7 +60,7 @@ function Register({ register }) {
             />
             <ScrollView style={{ position:'relative',left:0, right:0, margin:0,padding:0, display:'flex'}}>
             <View>
-                <Image source={require("../Logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
+                <Image source={require("../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
                 <Text style={{ ...s.textWhite, ...s.size(4), ...s.textCenter }}>Creá una cuenta y administrá tu plata como quieras, cuando quieras</Text>
             </View>
             <View style={{ width: "100%" }}>
