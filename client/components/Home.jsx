@@ -25,12 +25,6 @@ function Home() {
               }}
           />
             <ScrollView>
-                    <View>
-                        <Link to="/send-money" component={TouchableOpacity} style={s.btn('white')}>
-                            <Text style={{ ...s.textColor('pink'), ...s.size(5) }}>Send Money</Text>
-                        </Link>
-                    </View>
-            {/* <TouchableOpacity onPress={() => history.push("/send-money")}> <Text> Send Money</Text></TouchableOpacity> */}
                 <View>
                     <Image source={require("../logoFull.png")} style={{alignSelf: "center" , ...s.mb(8)}}></Image>
                 </View>
