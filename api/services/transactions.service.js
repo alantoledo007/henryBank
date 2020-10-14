@@ -35,13 +35,13 @@ module.exports = {
 			},
 			handler: controller.create_transaction
 		},
-		transaction:{
-			rest:{
-				method:"GET",
-				path:"/"
-			},
-			handler: controller.get_transactions
-		},
+		// transaction:{
+		// 	rest:{
+		// 		method:"GET",
+		// 		path:"/"
+		// 	},
+		// 	handler: controller.get_transactions
+		// },
 	},
 
 	/**
