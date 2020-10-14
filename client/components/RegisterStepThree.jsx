@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity, StatusBar,
     TextInput, Picker, ProgressBarAndroid, Modal,TouchableHighlight, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-native';
-import { resetRegister } from '../redux/actions/register';
+import { loadAuth, resetRegister } from '../redux/actions/register';
 import  axios  from 'axios';
 import env from '../env';
 import colors from "./style/colors";
@@ -16,7 +16,7 @@ function RegisterStepThree(props){
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const { fullState, resetRegister, token } =props;
+    const { fullState, resetRegister, token, loadAuth } =props;
 
     const [direccion, setDireccion] = useState(null);
     const [altura, setAltura] = useState(null);
@@ -62,7 +62,8 @@ function RegisterStepThree(props){
             }
         })
         .then((response) => {
-            console.log(response.data)
+            console.log(response.data.data.user);
+            loadAuth(response.data.data.user);
             setModalVisible(true)
             resetRegister();
 
@@ -348,6 +349,7 @@ function mapDispatchToProps(dispatch) {
     return {
         
         resetRegister: () => dispatch(resetRegister()),
+        loadAuth: data => dispatch(loadAuth(data))
     }
 }
 
