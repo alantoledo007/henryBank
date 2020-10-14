@@ -7,30 +7,23 @@ const {MoleculerError} = require('moleculer').Errors;
 module.exports = async (ctx)=>{
 
     const getUserId = async (identifier) =>{
-        const userId = identifier //si le pasan el id de usuario no deberia hacer nada más
-
         //revisamos si hay un @, lo que quiere decir que es un email
         for(let i = 0;i < identifier.length ; i++){
             if(identifier[i] === '@'){
                 //entonces buscamos el id de ese usuario y lo devolvemos. 
-                userId = await User.findOne({where:{email:identifier}})
-                return userId
+                const emailID = await User.findOne({where:{email:identifier},attributes:['id']})
+                return emailID.dataValues.id
             }
         }
-        
-
-        return userId
+        return identifier
     }
 
 
     const {identifier,amount,description} = ctx.params
     const {id} = ctx.meta.user
 
-    const user_id = getUserId(identifier)
-   
-
-
-
+    const user_id = await getUserId(identifier)
+    
     const usuario_emisor = await User.findOne({where:{id}})
     const usuario_receptor = await User.findOne({where:{id:user_id}})
 
@@ -40,7 +33,7 @@ module.exports = async (ctx)=>{
         throw new MoleculerError(`You can't send money to yourself`,402,"WRONG_RECEPTOR",{ nodeID: ctx.nodeID, action:ctx.action.name })
     }
 
-    //Verificacion de balance 
+    //Verificacion de balance   
     if(usuario_emisor.balance < amount){
         throw new MoleculerError("Sos pobre",409,"NOTENOUGH_BALANCE",{ nodeID: ctx.nodeID, action:ctx.action.name })
     }   

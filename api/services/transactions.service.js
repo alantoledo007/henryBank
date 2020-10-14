@@ -26,7 +26,7 @@ module.exports = {
 		transaction:{
 			rest:{
 				method : "POST",
-				path: "/transaction"
+				path: "/newtransaction"
 			},
 			params:{
 				identifier:"string",
@@ -38,7 +38,7 @@ module.exports = {
 		transaction_get:{
 			rest:{
 				method:"GET",
-				path:"/transaction_get"
+				path:"/mytransactions"
 			},
 			handler: controller.get_transactions
 		},

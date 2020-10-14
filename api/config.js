@@ -6,6 +6,7 @@ module.exports = {
 
 	actions_protected: [ //todas las acciones incorporadas dentro de este array requerirán autenticación jwt
 		'auth.register_confirmation',
-		'transactions.transaction'
+		'transactions.transaction',
+		'transactions.transaction_get'
 	]
 };
