@@ -1,8 +1,8 @@
 //general
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import  axios  from 'axios';
 import env from '../env';
-import { useHistory } from 'react-router-native';
+import { useHistory, Link } from 'react-router-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, TextInput, Button,  ScrollView, Text, TouchableOpacity, 
     Picker, StyleSheet, Modal, TouchableHighlight } from "react-native";
@@ -25,12 +25,30 @@ const SendMoney = (props) => {
     const [money, setMoney] = useState(0);
     const [description, setDescription] = useState('');
     const [title, setTitle] = useState('');
+    const [titleError, setTitleError] = useState('');
+    const [friends, setFriends ] =useState([]);
+    const [flag, setFlag] = useState(false)
 
      //Prueba
      const balance = 20000;
-     const amigos = [ {name: 'Fran', id:'9e1be1c5-6697-41bf-ac76-46ebc407a73b'}, 
-                     {name: 'Juan', id:'9e1be1c5-6697-41bf-ac76-46ebc407a73b'},
-                     {name: 'Kenny', id:'9e1be1c5-6697-41bf-ac76-46ebc407a73b'}]
+
+    const contancts = () => {
+        axios.get(`${env.API_URI}/contacts`, 
+        {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        .then((response) => {
+            setFriends(response.data.data)
+            setFlag(true)
+        })
+        .catch((error) => {
+            console.log(error)
+        })  
+
+    }
 
     const format = amount => {
     return Number(amount)
@@ -61,10 +79,8 @@ const SendMoney = (props) => {
         const payload = {
             amount: money,
             description: description,
-            user_id: amigos[0].id
+            user_id: selectedValue,
         }
-
-        console.log(payload)
 
         axios.post(`${env.API_URI}/transactions`, 
             payload,
@@ -75,15 +91,25 @@ const SendMoney = (props) => {
             }
         })
         .then((response) => {
-            console.log(response.data)
             setTitle(response.data.title)
             setModalVisible(true)
         })
         .catch((error) => {
-            console.log(error)
+            if(error.message.includes('409')){
+                setTitleError('Dinero insuficiente')
+            }
+            if(error.message.includes('402')){
+                setTitleError('Destino incorrecto')
+            }
+            setModalVisible(true)
         })  
         
     }
+    useEffect(() => {
+        flag  === false ? 
+        contancts()
+        : {}
+      });
 
 
 return (
@@ -101,6 +127,12 @@ return (
               }}
         />
         <ScrollView style={{width:'100%'}}>
+
+            <View style={{ ...s.mb(5)}}>
+                <Link to="/" component={TouchableOpacity}>
+                    <Text style={s.textColor('orange')}> &lt; Volver</Text>
+                </Link>
+            </View>
        
             <Text style={{...s.textWhite, ...s.textCenter, ...s.size(8), ...s.p(2)}}>
                 Enviar dinero
@@ -113,8 +145,8 @@ return (
                     selectedValue={selectedValue}
                     onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
                 <Picker.Item label='Contactos' value='Contactos' />
-                {amigos && amigos.map((x) =>  (
-                     <Picker.Item label={x.name} value={x.name} key={x.name}/>
+                {friends && friends.map((x) =>  (
+                     <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
 
                 ))}
                  </Picker>
@@ -175,14 +207,14 @@ return (
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         
-                        <Text style={{...styles.modalText, color:'#FFBD69', fontSize: 40}}>Transferencia exitosa.</Text>
+        <Text style={{...styles.modalText, color:'#FFBD69', fontSize: 40}}>{title ? 'Transferencia exitosa.' : 'Transferencia fallida'}</Text>
                         <View style = {{
                             borderWidth: 1,
                             borderColor:'#221F3B',
                             width: 220,
                             margin: 10
                         }} />
-                        <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title}</Text>
+                        <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title ? title : titleError}</Text>
             
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#E94560" }}
