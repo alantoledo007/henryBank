@@ -13,5 +13,5 @@ module.exports = {
 	restore_password,
 	send_restore_code,
 	send_code_email_verifier,
-	email_verify
+	email_verify,
 };
