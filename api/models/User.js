@@ -34,12 +34,16 @@ module.exports = (sequelize) => {
 				type: DataTypes.STRING(10),
 				allowNull: true,
 			},
+			recharge_code: {
+				type: DataTypes.BIGINT(10),
+				allowNull: true
+			},
 			phone_number: {
 				type: DataTypes.STRING(20),
 				allowNull: true,
 			},
 			role: {
-				type: DataTypes.ENUM(["client", "admin"]),
+				type: DataTypes.ENUM(["client", "admin", "CCE"]),
 				allowNull: false,
 				defaultValue: "client",
 			},
@@ -93,8 +97,8 @@ module.exports = (sequelize) => {
 
 			dataCompletedAt: {
 				type: DataTypes.DATE,
-				allowNull: true
-			}
+				allowNull: true,
+			},
 		},
 		{
 			tableName: "users",

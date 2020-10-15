@@ -60,7 +60,7 @@ function Dash({user}){
                     <Image style={styles.imgProfile} source={{ uri:state.user.avatar }} />
                     <View>
                         <Text style={{ ...styles.textWhite }}>Mi dinero</Text>
-                        <Text style={{...styles.textWhite, fontSize:25, fontWeight: 'bold'}}>$0</Text>
+    <Text style={{...styles.textWhite, fontSize:25, fontWeight: 'bold'}}>{user.balance ? `$${user.balance}` : '$0.00'}</Text>
                     </View>
                 </View>
                 
@@ -115,7 +115,7 @@ function Dash({user}){
                 </View>
 
                 <View style={styles.row}>
-                    <Link style={styles.buttonTransaction} component={TouchableOpacity} to="/">
+                    <Link style={styles.buttonTransaction} component={TouchableOpacity} to="/send-money">
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/send.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginTop:15, marginBottom:15, color:'white', fontWeight:'bold' }}>ENVIAR</Text>
                     </Link>

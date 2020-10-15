@@ -69,3 +69,4 @@ typings/
 
 storage/
 email_validation_storage/
+recharge_code_storage/

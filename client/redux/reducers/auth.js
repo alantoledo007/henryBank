@@ -7,7 +7,8 @@ const initialState = {
         surname: null,
         avatar: null,
         emailVerifiedAt: null,
-        dataCompletedAt: null
+        dataCompletedAt: null,
+        balance: null
     }
 }
 
