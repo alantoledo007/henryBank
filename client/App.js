@@ -12,6 +12,7 @@ import RegisterStepThree from './components/RegisterStepThree';
 import EmailVerifier from './components/EmailVerifier';
 import PasswordReset from './components/PasswordReset/Index'
 import Reset from './components/PasswordReset/Reset';
+import Contacts from './components/Contacts/Index';
 import { Provider } from 'react-redux';
 import store from './redux/store/index';
 import Fox from './components/Fox';
@@ -32,6 +33,7 @@ export default function App() {
           <Route exact path="/register-step-two" component={RegisterStepTwo} />
           <Route exact path="/register-step-three" component={RegisterStepThree} />
           <Route exact path="/email-verifier" component={EmailVerifier} />
+          <Route exact path="/contacts" component={Contacts} />
         </NativeRouter>
       </Provider>
     </React.Fragment>
