@@ -14,8 +14,15 @@ import RegisterStepThree from './components/RegisterStepThree';
 import Login from './components/Login';
 import PasswordReset from './components/PasswordReset/Index'
 import Reset from './components/PasswordReset/Reset';
+
 import Dash from './components/Dash';
 import Deposit from './components/Deposit';
+
+import SendMoney from './components/SendMoney';
+import { Provider } from 'react-redux';
+import store from './redux/store/index';
+import Fox from './components/Fox';
+
 
 export default function App() {
 return (
@@ -33,7 +40,11 @@ return (
           <Route exact path="/register-step-two" component={RegisterStepTwo} />
           <Route exact path="/register-step-three" component={RegisterStepThree} />
           <Route exact path="/email-verifier" component={EmailVerifier} />
+<<<<<<< HEAD
           <Route exact path="/deposit" component={Deposit}/>
+=======
+          <Route exact path="/send-money" component={SendMoney} />
+>>>>>>> master
         </NativeRouter>
       </Provider>
     </React.Fragment>

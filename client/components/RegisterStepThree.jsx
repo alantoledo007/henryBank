@@ -52,7 +52,7 @@ function RegisterStepThree(props){
             name: fullState.name, 
             surname: fullState.surname,
         }
-        console.log(payload)
+        loadAuth(payload)
         axios.put(`${env.API_URI}/auth/register_confirmation`, 
             payload,
         {
@@ -62,10 +62,8 @@ function RegisterStepThree(props){
             }
         })
         .then((response) => {
-            console.log(response.data.data.user);
-            loadAuth(response.data.data.user);
             setModalVisible(true)
-            resetRegister();
+            // resetRegister();
 
         })
         .catch((error) => {

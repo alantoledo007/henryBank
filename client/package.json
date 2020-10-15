@@ -10,6 +10,7 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.1.0",
     "@react-native-community/async-storage": "^1.12.0",
+    "@react-native-community/checkbox": "^0.5.5",
     "@react-native-community/datetimepicker": "^3.0.3",
     "@react-native-community/picker": "^1.8.1",
     "axios": "^0.20.0",

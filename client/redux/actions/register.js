@@ -2,6 +2,7 @@ export const STEP_ONE = 'STEP_ONE';
 export const STEP_TWO = 'STEP_TWO';
 export const STEP_THREE = 'STEP_THREE';
 export const RESET_REGISTER = 'RESET_REGISTER';
+export const REGISTER_CONFIRMATION = 'REGISTER_CONFIRMATION';
 
 export const stepOne = payload => {
 
@@ -34,7 +35,7 @@ export const resetRegister = () => {
 
 export const loadAuth = (data) => {
     return {
-        type:'REGISTER_CONFIRMATION',
+        type: REGISTER_CONFIRMATION,
         payload: data
     }
 }
