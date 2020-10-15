@@ -16,10 +16,7 @@ module.exports = (sequelize) => {
 		},
 		amount: {
 			type: DataTypes.FLOAT(12, 2),
-			allowNull: false,
-		},
-		type: {
-			type: DataTypes.ENUM(["ingreso", "egreso"]),
+			allowNull: false, 
 		},
 	});
 };

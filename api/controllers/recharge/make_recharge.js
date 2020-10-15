@@ -10,8 +10,7 @@ module.exports = async (ctx) => {
 		title: `Recarga de ${amount}`,
 		description: "Recarga de saldo",
 		amount: 0 - amount,
-		user_id: cce_user.id,
-		type: "egreso",
+		user_id: cce_user.id, 
 	});
 
 	await Transaction.create({
@@ -19,7 +18,6 @@ module.exports = async (ctx) => {
 		description: "Recarga de saldo",
 		amount,
 		user_id: client_id,
-		type: "ingreso",
 	});
 
 	await User.increment({ balance: +amount }, { where: { id: client_id } });
