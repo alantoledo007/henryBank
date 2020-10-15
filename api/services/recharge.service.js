@@ -21,12 +21,19 @@ module.exports = {
 	 * Actions
 	 */
 	actions: {
-		recharge: {
+		recharge_cash: {
 			rest: {
 				method: "POST",
-				path: "/",
+				path: "/cash",
 			},
 			handler: controller.make_recharge,
+		},
+		recharge_card: {
+			rest: {
+				method: "POST",
+				path: "/card",
+			},
+			handler: controller.card_recharge,
 		},
 	},
 
