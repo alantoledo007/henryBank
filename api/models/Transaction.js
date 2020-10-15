@@ -18,8 +18,5 @@ module.exports = (sequelize) => {
 			type: DataTypes.FLOAT(12, 2),
 			allowNull: false,
 		},
-		type: {
-			type: DataTypes.ENUM(["ingreso", "egreso"]),
-		},
 	});
 };
