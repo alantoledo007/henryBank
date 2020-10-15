@@ -29,6 +29,7 @@ const SendMoney = (props) => {
     const [friends, setFriends ] =useState([]);
     const [flag, setFlag] = useState(false)
 
+
     const contancts = () => {
         axios.get(`${env.API_URI}/contacts`, 
         {
@@ -38,6 +39,9 @@ const SendMoney = (props) => {
             }
         })
         .then((response) => {
+            if (response.data.data.length === 0){ 
+            setSelectedValue('Sin contactos')
+            setFlag(true)}
             setFriends(response.data.data)
             setFlag(true)
         })
@@ -62,7 +66,7 @@ const SendMoney = (props) => {
     };
 
     function next () {
-        if(selectedValue === 'Contactos'){
+        if(selectedValue === 'Contactos' || selectedValue === 'Sin contactos' ){
             return mostrarError('Debe ingresar un contacto')}
         if(toggleCheckBox === false ){
             return mostrarError('Debe aceptar los terminos')}
@@ -141,7 +145,7 @@ return (
                 <Picker
                     selectedValue={selectedValue}
                     onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-                <Picker.Item label='Contactos' value='Contactos' />
+                <Picker.Item label={selectedValue} value={selectedValue} />
                 {friends && friends.map((x) =>  (
                      <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
 
@@ -149,7 +153,7 @@ return (
                  </Picker>
             </View>
 
-            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: ${format(balance)}</Text>
+            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: ${balance ? format(balance) : '$0.00'}</Text>
                     
             <View style={{...s.my(4), justifyContent:'center', alignItems:'center', height:50}}>
                     <Text style={{...s.textWhite, ...s.size(7), ...s.textCenter}}>
