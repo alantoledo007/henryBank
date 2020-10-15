@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
 		},
 		amount: {
 			type: DataTypes.FLOAT(12, 2),
-			allowNull: false,
+			allowNull: false, 
 		},
 	});
 };
