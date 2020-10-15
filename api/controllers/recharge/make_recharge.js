@@ -1,4 +1,3 @@
-const { where } = require("sequelize/types");
 const { User, Transaction } = require("../../db");
 const {MoleculerError} = require('moleculer').Errors;
 
