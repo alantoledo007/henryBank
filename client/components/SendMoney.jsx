@@ -27,7 +27,8 @@ const SendMoney = (props) => {
     const [title, setTitle] = useState('');
     const [titleError, setTitleError] = useState('');
     const [friends, setFriends ] =useState([]);
-    const [flag, setFlag] = useState(false)
+    const [flag, setFlag] = useState(false);
+    const [find, setFind] = useState(false);
 
 
     const contancts = () => {
@@ -112,7 +113,7 @@ const SendMoney = (props) => {
         : {}
       });
 
-
+    
 return (
          
     <View style={s.container}>
@@ -141,19 +142,33 @@ return (
             
             <Text style={{...s.textWhite, ...s.size(4), ...s.py(2)}}>Contacto</Text>
 
-            <View style={{...s.input, justifyContent:"center"}}>
-                <Picker
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-                <Picker.Item label={selectedValue} value={selectedValue} />
-                {friends && friends.map((x) =>  (
-                     <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
+            { find === false ? <View style={{...s.input, justifyContent:"center"}}>
+                    <Picker
+                        selectedValue={selectedValue}
+                        onValueChange={(itemValue, itemIndex) => itemValue === true ? setFind(true) : 
+                        setSelectedValue(itemValue)}>
+                    <Picker.Item label={selectedValue} value={selectedValue} />
+                    <Picker.Item label='Enviar sin agendar' value={true} key='Buscar...'/>
+                    {friends && friends.map((x) =>  (
+                        <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
 
-                ))}
-                 </Picker>
-            </View>
+                    ))}
+                    </Picker>
+                </View> : 
+                <View style={{...s.row}}>
+                    <TextInput style={{...s.input, ...s.col(10.5), borderTopRightRadius:0, 
+                    borderBottomRightRadius:0}} placeholder='Correo electrónico'>
+                    </TextInput>
+                    <TouchableOpacity style={{ ...s.btn(), borderBottomLeftRadius:0, 
+                        borderTopLeftRadius:0, height:50}} onPress={() => setFind(false)}>          
+                            <Text style={{ ...s.textWhite, ...s.textButton, ...s.col(1.3), 
+                                ...s.textCenter}}>+</Text>            
+                    </TouchableOpacity>
+            
+            </View>}
 
-            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: ${balance ? format(balance) : '$0.00'}</Text>
+            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: 
+                    {balance ? format(balance) : '$0.00'}</Text>
                     
             <View style={{...s.my(4), justifyContent:'center', alignItems:'center', height:50}}>
                     <Text style={{...s.textWhite, ...s.size(7), ...s.textCenter}}>
@@ -208,14 +223,16 @@ return (
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         
-        <Text style={{...styles.modalText, color:'#FFBD69', fontSize: 40}}>{title ? 'Transferencia exitosa.' : 'Transferencia fallida'}</Text>
+        <Text style={{...styles.modalText, color:'#FFBD69', fontSize: 40}}>{title ? 'Transferencia exitosa.' : 
+                        'Transferencia fallida'}</Text>
                         <View style = {{
                             borderWidth: 1,
                             borderColor:'#221F3B',
                             width: 220,
                             margin: 10
                         }} />
-                        <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title ? title : titleError}</Text>
+                        <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title ? title : 
+                            titleError}</Text>
             
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#E94560" }}
