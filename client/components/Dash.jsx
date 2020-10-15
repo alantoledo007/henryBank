@@ -108,7 +108,7 @@ function Dash({user}){
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/account.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis datos</Text>
                     </Link>
-                    <Link style={styles.panelButton} component={TouchableOpacity} to="/">
+                    <Link style={styles.panelButton} component={TouchableOpacity} to="/contacts">
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/products.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis productos</Text>
                     </Link>
