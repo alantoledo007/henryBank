@@ -34,6 +34,10 @@ module.exports = (sequelize) => {
 				type: DataTypes.STRING(10),
 				allowNull: true,
 			},
+			recharge_code: {
+				type: DataTypes.BIGINT(10),
+				allowNull: true
+			},
 			phone_number: {
 				type: DataTypes.STRING(20),
 				allowNull: true,

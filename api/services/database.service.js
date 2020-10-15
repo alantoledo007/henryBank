@@ -37,18 +37,22 @@ module.exports = {
 	 * Service created lifecycle event handler
 	 */
 	created() {
-		conn.sync(/*{force:true}*/).then(() => {});
+		conn.sync(/*{force:true}*/).then(async () => {
+			const cce_user = await User.findOne({where: {role: 'CCE'}})
+			if (cce_user) return
+			await User.create({
+				email: "cce_user@gmail.com",
+				password: "1234567",
+				role: "CCE",
+			});
+		});
 	},
 
 	/**
 	 * Service started lifecycle event handler
 	 */
 	async started() {
-		await User.create({
-			email: "cce_user@gmail.com",
-			password: "1234567",
-			role: "CCE",
-		});
+		
 	},
 
 	/**
