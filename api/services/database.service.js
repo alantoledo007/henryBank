@@ -40,11 +40,15 @@ module.exports = {
 		conn.sync(/*{force:true}*/).then(async () => {
 			const cce_user = await User.findOne({where: {role: 'CCE'}})
 			if (cce_user) return
-			await User.create({
+			const new_cce_user = await User.create({
 				email: "cce_user@gmail.com",
-				password: "1234567",
+				password: "12345678",
 				role: "CCE",
+				emailVerifiedAt: Date.now(),
+				dataCompletedAt: Date.now()
 			});
+			new_cce_user.password = await new_cce_user.encryptPassword(new_cce_user.password)
+			await new_cce_user.save()
 		});
 	},
 
