@@ -62,7 +62,7 @@ function Index({ email, passwordReset }) {
                 </View>
                 
                 <View>
-                    <Image source={require("../../Logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
+                    <Image source={require("../../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
                 </View>
 
                 <View>
