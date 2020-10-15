@@ -1,9 +1,16 @@
+const { where } = require("sequelize/types");
 const { User, Transaction } = require("../../db");
 const {MoleculerError} = require('moleculer').Errors;
 
 module.exports = async (ctx) => {
 	const { amount, recharge_code } = ctx.params;
 	const cce_user_id = ctx.meta.user.id;
+
+	const cce_user = await User.findOne({where: {id: cce_user_id}})
+
+	if (cce_user.role !== "CCE") {
+		throw new MoleculerError(`Usuario no autorizado para efectuar recargas de saldo`,401,"UNAUTHORIZED",{ nodeID: ctx.nodeID, action:ctx.action.name })
+	}
 
 	if (amount < 100) {
 		throw new MoleculerError(`Monto minimo de recarga no alcanzado`,401,"INVALID_AMOUNT",{ nodeID: ctx.nodeID, action:ctx.action.name })
