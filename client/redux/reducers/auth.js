@@ -7,7 +7,8 @@ const initialState = {
         surname: null,
         avatar: null,
         emailVerifiedAt: null,
-        dataCompletedAt: null
+        dataCompletedAt: null,
+        balance: null
     }
 }
 
@@ -26,6 +27,11 @@ export default function userReducer(state = initialState, action) {
                 user: action.payload.user
             };
         case 'REGISTER':
+            return {
+                ...state,
+                user: action.payload
+            };
+        case 'REGISTER_CONFIRMATION':
             return {
                 ...state,
                 user: action.payload

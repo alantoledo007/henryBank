@@ -2,13 +2,15 @@
 import React from 'react';
 import { ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-native';
+import { Link, useHistory } from 'react-router-native';
 
 //UI
 import s from './style/styleSheet';
 import { LinearGradient } from 'expo-linear-gradient';
 
 function Home() {
+
+    const history = useHistory()
     return (
         <View style={s.container}>
             <LinearGradient

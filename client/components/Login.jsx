@@ -114,7 +114,7 @@ function Login({ login }) {
               }}
           />
         <View>
-                <Image source={require("../Logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
+                <Image source={require("../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
                 </View>
         <View>
           <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(5) }}>Iniciar sesión</Text>
