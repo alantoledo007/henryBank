@@ -2,6 +2,7 @@ import { STEP_ONE } from '../actions/register';
 import { STEP_TWO } from '../actions/register';
 import { STEP_THREE } from '../actions/register';
 import { RESET_REGISTER } from '../actions/register';
+import { REGISTER_CONFIRMATION } from '../actions/register';
 
 const initialState = {
     name: 'default',
@@ -46,6 +47,11 @@ export default (state = initialState, action) => {
                 locality: action.payload.locality,
                 province: action.payload.province,
                 country: action.payload.country
+            } 
+        }
+        case REGISTER_CONFIRMATION: {
+            return {
+                state: action.payload
             } 
         }
         case RESET_REGISTER: {

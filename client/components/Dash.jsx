@@ -60,7 +60,7 @@ function Dash({user}){
                     <Image style={styles.imgProfile} source={{ uri:state.user.avatar }} />
                     <View>
                         <Text style={{ ...styles.textWhite }}>Mi dinero</Text>
-                        <Text style={{...styles.textWhite, fontSize:25, fontWeight: 'bold'}}>$0</Text>
+    <Text style={{...styles.textWhite, fontSize:25, fontWeight: 'bold'}}>{user.balance ? `$${user.balance}` : '$0.00'}</Text>
                     </View>
                 </View>
                 
