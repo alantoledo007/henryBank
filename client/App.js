@@ -16,6 +16,7 @@ import PasswordReset from './components/PasswordReset/Index'
 import Reset from './components/PasswordReset/Reset';
 import Dash from './components/Dash';
 import Deposit from './components/Deposit/Deposit';
+import Contacts from './components/Contacts/Index';
 import SendMoney from './components/SendMoney';
 
 
@@ -36,6 +37,7 @@ return (
           <Route exact path="/register-step-three" component={RegisterStepThree} />
           <Route exact path="/email-verifier" component={EmailVerifier} />
           <Route exact path="/deposit" component={Deposit}/>
+          <Route exact path="/contacts" component={Contacts} />
           <Route exact path="/send-money" component={SendMoney} />
         </NativeRouter>
       </Provider>
