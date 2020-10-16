@@ -29,7 +29,7 @@ const SendMoney = (props) => {
     const [friends, setFriends ] =useState([]);
     const [flag, setFlag] = useState(false);
     const [find, setFind] = useState(false);
-
+    const [invite, setInvite] =useState('')
 
     const contancts = () => {
         axios.get(`${env.API_URI}/contacts`, 
@@ -67,8 +67,10 @@ const SendMoney = (props) => {
     };
 
     function next () {
-        if(selectedValue === 'Contactos' || selectedValue === 'Sin contactos' ){
+        if(selectedValue === 'Contactos' || selectedValue === 'Sin contactos' || selectedValue === 'Enviar sin agendar' ){
             return mostrarError('Debe ingresar un contacto')}
+        if(find === true){ if(validator.validate(selectedValue) === false){
+            return mostrarError('No es un email valido')}}
         if(toggleCheckBox === false ){
             return mostrarError('Debe aceptar los terminos')}
         if(money === 0 || money === null || money === undefined ){
@@ -105,6 +107,7 @@ const SendMoney = (props) => {
             }
             if(error.message.includes('500')){
                 setTitleError('No es un usuario de Quantum')
+                setInvite(true)
             }
             setModalVisible(true)
         })  
@@ -121,12 +124,6 @@ const SendMoney = (props) => {
         setSelectedValue('Contactos')
     }
 
-    // const validate = (email) => {
-    //     if(validator.validate(selectedValue) === false){
-    //         mostrarError('No es un email valido'),
-    //         selectedValue === 'Contactos'}  
-    //     setSelectedValue(email)
-    // }
     
 return (
          
@@ -160,10 +157,11 @@ return (
             { find === false ? <View style={{...s.input, justifyContent:"center"}}>
                     <Picker
                         selectedValue={selectedValue}
-                        onValueChange={(itemValue, itemIndex) => itemValue === true ? setFind(true) : 
+                        onValueChange={(itemValue, itemIndex) => itemValue === 'Enviar sin agendar' ? setFind(true) : 
                         setSelectedValue(itemValue)}>
-                    <Picker.Item label={selectedValue} value={selectedValue} />
-                    {/* <Picker.Item label='Enviar sin agendar' value={true} key='Buscar...'/> */}
+                    {selectedValue === 'Contactos' || selectedValue === 'Sin contactos' ? <Picker.Item label={selectedValue} value={selectedValue} /> : <Picker.Item label='' value='' />}
+                    <Picker.Item label='Enviar sin agendar' value='Enviar sin agendar' key='Buscar...'/>
+                    
                     {friends && friends.map((x) =>  (
                         <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
 
@@ -245,6 +243,16 @@ return (
                         }} />
                         <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title ? title : 
                             titleError}</Text>
+                        
+                        <TouchableHighlight
+                            onPress={() => {
+                            history.push('/dash')
+                            }}
+                        >
+                            <Text style={{...styles.modalText, color:'#FFBD69', ...s.size(4)}}>{ invite ? '¿Deseas invitarlo a Quantum?' : ''}</Text>
+                        </TouchableHighlight>
+
+                        
             
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#E94560" }}
@@ -268,13 +276,13 @@ return (
 const styles = StyleSheet.create ({
   checkboxContainer: {
     flexDirection: "row",
-    paddingVertical: 10,
+    paddingVertical: 5,
     marginBottom: 30
   },
   errorMessage: {
     color: '#E94560',
     alignSelf: "center",
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   modalText: {
     marginBottom: 15,
