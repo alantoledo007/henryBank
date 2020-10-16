@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet,  } from 'react-native';
 
-import { connect } from 'react-redux';
-
 import {styles as s} from '../style/styleSheet';
 import colors from '../style/colors';
 
@@ -11,7 +9,7 @@ const DepositCash = ({ recharge_code }) => {
     const splitRechargeCode = recharge_code.toString().substring(0, 5) + "  " + recharge_code.toString().substring(5)
     return (
             <View style={styles.container}>
-                <Text style={styles.text}>Este código te permitirá depositar dinero en tu cuenta:</Text>
+                <Text style={styles.text}>Este código te permitirá depositar dinero en tu cuenta pagando con efectivo:</Text>
                 <View style={styles.codeWrapper}>
                     <Text style={styles.code}>{recharge_code ? splitRechargeCode : "00000 00000"}</Text>
                 </View>
@@ -48,11 +46,5 @@ const styles = StyleSheet.create({
 
 })
 
-const mapStateToProps = (state) => {
-    return {
-      // user: state.auth.user,
-      recharge_code: state.auth.user.recharge_code,
-    };
-  };
 
-export default connect(mapStateToProps)(DepositCash);
+export default DepositCash;

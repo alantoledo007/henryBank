@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { Link, useHistory } from "react-router-native";
+import { Link } from "react-router-native";
 import {
   View,
   Text,
@@ -20,7 +20,6 @@ import { styles as s } from "../style/styleSheet";
 import colors from "../style/colors";
 
 const DepositCard = ({ token }) => {
-  const history = useHistory();
   const [form, setForm] = useState({
     amount: "",
     values: {},
@@ -70,7 +69,7 @@ const DepositCard = ({ token }) => {
   };
 
   const onSubmit = () => {
-    //Función para formular algunos errores de manera un poco mas prolija, ya que el paquete de la tarjeta está en inglés
+    //Función auxiliar para formular algunos errores de manera un poco mas prolija, ya que el paquete de la tarjeta está en inglés
     const getErrorMsg = (input) => {
       switch (input) {
         case "number":
@@ -224,7 +223,7 @@ const DepositCard = ({ token }) => {
             </Text>
 
             <Link to="/dash" component={TouchableOpacity} style={styles.successButton}>
-              <Text style={{ ...styles.text }}>Volver</Text>
+              <Text style={{ ...styles.text }}>Listo</Text>
             </Link>
           </View>
         </View>
@@ -325,15 +324,10 @@ const styles = StyleSheet.create({
     height: 40,
     width: 80,
     marginTop: 25,
+    paddingBottom: 10,
     justifyContent: "center",
     alignItems: "center"
   }
 });
 
-const mapStateToProps = (state) => {
-  return {
-    token: state.auth.token,
-  };
-};
-
-export default connect(mapStateToProps)(DepositCard);
+export default DepositCard;

@@ -5,8 +5,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
+  Image
 } from "react-native";
 import { Link } from "react-router-native";
+
+import { connect } from 'react-redux';
 
 import colors from "../style/colors";
 import { styles as s } from "../style/styleSheet";
@@ -17,7 +20,7 @@ import { Picker, PickerIOS } from "@react-native-community/picker";
 import DepositCash from "./DepositCash";
 import DepositCard from "./DepositCard";
 
-const Deposit = () => {
+const Deposit = ({token, recharge_code}) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   return (
@@ -34,8 +37,8 @@ const Deposit = () => {
         }}
       />
 
-      <Link style={styles.volver} component={TouchableOpacity} to="/dash">
-        <Text style={{ ...s.textButton(colors.white), ...s.font }}>VOLVER</Text>
+      <Link style={{alignSelf: "flex-end", marginBottom: 15}} component={TouchableOpacity} to="/dash">
+        <Image source={require('../../assets/close-pink.png')}/>
       </Link>
       <View style={styles.pickerWrapper}>
         <Text style={{ ...styles.text, fontSize: 40 }}>Recargar dinero</Text>
@@ -51,10 +54,10 @@ const Deposit = () => {
         </Picker>
       </View>
       {/* Según el state paymentMethod, renderizamos un componente u otro: */}
-      {paymentMethod === "cash" && <DepositCash />}
-      {paymentMethod === "card" && <DepositCard />}
+      {paymentMethod === "cash" && <DepositCash recharge_code={recharge_code} />}
+      {paymentMethod === "card" && <DepositCard token={token} />}
       <Link>
-        <Text style={styles.needHelp}>¿Necesitas ayuda?</Text>
+        <Text style={styles.needHelp}>¿Necesitás ayuda?</Text>
       </Link>
     </View>
   );
@@ -97,4 +100,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Deposit;
+const mapStateToProps = state => {
+  return {
+    recharge_code: state.auth.user.recharge_code,
+    token: state.auth.token
+  }
+}
+
+export default connect(mapStateToProps)(Deposit);
