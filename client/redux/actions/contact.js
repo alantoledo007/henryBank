@@ -28,12 +28,12 @@ export const getContacts = token => {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then(response => {
-                const { data } = response.data
-                console.log('RESPUESTA EXITOSA:', data);
-                receiveContacts(data)
-            })
-            .catch(err => console.log(err));
+        .then(response => {
+            const { data } = response.data
+            console.log('RESPUESTA EXITOSA:', data);
+            dispatch(receiveContacts(data))
+        })
+        .catch(err => console.log(err));
     }
 }
 

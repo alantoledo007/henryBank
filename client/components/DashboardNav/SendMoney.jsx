@@ -262,9 +262,7 @@ const SendMoney = (props) => {
                                 titleError}</Text>
 
                             {invite ? <TouchableHighlight
-                                onPress={() => {
-                                    history.push('/dash')
-                                }}
+                                onPress={close}
                             >
                                 <Text style={{ ...styles.modalText, color: '#FFBD69', ...s.size(4) }}>¿Deseas invitarlo a Quantum?</Text>
                             </TouchableHighlight>
@@ -274,10 +272,7 @@ const SendMoney = (props) => {
 
                             <TouchableHighlight
                                 style={{ ...styles.openButton, backgroundColor: "#E94560" }}
-                                onPress={() => {
-                                    setModalVisible(!modalVisible);
-                                    history.push('/dash')
-                                }}
+                                onPress={close}
                             >
                                 <Text style={styles.textStyle}>Continuar</Text>
                             </TouchableHighlight>

@@ -58,7 +58,7 @@ const Deposit = ({ token, recharge_code, close }) => {
       </View>
       {/* Según el state paymentMethod, renderizamos un componente u otro: */}
       {paymentMethod === "cash" && <DepositCash />}
-      {paymentMethod === "card" && <DepositCard />}
+      {paymentMethod === "card" && <DepositCard close={close}/>}
       <Link>
         <Text style={styles.needHelp}>¿Necesitás ayuda?</Text>
       </Link>

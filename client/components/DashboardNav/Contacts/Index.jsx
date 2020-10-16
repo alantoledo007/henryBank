@@ -34,15 +34,16 @@ function Index(props) {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then(response => {
-                setDis(false);
-                setModalVisible(!modalVisible);
-            })
-            .catch(err => {
-                setDis(false);
-                console.log('error de agregancia')
-                setModalVisible(!modalVisible);
-            })
+        .then(() => getContacts(token))
+        .then(() => {
+            setDis(false);
+            setModalVisible(!modalVisible);
+        })
+        .catch(err => {
+            setDis(false);
+            console.log('error de agregancia')
+            setModalVisible(!modalVisible);
+        })
     }
 
     const filtrarContactos = nombre => {
@@ -52,7 +53,6 @@ function Index(props) {
 
     useEffect(() => {
         getContacts(token);
-        console.log('contactos:', contacts);
     }, [])
     return (
         <View style={{ ...s.container, marginTop: 0 }}>
@@ -76,16 +76,16 @@ function Index(props) {
                     render={({ onChange, onBlur, value }) => (
                         <TextInput
                             style={{ ...s.input, ...s.mt(4), ...s.mb(4), ...s.mr(2), flex: 5 }}
-                            onChangeText={(value) => {
-                                filtrarContactos(value)
-                                return onChange(value)
-                            }}
+                            // onChangeText={(value) => {
+                            //     filtrarContactos(value)
+                            //     return onChange(value)
+                            // }}
                             onBlur={onBlur}
                             value={value}
                             placeholder="Busca un contacto..."
                             autoCapitalize="none"
-                        />
-                    )}
+                            />
+                            )}
                     name="filtrar"
                     rules={{ required: false }}
                     defaultValue=""
@@ -96,13 +96,15 @@ function Index(props) {
                 }} style={{ flex: 1, width: 50, height: 50, borderRadius: 50, backgroundColor: colors.pink, justifyContent: "center", alignItems: "center" }}>
                     <Text style={{ color: colors.white, fontSize: 30, borderStyle: 'solid' }}>+</Text>
                 </TouchableOpacity>
-            </View>
+            </View> 
             <ScrollView style={{ ...s.mt(1) }}>
                 {/* Contactos */}
                 <View style={{ borderBottomColor: colors.pink, borderBottomWidth: 1, ...s.mb(5) }} />
                 <List
                     contacts={contacts}
                     isFetching={isFetching}
+                    token={token}
+                    getContacts={getContacts}
                 />
 
             </ScrollView>
@@ -139,7 +141,7 @@ function Index(props) {
                         </TouchableOpacity>
                     </View> */}
                     <View>
-                        <Text style={{ ...s.textWhite, ...s.size(3) }}>Alias de Contacto *</Text>
+                        <Text style={{ ...s.textWhite, ...s.size(3) }}>Alias de Contacto *</Text>                        
                         <Controller
                             control={control}
                             render={({ onChange, onBlur, value }) => (
@@ -186,6 +188,7 @@ function Index(props) {
                             <Text style={{ ...s.textCenter, ...s.textColor(colors.white) }}>AGREGAR</Text>
                         </TouchableOpacity>
                         <View><Text style={{ ...s.textWhite, ...s.size(3), ...s.pb(4), ...s.textCenter }}>Si el usuario no tiene Quantum se le enviara una invitación</Text></View>
+                        <Text style={{ ...s.textWhite, ...s.size(2) }} >(*Campos obligatorios)</Text>
                     </View>
                 </View>
             </Modal>

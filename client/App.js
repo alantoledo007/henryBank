@@ -15,7 +15,6 @@ import Login from './components/Login';
 import PasswordReset from './components/PasswordReset/Index'
 import Reset from './components/PasswordReset/Reset';
 import Dash from './components/DashboardNav/Index';
-import Contact from './components/Contact';
 
 
 export default function App() {
