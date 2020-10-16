@@ -178,7 +178,7 @@ return (
             </View>}
 
             <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: 
-                    {balance ? format(balance) : '$0.00'}</Text>
+                    {balance ? ` $ ${format(balance)} ` : '$0.00'}</Text>
                     
             <View style={{...s.my(4), justifyContent:'center', alignItems:'center', height:50}}>
                     <Text style={{...s.textWhite, ...s.size(7), ...s.textCenter}}>
@@ -244,13 +244,14 @@ return (
                         <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title ? title : 
                             titleError}</Text>
                         
-                        <TouchableHighlight
+                        { invite ? <TouchableHighlight
                             onPress={() => {
                             history.push('/dash')
                             }}
                         >
-                            <Text style={{...styles.modalText, color:'#FFBD69', ...s.size(4)}}>{ invite ? '¿Deseas invitarlo a Quantum?' : ''}</Text>
+                            <Text style={{...styles.modalText, color:'#FFBD69', ...s.size(4)}}>¿Deseas invitarlo a Quantum?</Text>
                         </TouchableHighlight>
+                        : null }
 
                         
             
