@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { View, TextInput, Button,  ScrollView, Text, TouchableOpacity, 
     Picker, StyleSheet, Modal, TouchableHighlight } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
+import validator from 'email-validator';
 
 //redux
 import { connect } from "react-redux";
@@ -17,7 +18,6 @@ import s from './style/styleSheet';
 const SendMoney = (props) => {
 
     const { token, balance } = props;
-
     const history = useHistory()
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedValue, setSelectedValue] = useState('Contactos');
@@ -27,8 +27,9 @@ const SendMoney = (props) => {
     const [title, setTitle] = useState('');
     const [titleError, setTitleError] = useState('');
     const [friends, setFriends ] =useState([]);
-    const [flag, setFlag] = useState(false)
-
+    const [flag, setFlag] = useState(false);
+    const [find, setFind] = useState(false);
+    const [invite, setInvite] =useState('')
 
     const contancts = () => {
         axios.get(`${env.API_URI}/contacts`, 
@@ -59,15 +60,17 @@ const SendMoney = (props) => {
 
     const [error, setError] = useState("");
     const mostrarError = (err) => {
-      setError(err);
-      setTimeout(() => {
+        setError(err);
+        setTimeout(() => {
         setError("");
-      }, 3000);
+      }, 3000)
     };
 
     function next () {
-        if(selectedValue === 'Contactos' || selectedValue === 'Sin contactos' ){
+        if(selectedValue === 'Contactos' || selectedValue === 'Sin contactos' || selectedValue === 'Enviar sin agendar' ){
             return mostrarError('Debe ingresar un contacto')}
+        if(find === true){ if(validator.validate(selectedValue) === false){
+            return mostrarError('No es un email valido')}}
         if(toggleCheckBox === false ){
             return mostrarError('Debe aceptar los terminos')}
         if(money === 0 || money === null || money === undefined ){
@@ -80,10 +83,10 @@ const SendMoney = (props) => {
         const payload = {
             amount: money,
             description: description,
-            user_id: selectedValue,
+            identifier: selectedValue,
         }
 
-        axios.post(`${env.API_URI}/transactions`, 
+        axios.post(`${env.API_URI}/transactions/newtransaction`, 
             payload,
         {
             headers: {
@@ -102,6 +105,10 @@ const SendMoney = (props) => {
             if(error.message.includes('402')){
                 setTitleError('Destino incorrecto')
             }
+            if(error.message.includes('500')){
+                setTitleError('No es un usuario de Quantum')
+                setInvite(true)
+            }
             setModalVisible(true)
         })  
         
@@ -112,7 +119,12 @@ const SendMoney = (props) => {
         : {}
       });
 
+    const back = () => {
+        setFind(false), 
+        setSelectedValue('Contactos')
+    }
 
+    
 return (
          
     <View style={s.container}>
@@ -139,21 +151,34 @@ return (
                 Enviar dinero
             </Text>
             
-            <Text style={{...s.textWhite, ...s.size(4), ...s.py(2)}}>Contacto</Text>
+            <Text style={{...s.textWhite, ...s.size(4), ...s.py(2)}}
+            onPress={() => back()}>Contacto</Text>
 
-            <View style={{...s.input, justifyContent:"center"}}>
-                <Picker
-                    selectedValue={selectedValue}
-                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}>
-                <Picker.Item label={selectedValue} value={selectedValue} />
-                {friends && friends.map((x) =>  (
-                     <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
+            { find === false ? <View style={{...s.input, justifyContent:"center"}}>
+                    <Picker
+                        selectedValue={selectedValue}
+                        onValueChange={(itemValue, itemIndex) => itemValue === 'Enviar sin agendar' ? setFind(true) : 
+                        setSelectedValue(itemValue)}>
+                    {selectedValue === 'Contactos' || selectedValue === 'Sin contactos' ? <Picker.Item label={selectedValue} value={selectedValue} /> : <Picker.Item label='' value='' />}
+                    <Picker.Item label='Enviar sin agendar' value='Enviar sin agendar' key='Buscar...'/>
+                    
+                    {friends && friends.map((x) =>  (
+                        <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
 
-                ))}
-                 </Picker>
-            </View>
+                    ))}
+                    </Picker>
+                </View> : 
+                <View >
+                    <TextInput  style={{...s.input}} 
+                                placeholder='Correo electrónico'
+                                onChangeText={ email => setSelectedValue(email)}
+                                keyboardType="email-address"
+                                autoCapitalize="none"                       
+                    />          
+            </View>}
 
-            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: ${balance ? format(balance) : '$0.00'}</Text>
+            <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: 
+                    {balance ? ` $ ${format(balance)} ` : '$0.00'}</Text>
                     
             <View style={{...s.my(4), justifyContent:'center', alignItems:'center', height:50}}>
                     <Text style={{...s.textWhite, ...s.size(7), ...s.textCenter}}>
@@ -208,14 +233,27 @@ return (
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         
-        <Text style={{...styles.modalText, color:'#FFBD69', fontSize: 40}}>{title ? 'Transferencia exitosa.' : 'Transferencia fallida'}</Text>
+        <Text style={{...styles.modalText, color:'#FFBD69', fontSize: 40}}>{title ? 'Transferencia exitosa.' : 
+                        'Transferencia fallida'}</Text>
                         <View style = {{
                             borderWidth: 1,
                             borderColor:'#221F3B',
                             width: 220,
                             margin: 10
                         }} />
-                        <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title ? title : titleError}</Text>
+                        <Text style={{...styles.modalText, color:'#221F3B', ...s.size(4)}}>{title ? title : 
+                            titleError}</Text>
+                        
+                        { invite ? <TouchableHighlight
+                            onPress={() => {
+                            history.push('/dash')
+                            }}
+                        >
+                            <Text style={{...styles.modalText, color:'#FFBD69', ...s.size(4)}}>¿Deseas invitarlo a Quantum?</Text>
+                        </TouchableHighlight>
+                        : null }
+
+                        
             
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#E94560" }}
@@ -239,13 +277,13 @@ return (
 const styles = StyleSheet.create ({
   checkboxContainer: {
     flexDirection: "row",
-    paddingVertical: 10,
+    paddingVertical: 5,
     marginBottom: 30
   },
   errorMessage: {
     color: '#E94560',
     alignSelf: "center",
-    paddingVertical: 10,
+    paddingVertical: 5,
   },
   modalText: {
     marginBottom: 15,
