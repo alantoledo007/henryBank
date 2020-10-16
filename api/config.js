@@ -8,7 +8,7 @@ module.exports = {
 		'auth.register_confirmation',
 		'transactions.transaction',
 
-		'transactions.transaction_get'
+		'transactions.transaction_get',
 
   
 	'recharge.recharge_card',

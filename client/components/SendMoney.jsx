@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { View, TextInput, Button,  ScrollView, Text, TouchableOpacity, 
     Picker, StyleSheet, Modal, TouchableHighlight } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
+import validator from 'email-validator';
 
 //redux
 import { connect } from "react-redux";
@@ -17,7 +18,6 @@ import s from './style/styleSheet';
 const SendMoney = (props) => {
 
     const { token, balance } = props;
-
     const history = useHistory()
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedValue, setSelectedValue] = useState('Contactos');
@@ -60,10 +60,10 @@ const SendMoney = (props) => {
 
     const [error, setError] = useState("");
     const mostrarError = (err) => {
-      setError(err);
-      setTimeout(() => {
+        setError(err);
+        setTimeout(() => {
         setError("");
-      }, 3000);
+      }, 3000)
     };
 
     function next () {
@@ -81,10 +81,10 @@ const SendMoney = (props) => {
         const payload = {
             amount: money,
             description: description,
-            user_id: selectedValue,
+            identifier: selectedValue,
         }
 
-        axios.post(`${env.API_URI}/transactions`, 
+        axios.post(`${env.API_URI}/transactions/newtransaction`, 
             payload,
         {
             headers: {
@@ -103,6 +103,9 @@ const SendMoney = (props) => {
             if(error.message.includes('402')){
                 setTitleError('Destino incorrecto')
             }
+            if(error.message.includes('500')){
+                setTitleError('No es un usuario de Quantum')
+            }
             setModalVisible(true)
         })  
         
@@ -113,6 +116,17 @@ const SendMoney = (props) => {
         : {}
       });
 
+    const back = () => {
+        setFind(false), 
+        setSelectedValue('Contactos')
+    }
+
+    // const validate = (email) => {
+    //     if(validator.validate(selectedValue) === false){
+    //         mostrarError('No es un email valido'),
+    //         selectedValue === 'Contactos'}  
+    //     setSelectedValue(email)
+    // }
     
 return (
          
@@ -140,7 +154,8 @@ return (
                 Enviar dinero
             </Text>
             
-            <Text style={{...s.textWhite, ...s.size(4), ...s.py(2)}}>Contacto</Text>
+            <Text style={{...s.textWhite, ...s.size(4), ...s.py(2)}}
+            onPress={() => back()}>Contacto</Text>
 
             { find === false ? <View style={{...s.input, justifyContent:"center"}}>
                     <Picker
@@ -148,23 +163,20 @@ return (
                         onValueChange={(itemValue, itemIndex) => itemValue === true ? setFind(true) : 
                         setSelectedValue(itemValue)}>
                     <Picker.Item label={selectedValue} value={selectedValue} />
-                    <Picker.Item label='Enviar sin agendar' value={true} key='Buscar...'/>
+                    {/* <Picker.Item label='Enviar sin agendar' value={true} key='Buscar...'/> */}
                     {friends && friends.map((x) =>  (
                         <Picker.Item label={x.nickname} value={x.contact_id} key={x.nickname}/>
 
                     ))}
                     </Picker>
                 </View> : 
-                <View style={{...s.row}}>
-                    <TextInput style={{...s.input, ...s.col(10.5), borderTopRightRadius:0, 
-                    borderBottomRightRadius:0}} placeholder='Correo electrónico'>
-                    </TextInput>
-                    <TouchableOpacity style={{ ...s.btn(), borderBottomLeftRadius:0, 
-                        borderTopLeftRadius:0, height:50}} onPress={() => setFind(false)}>          
-                            <Text style={{ ...s.textWhite, ...s.textButton, ...s.col(1.3), 
-                                ...s.textCenter}}>+</Text>            
-                    </TouchableOpacity>
-            
+                <View >
+                    <TextInput  style={{...s.input}} 
+                                placeholder='Correo electrónico'
+                                onChangeText={ email => setSelectedValue(email)}
+                                keyboardType="email-address"
+                                autoCapitalize="none"                       
+                    />          
             </View>}
 
             <Text style={{...s.textWhite, ...s.textCenter, ...s.py(5)}}>Balance actual: 
