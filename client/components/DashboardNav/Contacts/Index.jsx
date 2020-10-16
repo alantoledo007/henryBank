@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView, View, Text, Image, TouchableOpacity, Modal, TextInput, ActivityIndicator } from 'react-native'
 import { Link } from 'react-router-native';
-import s from '../style/styleSheet';
+import s from '../../style/styleSheet';
 import { LinearGradient } from 'expo-linear-gradient';
-import { connect } from 'react-redux';
 import Axios from 'axios';
-import env from '../../env';
-import colors from '../style/colors';
+import env from '../../../env';
+import colors from '../../style/colors';
 import { Controller, useForm } from 'react-hook-form';
 import { ListItem, Avatar } from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
-function Index({ token, user }) {
-    const [ allContacts, setAllContacts ] = useState(null);
-    const [ contacts, setContacts ] = useState(null);
-    const [ modalVisible, setModalVisible ] = useState(false);
-    const [ modalError, setModalError ] = useState(null)
-    const [ dis, setDis ] = useState(false);
+import { connect } from 'react-redux';
+//actions
+import { getContacts } from '../../../redux/actions/contact';
+
+import List from './List';
+
+function Index(props) {
+    const { token, user, getContacts, contacts, isFetching } = props;
+
+    // const [ allContacts, setAllContacts ] = useState(null);
+    // const [ contacts, setContacts ] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [modalError, setModalError] = useState(null)
+    const [dis, setDis] = useState(false);
     const { control, errors, handleSubmit } = useForm();
 
     const onSubmit = data => {
@@ -27,46 +34,28 @@ function Index({ token, user }) {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then( response => {
-            setDis(false);
-            setModalVisible(!modalVisible);
-        })
-        .catch(err => {
-            setDis(false);  
-            console.log('error de agregancia')
-            setModalVisible(!modalVisible);
-        } )
+            .then(response => {
+                setDis(false);
+                setModalVisible(!modalVisible);
+            })
+            .catch(err => {
+                setDis(false);
+                console.log('error de agregancia')
+                setModalVisible(!modalVisible);
+            })
     }
+
     const filtrarContactos = nombre => {
         nombre = nombre.toLowerCase()
         setContacts(allContacts.filter(contact => (contact.nickname.toLowerCase().includes(nombre.toLowerCase()))))
     }
-    const getContacts = () => {
-        Axios.get(`${env.API_URI}/contacts`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-            .then(response => {
-                console.log('contactos', response.data.data)
-                if (allContacts === null) {
-                    setContacts(response.data.data);
-                    setAllContacts(response.data.data);
-                } else{
-                    if(allContacts.length !== response.data.data.length) {
-                        setAllContacts(response.data.data)
-                    }
-                }
-                //console.log(response)
-            })
-            .catch(err => console.log(err));
-    }
+
     useEffect(() => {
-        getContacts();
-    })
+        getContacts(token);
+        console.log('contactos:', contacts);
+    }, [])
     return (
-        <View style={s.container}>
+        <View style={{ ...s.container, marginTop: 0 }}>
             <LinearGradient
                 // Background Linear Gradient
                 colors={['rgba(0,0,0,0.8)', 'transparent']}
@@ -111,21 +100,10 @@ function Index({ token, user }) {
             <ScrollView style={{ ...s.mt(1) }}>
                 {/* Contactos */}
                 <View style={{ borderBottomColor: colors.pink, borderBottomWidth: 1, ...s.mb(5) }} />
-                {contacts && contacts.map((contact, index) => (
-                    <ScrollView key={index}>
-                        <Link to="/">
-                            <View style={{ ...s.mb(4), flexDirection: "row" }}>
-                                <Image source={{ uri: contact.User.avatar }} style={{ width: 50, height: 50, alignSelf: "flex-start", borderRadius: 10 }}></Image>
-                                <View>
-                                    <Text style={{ ...s.textColor(colors.white), ...s.size(3.5), ...s.ml(4), ...s.mb(1), fontWeight: 'bold', textTransform: 'capitalize' }} > {contact.nickname.toLowerCase()} </Text>
-                                    <Text style={{ ...s.textColor(colors.white), ...s.size(2.5), ...s.ml(4) }} ><IonIcon name="ios-mail" /> {contact.User.email} </Text>
-                                </View>
-                                <IonIcon style={{ position: "absolute", alignSelf: "center", right: 0 }} name="ios-arrow-forward" size={30} color={colors.white} />
-                            </View>
-                        </Link>
-                        <View style={{ borderBottomColor: colors.pink, borderBottomWidth: 1, ...s.mb(5) }} />
-                    </ScrollView>
-                ))}
+                <List
+                    contacts={contacts}
+                    isFetching={isFetching}
+                />
 
             </ScrollView>
 
@@ -138,7 +116,7 @@ function Index({ token, user }) {
                     setModalVisible(!modalVisible);
                 }}
             >
-                <View style={{ ...s.mt(20), backgroundColor: colors.blue, margin: 20, borderRadius: 10, borderStyle: "solid", borderColor: 'black', borderWidth: 3, padding: 15 }} >
+                <View style={{ ...s.mt(20), backgroundColor: colors.blue, margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.7 }} >
                     <LinearGradient
                         // Background Linear Gradient
                         colors={['rgba(0,0,0,0.8)', 'transparent']}
@@ -216,13 +194,32 @@ function Index({ token, user }) {
 }
 
 
+// const mapStateToProps = state => {
+//     return {
+//         token: state.auth.token,
+//         user: state.auth.user,
+//         contacts: state.contacts.list,
+//         isFetching: state.contacts.isFetching
+//     }
+// }
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         getContacts: token => dispatch(getContacts(token)) 
+//     }
+// }
 const mapStateToProps = state => {
     return {
         token: state.auth.token,
         user: state.auth.user,
+        contacts: state.contacts.list,
+        isFetching: state.contacts.isFetching
     }
 }
+
 const mapDispatchToProps = dispatch => {
-    return {}
+    return {
+        getContacts: token => dispatch(getContacts(token))
+    }
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
