@@ -14,10 +14,10 @@ import { CreditCardInput } from "react-native-credit-card-input";
 
 import { connect } from "react-redux";
 import axios from "axios";
-import env from "../../env";
+import env from "../../../env";
 
-import { styles as s } from "../style/styleSheet";
-import colors from "../style/colors";
+import { styles as s } from "../../style/styleSheet";
+import colors from "../../style/colors";
 
 const DepositCard = ({ token }) => {
   const [form, setForm] = useState({
@@ -330,4 +330,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DepositCard;
+const mapStateToProps = state => {
+  return {
+      token: state.auth.token
+  }
+}
+
+export default connect(mapStateToProps)(DepositCard);

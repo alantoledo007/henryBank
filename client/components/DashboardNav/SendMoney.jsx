@@ -1,22 +1,22 @@
 //general
 import React, { useState, useEffect } from 'react';
 import  axios  from 'axios';
-import env from '../env';
+import env from '../../env';
 import { useHistory, Link } from 'react-router-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, TextInput, Button,  ScrollView, Text, TouchableOpacity, 
-    Picker, StyleSheet, Modal, TouchableHighlight } from "react-native";
+    Picker, StyleSheet, Modal, TouchableHighlight, TouchableWithoutFeedback, Image } from "react-native";
 import CheckBox from '@react-native-community/checkbox';
 
 //redux
 import { connect } from "react-redux";
 
 //UI
-import s from './style/styleSheet';
+import s from '../style/styleSheet';
 
 const SendMoney = (props) => {
 
-    const { token, balance } = props;
+    const { token, balance, close } = props;
 
     const history = useHistory()
     const [modalVisible, setModalVisible] = useState(false);
@@ -129,11 +129,12 @@ return (
         />
         <ScrollView style={{width:'100%'}}>
 
-            <View style={{ ...s.mb(5)}}>
-                <Link to="/dash" component={TouchableOpacity}>
-                    <Text style={s.textColor('orange')}> &lt; Volver</Text>
-                </Link>
+            <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
+                {close && <TouchableWithoutFeedback onPress={close}>
+                    <Image style={{height: 15}} source={require("../../assets/close-pink.png")} />
+                </TouchableWithoutFeedback>}
             </View>
+
        
             <Text style={{...s.textWhite, ...s.textCenter, ...s.size(8), ...s.p(2)}}>
                 Enviar dinero

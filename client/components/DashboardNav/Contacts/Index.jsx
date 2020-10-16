@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView, View, Text, Image, TouchableOpacity, Modal, TextInput, ActivityIndicator } from 'react-native'
 import { Link } from 'react-router-native';
-import s from '../style/styleSheet';
+import s from '../../style/styleSheet';
 import { LinearGradient } from 'expo-linear-gradient';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import env from '../../env';
-import colors from '../style/colors';
+import env from '../../../env';
+import colors from '../../style/colors';
 import { Controller, useForm } from 'react-hook-form';
 import { ListItem, Avatar } from 'react-native-elements'
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -66,7 +66,7 @@ function Index({ token, user }) {
         getContacts();
     })
     return (
-        <View style={s.container}>
+        <View style={{...s.container, marginTop: 0}}>
             <LinearGradient
                 // Background Linear Gradient
                 colors={['rgba(0,0,0,0.8)', 'transparent']}
@@ -138,7 +138,7 @@ function Index({ token, user }) {
                     setModalVisible(!modalVisible);
                 }}
             >
-                <View style={{ ...s.mt(20), backgroundColor: colors.blue, margin: 20, borderRadius: 10, borderStyle: "solid", borderColor: 'black', borderWidth: 3, padding: 15 }} >
+                <View style={{ ...s.mt(20), backgroundColor: colors.blue, margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000",shadowOffset:{width:0,height:3},shadowOpacity:0.7}} >
                     <LinearGradient
                         // Background Linear Gradient
                         colors={['rgba(0,0,0,0.8)', 'transparent']}
