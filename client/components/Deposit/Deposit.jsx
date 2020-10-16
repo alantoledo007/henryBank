@@ -7,21 +7,33 @@ import {
   Platform,
 } from "react-native";
 import { Link } from "react-router-native";
-import { connect } from "react-redux";
 
-import colors from "./style/colors";
-import { styles as s } from "./style/styleSheet";
+import colors from "../style/colors";
+import { styles as s } from "../style/styleSheet";
+import { LinearGradient } from "expo-linear-gradient";
 
 import { Picker, PickerIOS } from "@react-native-community/picker";
 // import RNPickerSelect from "react-native-picker-select";
-import DepositCash from "./Deposit/DepositCash";
-import DepositCard from "./Deposit/DepositCard";
+import DepositCash from "./DepositCash";
+import DepositCard from "./DepositCard";
 
-const Deposit = ({ rechargeCode }) => {
+const Deposit = () => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   return (
     <View style={styles.container}>
+      <LinearGradient
+        // Background Linear Gradient
+        colors={["rgba(0,0,0,0.8)", "#6b538a"]}
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 50,
+          height: 1000,
+        }}
+      />
+
       <Link style={styles.volver} component={TouchableOpacity} to="/dash">
         <Text style={{ ...s.textButton(colors.white), ...s.font }}>VOLVER</Text>
       </Link>
@@ -52,8 +64,7 @@ const styles = StyleSheet.create({
   container: {
     ...s.container,
     ...s.itemsCenter,
-    // justifyContent: "space-around",
-    alignItems: "center",
+    backgroundColor: "black"
   },
   text: {
     ...s.font,
@@ -73,25 +84,17 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 30,
-    width: 100,
+    width: 110,
     alignSelf: "center",
-    color: colors.orange,
-    fontSize: 200,
-    textAlign: "center",
-    // backgroundColor: "blue",
+    color: colors.white,
+    // fontSize: 200000,
+    // textAlign: "center",
   },
   needHelp: {
     ...s.font,
     color: colors.orange,
-    marginTop: 20,
+    marginTop: 30,
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    // user: state.auth.user,
-    rechargeCode: state.auth.user.rechargeCode,
-  };
-};
-
-export default connect(mapStateToProps, null)(Deposit);
+export default Deposit;

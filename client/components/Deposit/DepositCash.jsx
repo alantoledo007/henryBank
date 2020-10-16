@@ -6,23 +6,25 @@ import { connect } from 'react-redux';
 import {styles as s} from '../style/styleSheet';
 import colors from '../style/colors';
 
-const DepositCash = ({ rechargeCode }) => {
+const DepositCash = ({ recharge_code }) => {
+    //Ya que el código de recarga es un poquito largo, lo separo a la mitad levemente para que sea un poco mas facil de leer
+    const splitRechargeCode = recharge_code.toString().substring(0, 5) + "  " + recharge_code.toString().substring(5)
     return (
             <View style={styles.container}>
                 <Text style={styles.text}>Este código te permitirá depositar dinero en tu cuenta:</Text>
                 <View style={styles.codeWrapper}>
-                    <Text style={styles.code}>{rechargeCode ? rechargeCode : "00000 00000"}</Text>
+                    <Text style={styles.code}>{recharge_code ? splitRechargeCode : "00000 00000"}</Text>
                 </View>
-                <Text style={{...styles.text, fontSize: 15}}>El monto mínimo es de $50.</Text>
-                <Text style={styles.text}>Deberás  dirigirte a un Rapipago o Pago Fácil y mostrarle tu código al cajero.</Text>
+                <Text style={{...styles.text, fontSize: 15}}>El monto mínimo es de $100.</Text>
+                <Text style={styles.text}>¡Es fácil! Sólo deberás  dirigirte a un Rapipago o Pago Fácil y mostrarle tu código al cajero.</Text>
             </View>
     )
 }
 const styles = StyleSheet.create({
     container: {
-        // backgroundColor: "green",
         height: 400,
-        justifyContent: "space-evenly"
+        justifyContent: "space-evenly",
+        // marginVertical: 15,
     },
     text: {
         ...s.font,
@@ -49,7 +51,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
       // user: state.auth.user,
-      rechargeCode: state.auth.user.rechargeCode,
+      recharge_code: state.auth.user.recharge_code,
     };
   };
 

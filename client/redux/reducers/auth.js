@@ -8,7 +8,7 @@ const initialState = {
         avatar: null,
         emailVerifiedAt: null,
         dataCompletedAt: null,
-        rechargeCode: null,
+        recharge_code: null,
         balance: null
     }
 }
