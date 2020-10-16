@@ -1,5 +1,9 @@
 import React from "react";
-import { View, Text, ActivityIndicator } from "react-native";
+import { View, Text, Image, ActivityIndicator } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import s from '../../style/styleSheet';
+import colors from '../../style/colors';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 export default function List({ contacts, isFetching }) {
   if (isFetching) return <ActivityIndicator style={{}} />;
@@ -7,10 +11,8 @@ export default function List({ contacts, isFetching }) {
     console.log('CONTACTOS:',contacts);
     return (
       <>
-        <Text>{isFetching ? "SI" : "NO"}</Text>
         {contacts.map((contact, index) => (
           <ScrollView key={index}>
-            <Link to="/">
               <View style={{ ...s.mb(4), flexDirection: "row" }}>
                 <Image
                   source={{ uri: contact.User.avatar }}
@@ -56,7 +58,6 @@ export default function List({ contacts, isFetching }) {
                   color={colors.white}
                 />
               </View>
-            </Link>
             <View
               style={{
                 borderBottomColor: colors.pink,

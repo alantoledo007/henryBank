@@ -139,7 +139,7 @@ function Index(props) {
                         </TouchableOpacity>
                     </View> */}
                     <View>
-                        <Text style={{ ...s.textWhite, ...s.size(3) }}>Alias de Contacto *</Text>
+                        <Text style={{ ...s.textWhite, ...s.size(3) }}>Alias de Contacto *</Text>                        
                         <Controller
                             control={control}
                             render={({ onChange, onBlur, value }) => (
@@ -186,6 +186,7 @@ function Index(props) {
                             <Text style={{ ...s.textCenter, ...s.textColor(colors.white) }}>AGREGAR</Text>
                         </TouchableOpacity>
                         <View><Text style={{ ...s.textWhite, ...s.size(3), ...s.pb(4), ...s.textCenter }}>Si el usuario no tiene Quantum se le enviara una invitación</Text></View>
+                        <Text style={{ ...s.textWhite, ...s.size(2) }} >(*Campos obligatorios)</Text>
                     </View>
                 </View>
             </Modal>

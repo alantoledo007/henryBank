@@ -8,14 +8,13 @@ const initialState = {
 export default (state = initialState, action) => {
     switch(action.type){
         case REQUEST_CONTACTS:
-            console.log('PIDIENDO CONTACTOS');
             return {
                 ...state,
                 isFetching: true
             }
         case RECEIVE_CONTACTS:
-            console.log('RECIBIENDO CONTACTOS', action.payload)
             return {
+                ...state,
                 isFetching: false,
                 list: action.payload
             }

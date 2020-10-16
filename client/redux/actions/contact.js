@@ -31,7 +31,7 @@ export const getContacts = token => {
                 .then(response => {
                     const { data } = response.data
                     console.log('RESPUESTA EXITOSA:', data);
-                    receiveContacts(data)
+                    dispatch(receiveContacts(data))
                 })
                 .catch(err => console.log(err));
     }
