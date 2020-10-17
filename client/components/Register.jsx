@@ -11,11 +11,13 @@ import { connect } from "react-redux";
 import { register } from "../redux/actions/auth";
 
 //UI
+import {Button, Input, bootnative, QTLink, Container} from './Quantum';
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from './style/colors';
 import s from './style/styleSheet';
 
 function Register({ register }) {
+    const bn = bootnative();
     const { control, handleSubmit } = useForm();
     const [hidePassword, setHidePassword] = useState(true);
 
@@ -52,104 +54,73 @@ function Register({ register }) {
 
     return (
         
-        <View style={{ ...s.container}}>
-            <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
-            />
-            <ScrollView style={{ position:'relative',left:0, right:0, margin:0,padding:0, display:'flex'}}>
-            <View>
-                <Image source={require("../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
-                <Text style={{ ...s.textWhite, ...s.size(4), ...s.textCenter }}>Creá una cuenta y administrá tu plata como quieras, cuando quieras</Text>
-            </View>
-            <ActivityIndicator animating={dis} size="large" color={colors.pink} />
-            <View style={{ width: "100%" }}>
-                <View style={s.mt(5)}>
-                    <Text style={{ ...s.textWhite, ...s.size(4), ...s.mb(1) }}>
-                        Correo electrónico
-                    </Text>
-                    <Controller
-                        control={control}
-                        render={({ onChange, onBlur, value }) => (
-                            <TextInput
-                                placeholder="ejemplo@mail.com"
-                                style={{ ...s.input, ...s.textColor('rgb(75,75,75)'), fontWeight: "normal", ...s.size(3.5) }}
-                                onBlur={onBlur}
-                                onChangeText={value => onChange(value)}
-                                value={value}
-                                autoCapitalize="none"
-                                keyboardType="email-address"
-                                editable={!dis} 
-                            />
-                        )}
-                        name="email"
-                        rules={{ required: true }}
-                        defaultValue=""
-                        
-                    />
+        <Container>
+                <View style={bn('row')}>
+                    <View style={bn('col-12')}>
+                        <Image source={require("../logo.png")} style={{ width: 64, height: 64, alignSelf: "center" }}></Image>
+                        <Text style={{ ...bn('bg-#f1f1f1 p-2 borderRadius-10 text-center mt-4'),...s.size(4) }}>Creá una cuenta y administrá tu plata como quieras, cuando quieras</Text>
+                    </View>
                 </View>
-                <View style={{ flex: 2 }}>
-                    <Text style={{ ...s.textWhite, ...s.size(4), ...s.mt(2), ...s.mb(1), flexDirection: "row" }}>
-                        Contraseña
-                    </Text>
-                    <Controller
-                        control={control}
-                        render={({ onChange, onBlur, value }) => (
-                            <View style={{ flexDirection: "row" }}>
-                                <TextInput
-                                    style={{ ...s.input, ...s.textColor('rgb(75,75,75)'), fontWeight: "normal", ...s.size(3.5), width: "90%", borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+
+                
+                <ActivityIndicator animating={dis} size="large" color={colors.pink} />
+                <View style={bn('row')}>
+                    <View style={bn('col-12')}>
+                        <Text style={{ ...s.size(4), ...s.mb(1) }}>
+                            Correo electrónico
+                        </Text>
+                        <Controller
+                            control={control}
+                            render={({ onChange, onBlur, value }) => (
+                                <Input
+                                    placeholder="ejemplo@mail.com"
+                                    onBlur={onBlur}
+                                    onChangeText={value => onChange(value)}
+                                    value={value}
+                                    autoCapitalize="none"
+                                    keyboardType="email-address"
+                                    editable={!dis} 
+                                />
+                            )}
+                            name="email"
+                            rules={{ required: true }}
+                            defaultValue=""
+                            
+                        />
+                    </View>
+                    <View style={bn('col-12')}>
+                        <Text style={{ ...s.size(4), ...s.mt(2), ...s.mb(1) }}>
+                            Contraseña
+                        </Text>
+                        <Controller
+                            control={control}
+                            render={({ onChange, onBlur, value }) => (
+                                <Input
                                     secureTextEntry={hidePassword}
                                     onBlur={onBlur}
                                     onChangeText={value => onChange(value)}
                                     value={value}
                                     placeholder="••••••••"
                                     autoCapitalize="none"
-                                    editable={!dis} 
+                                    editable={!dis}
+                                    iconRight={hidePassword ? require("../assets/eye.png") : require("../assets/eye-slash.png")}
+                                    onIconRightPress={() => setHidePassword(!hidePassword)}
                                 />
-                                <View style={{ alignItems: "flex-end", width: "10%", height: 50, ...s.input, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
-                                    <TouchableWithoutFeedback onPress={() => setHidePassword(!hidePassword)}>
-                                        <Image
-                                            style={{ marginVertical: -2, width: 25, height: 25 }}
-                                            source={
-                                                hidePassword
-                                                    ? require("../assets/eye.png")
-                                                    : require("../assets/eye-slash.png")
-                                            }
-                                        />
-                                    </TouchableWithoutFeedback>
-                                </View>
-                            </View>
-                        )}
-                        name="password"
-                        rules={{ required: true }}
-                        defaultValue=""
-                    />
+                            )}
+                            name="password"
+                            rules={{ required: true }}
+                            defaultValue=""
+                        />
+                    </View>
+                    <View style={bn('col-12 mt-5')}>
+                        {error ? <Text style={{ ...s.textWhite, fontWeight: "bold", ...s.size(3), ...s.mb(1) }}>{error}</Text> : null}
+                        <Button label="CREAR CUENTA" style={bn('mb-5')} color="primary" 
+                            disabled={dis} onPress={handleSubmit(onSubmit)}></Button>
+
+                        <QTLink to="/login" label="¿Ya estás registrado? Iniciá sesión" />
+                    </View>
                 </View>
-                <View style={s.mt(5)}>
-                    {error ? <Text style={{ ...s.textWhite, fontWeight: "bold", ...s.size(3), ...s.mb(1) }}>{error}</Text> : null}
-                    <TouchableOpacity
-                        disabled={dis}
-                        style={{ ...s.btn(), ...s.mb(10) }}
-                        onPress={handleSubmit(onSubmit)}
-                    >
-                        <Text style={{ ...s.textWhite, fontWeight:'bold' }}>CREAR CUENTA</Text>
-                    </TouchableOpacity>
-                    <Link to="/login" component={TouchableOpacity}>
-                        <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
-                            ¿Ya estás registrado? Iniciá sesión
-                        </Text>
-                    </Link>
-                </View>
-            </View>
-        </ScrollView>
-        </View>
+            </Container>
     );
 }
 
