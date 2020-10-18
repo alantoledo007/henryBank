@@ -6,9 +6,10 @@ const {Contact} = require('../../db');
 module.exports = async (ctx) => {
     const {id} = ctx.params;
     const token_id = ctx.meta.user.id;
-
+    console.log('ID RECIBIDO:',id)
     const contact = await Contact.findOne({where:{user_id: token_id, id: id}});
     if(!contact){
+        console.log('no se encontro el user')
         /*
             la id almacenada es válida, pero si a pesar de eso no se encuentra el usuario,
             quiere decir que el mísmo fué eliminado y el token no expiró.

@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import { Link, useHistory } from "react-router-native";
 import { useForm, Controller } from "react-hook-form";
@@ -52,18 +53,21 @@ function Login({ login }) {
   const history = useHistory();
   const { control, handleSubmit } = useForm();
 
+  const [dis, setDis] = useState(false);
+
   const [hidePassword, setHidePassword] = useState(true);
 
   //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
-  const [error, setError] = useState("");
+  const [error, setError] = useState(" ");
   const mostrarError = (err) => {
     setError(err);
     setTimeout(() => {
-      setError("");
+      setError(" ");
     }, 5000);
   };
 
   const onSubmit = (data) => {
+    setDis(true);
     axios
       .post(env.API_URI + "/auth/login", JSON.stringify(data), {
         headers: {
@@ -74,6 +78,7 @@ function Login({ login }) {
         const { data } = res.data;
         //Mando la data del usuario (token + id, email, nombre si lo hay, etc) a redux. Redux va a guardarlo en el store y en AsyncStorage
         login(data);
+        setDis(false);
         return data;
       })
       .then((data) => {
@@ -83,6 +88,7 @@ function Login({ login }) {
         //history.push("/register-confirmation");
       })
       .catch((err) => {
+        setDis(false);
         //Manejo de errores:
         if (err.response.data.type == "AUTHENTICATION_FAILED")
           mostrarError("Dirección de correo o contraseña incorrectos.");
@@ -120,7 +126,6 @@ function Login({ login }) {
           <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(5) }}>Iniciar sesión</Text>
         </View>
         <View>
-          {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
           <View style={s.mb(4)}>
             <Text style={{ ...s.textWhite, ...s.size(4) }}>Correo electrónico</Text>
             <Controller
@@ -165,7 +170,7 @@ function Login({ login }) {
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <View style={{ position:'absolute', top:40, right: 15 }}>
+              <View style={{ position:'absolute', top:40, right: 15  }}>
                 <TouchableWithoutFeedback
                   onPress={() => setHidePassword(!hidePassword)}
                 >
@@ -184,9 +189,12 @@ function Login({ login }) {
               </Link>
             </View>
           </View>
+          <ActivityIndicator animating={dis} size="large" color={colors.pink}/>
+          <Text style={styles.errorMessage}>{error}</Text>
           <TouchableOpacity
             style={s.btn()}
             onPress={handleSubmit(onSubmit)}
+            disabled={dis}
           >
             <Text style={{ ...s.textWhite, fontWeight:'bold' }}>INGRESAR</Text>
           </TouchableOpacity>
