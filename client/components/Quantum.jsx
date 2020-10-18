@@ -125,7 +125,7 @@ export function Input({placeholder, style,secureTextEntry, onFocus ,onChangeText
                 keyboardType={keyboardType}
                 editable={editable} 
             />
-            {iconRight && <TouchableOpacity style={{ ...bn('p-2 py-4'),position:'absolute', right:0, top:0,elevation:20 }} onTouch={onIconRightPress}>
+            {iconRight && <TouchableOpacity style={{ ...bn('p-2 py-4'),position:'absolute', right:0, top:0,elevation:20 }} onPress={onIconRightPress}>
                     <Image
                         style={{ ...bn('width-20'), height:20 }}
                         source={iconRight}

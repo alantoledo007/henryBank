@@ -27,16 +27,21 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 export default function App() {
+  const screenConfig = {
+    options:{
+      header:() => false
+    }
+  }
 return (
       <Provider store={store}>
           <NavigationContainer>
             <Stack.Navigator>
-              <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="Dash" component={Dash} />
+              <Stack.Screen name="Home" component={Home} {...screenConfig} />
+              <Stack.Screen name="Dash" component={Dash} {...screenConfig} />
 
-              <Stack.Screen name="Reset" component={Reset} />
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Register" component={Register} />
+              <Stack.Screen name="Reset" component={Reset} {...screenConfig} />
+              <Stack.Screen name="Login" component={Login} {...screenConfig} />
+              <Stack.Screen name="Register" component={Register} {...screenConfig} />
             </Stack.Navigator>
           </NavigationContainer>
       {/*<NativeRouter>
