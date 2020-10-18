@@ -49,7 +49,7 @@ import {
   Poppins_900Black_Italic,
 } from "@expo-google-fonts/poppins";
 
-function Login({ login }) {
+function Login({ login, navigation }) {
   const history = useHistory();
   const { control, handleSubmit } = useForm();
 
@@ -156,7 +156,7 @@ function Login({ login }) {
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <QTLink to="/passwordreset" style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
+              <QTLink to="/passwordreset" {...{navigation}} style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
             </View>
           </View>
           <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />

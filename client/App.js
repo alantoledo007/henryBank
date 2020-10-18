@@ -19,12 +19,27 @@ import Deposit from './components/Deposit/Deposit';
 import Contacts from './components/Contacts/Index';
 import SendMoney from './components/SendMoney';
 
+//navigation
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const Stack = createStackNavigator();
 
 export default function App() {
 return (
-  <React.Fragment>
       <Provider store={store}>
-        <NativeRouter>
+          <NavigationContainer>
+            <Stack.Navigator>
+              <Stack.Screen name="Home" component={Home} />
+              <Stack.Screen name="Dash" component={Dash} />
+
+              <Stack.Screen name="Reset" component={Reset} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Register" component={Register} />
+            </Stack.Navigator>
+          </NavigationContainer>
+      {/*<NativeRouter>
           <Fox />
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
@@ -38,9 +53,8 @@ return (
           <Route exact path="/email-verifier" component={EmailVerifier} />
           <Route exact path="/deposit" component={Deposit}/>
           <Route exact path="/contacts" component={Contacts} />
-          <Route exact path="/send-money" component={SendMoney} />
-        </NativeRouter>
+          <Route exact path="/send-money" component={SendMoney} /> 
+        </NativeRouter>*/}
       </Provider>
-    </React.Fragment>
   );
 }

@@ -15,7 +15,7 @@ import {Button, Input, bootnative, QTLink, Container, Logo} from './Quantum';
 import colors from './style/colors';
 import s from './style/styleSheet';
 
-function Register({ register }) {
+function Register({ register, navigation}) {
     const bn = bootnative();
     const { control, handleSubmit } = useForm();
     const [hidePassword, setHidePassword] = useState(true);
@@ -116,7 +116,7 @@ function Register({ register }) {
                         <Button label="CREAR CUENTA" style={bn('mb-5')} color="primary" 
                             disabled={dis} onPress={handleSubmit(onSubmit)}></Button>
 
-                        <QTLink to="/login" label="¿Ya estás registrado? Iniciá sesión" />
+                        <QTLink to="Login" {...{navigation}} label="¿Ya estás registrado? Iniciá sesión" />
                     </View>
                 </View>
             </Container>

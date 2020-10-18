@@ -51,8 +51,7 @@ export function Logo({size, style}){
     );
 };
 
-function DefaultButton({label, color, onPress, style, textStyle, editable}){
-
+function DefaultButton({navigation, label, color, onPress, style, textStyle, editable, to}){
     return (
         <TouchableOpacity
         editable={editable}
@@ -67,16 +66,17 @@ function DefaultButton({label, color, onPress, style, textStyle, editable}){
 }
 
 export function Button(props){
-    if(props.to)
-        return <Link to={props.to} component={DefaultButton} {...props} />
+    const {to, navigation, params} = props;
+    if(to && navigation)
+        return <DefaultButton {...props} onPress={()=>navigation.navigate(to, params||{})} />
     return <DefaultButton {...props} />
 }
 
-export function QTLink({to, label, style}){
+export function QTLink({to,navigation, label, style}){
     return (
-        <Link to={to} component={TouchableOpacity}>
+        <TouchableOpacity onPress={() => navigation.navigate(to)}>
             <Text style={{ ...bn('text-primary text-center'),textDecorationLine:'underline',...style }}>{label}</Text>
-        </Link>
+        </TouchableOpacity>
     );
 }
 
@@ -125,7 +125,7 @@ export function Input({placeholder, style,secureTextEntry, onFocus ,onChangeText
                 keyboardType={keyboardType}
                 editable={editable} 
             />
-            {iconRight && <TouchableOpacity style={{ ...bn('p-2 py-4'),position:'absolute', right:0, top:0,elevation:20 }} onPress={onIconRightPress}>
+            {iconRight && <TouchableOpacity style={{ ...bn('p-2 py-4'),position:'absolute', right:0, top:0,elevation:20 }} onTouch={onIconRightPress}>
                     <Image
                         style={{ ...bn('width-20'), height:20 }}
                         source={iconRight}

@@ -1,5 +1,6 @@
 //general
 import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 import { ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
 import { connect } from 'react-redux';
 import { Link, useHistory } from 'react-router-native';
@@ -8,7 +9,7 @@ import { Link, useHistory } from 'react-router-native';
 import s from './style/styleSheet';
 import {Container, Logo, bootnative, QTLink, Button} from './Quantum';
 
-function Home() {
+function Home({navigation}) {
     const bn = bootnative();
     const history = useHistory()
     return (
@@ -30,13 +31,13 @@ function Home() {
 
                 <View style={bn('row')}>
                     <View style={bn('col-12 my-5')}>
-                        <Button to="/login" label="iniciar Sesión" />
+                        <Button to="Login" {...{navigation}} label="iniciar Sesión" />
                     </View>
                     <View style={bn('col-12')}>
-                        <Button to="/register" style={bn('border-1-primary-solid-5')} color="white" textStyle={bn('text-primary')} label="Crearse una cuenta" />
+                        <Button to="Register" {...{navigation}} style={bn('border-1-primary-solid-5')} color="white" textStyle={bn('text-primary')} label="Crearse una cuenta" />
                     </View>
                     <View style={bn('col-12 mt-5')}>
-                        <QTLink to="/#" label="¿Necesitas ayuda?"/>
+                        <QTLink to="Login" {...{navigation}} label="¿Necesitas ayuda?"/>
                     </View>
                 </View>
         </Container>
