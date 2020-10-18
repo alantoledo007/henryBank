@@ -5,10 +5,9 @@ import {Link} from 'react-router-native';
 import s from './style/styleSheet';
 import { StatusBar } from 'expo-status-bar';
 import {Dimensions} from 'react-native';
-import {BoxShadow as Shadow} from 'react-native-shadow'
 
 
-const bn = useBootnative();
+export const bn = useBootnative();
 export const bootnative = useBootnative;
 
 export function Container({children, styles}){
@@ -22,18 +21,45 @@ export function Container({children, styles}){
     );
 }
 
-export function Button({label, color, onPress, style, textStyle, editable}){
+export function Logo({size, style}){
+    const styles = {
+        lg:{
+            height:160,
+            width:160
+        },
+        sm: {
+            height:100,
+            width: 100,
+        },
+        xs: {
+            height:32,
+            width:32
+        }
+    }
+    return (
+        <Image source={require("../logo.png")} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
+    );
+};
+
+function DefaultButton({label, color, onPress, style, textStyle, editable}){
+
     return (
         <TouchableOpacity
-            editable={editable}
-            style={{ ...bn('borderRadius-5 p-3.5 bg-'+(color || 'primary')),...style }}
-            onPress={onPress}
+        editable={editable}
+        style={{ ...bn('borderRadius-5 p-3.5 bg-'+(color || 'primary')),...style }}
+        onPress={onPress}
         >
             <Text style={{ ...bn('bold text-white text-center'),textTransform:'uppercase',...textStyle }}>
                 {label}
             </Text>
         </TouchableOpacity>
-    )
+    );
+}
+
+export function Button(props){
+    if(props.to)
+        return <Link to={props.to} component={DefaultButton} {...props} />
+    return <DefaultButton {...props} />
 }
 
 export function QTLink({to, label, style}){

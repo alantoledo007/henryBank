@@ -6,50 +6,40 @@ import { Link, useHistory } from 'react-router-native';
 
 //UI
 import s from './style/styleSheet';
-import { LinearGradient } from 'expo-linear-gradient';
+import {Container, Logo, bootnative, QTLink, Button} from './Quantum';
 
 function Home() {
-
+    const bn = bootnative();
     const history = useHistory()
     return (
-        <View style={s.container}>
-            <LinearGradient
-              // Background Linear Gradient
-              colors={['rgba(0,0,0,0.8)', 'transparent']}
-              style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  height: 300,
-              }}
-          />
-            <ScrollView>
-                <View>
-                    <Image source={require("../logoFull.png")} style={{alignSelf: "center" , ...s.mb(8)}}></Image>
-                </View>
-                <View style={{ flex: 2, width: "100%" }}>
-                    <View style={{ width: "100%", ...s.my(5) }}>
-                        <Link to="/login" component={TouchableOpacity} style={s.btn()}>
-                            <Text style={{ ...s.textWhite, ...s.size(5) }}>Iniciar sesión</Text>
-                        </Link>
-                    </View>
-                    <View>
-                        <Link to="/register" component={TouchableOpacity} style={s.btn('white')}>
-                            <Text style={{ ...s.textColor('pink'), ...s.size(5) }}>Registrarse</Text>
-                        </Link>
-                    </View>
-                    <View opacity={0.2} style={{ ...s.hr('white',3.5), ...s.mt(10), ...s.mb(4) }}></View>
-                    <View>
-                        <Link to="/#">
-                            <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
-                                ¿Necesitás ayuda?
-                            </Text>
-                        </Link>
+        <Container>
+                <View style={bn('row')}>
+                    <View style={bn('col-12')}>
+                        <Logo />
                     </View>
                 </View>
-            </ScrollView>
-        </View>
+
+                <View style={bn('row')}>
+                    <View style={bn('col-12 p-3 bg-#f1f1f1 borderRadius-5 mt-5')}>
+                        <Text style={{ ...bn('text-center text-#999'),...s.size(3.5) }}>
+                            Te damos la bienvenida a Quantum, manejar tu plata
+                            nunca fue tán facil.
+                        </Text>
+                    </View>
+                </View>
+
+                <View style={bn('row')}>
+                    <View style={bn('col-12 my-5')}>
+                        <Button to="/login" label="iniciar Sesión" />
+                    </View>
+                    <View style={bn('col-12')}>
+                        <Button to="/register" style={bn('border-1-primary-solid-5')} color="white" textStyle={bn('text-primary')} label="Crearse una cuenta" />
+                    </View>
+                    <View style={bn('col-12 mt-5')}>
+                        <QTLink to="/#" label="¿Necesitas ayuda?"/>
+                    </View>
+                </View>
+        </Container>
     );
 }
 

@@ -11,8 +11,7 @@ import { connect } from "react-redux";
 import { register } from "../redux/actions/auth";
 
 //UI
-import {Button, Input, bootnative, QTLink, Container} from './Quantum';
-import { LinearGradient } from 'expo-linear-gradient';
+import {Button, Input, bootnative, QTLink, Container, Logo} from './Quantum';
 import colors from './style/colors';
 import s from './style/styleSheet';
 
@@ -57,7 +56,7 @@ function Register({ register }) {
         <Container>
                 <View style={bn('row')}>
                     <View style={bn('col-12')}>
-                        <Image source={require("../logo.png")} style={{ width: 64, height: 64, alignSelf: "center" }}></Image>
+                        <Logo />
                         <Text style={{ ...bn('bg-#f1f1f1 p-2 borderRadius-10 text-center mt-4'),...s.size(4) }}>Creá una cuenta y administrá tu plata como quieras, cuando quieras</Text>
                     </View>
                 </View>

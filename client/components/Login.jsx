@@ -21,6 +21,7 @@ import { login } from "../redux/actions/auth";
 import axios from "axios";
 import { AppLoading } from "expo";
 import env from "../env";
+import {Container, Logo, bootnative, QTLink, Button, Input} from './Quantum';
 
 //Estilos
 import { LinearGradient } from 'expo-linear-gradient';
@@ -101,33 +102,21 @@ function Login({ login }) {
   if (!fontsLoaded) return <AppLoading />;
   else
     return (
-      <View style={s.container}>
-        <LinearGradient
-              // Background Linear Gradient
-              colors={['rgba(0,0,0,0.8)', 'transparent']}
-              style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  height: 300,
-              }}
-          />
+      <Container>
         <View>
-                <Image source={require("../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
-                </View>
+          <Logo />
+        </View>
         <View>
           <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(5) }}>Iniciar sesión</Text>
         </View>
         <View>
           {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
           <View style={s.mb(4)}>
-            <Text style={{ ...s.textWhite, ...s.size(4) }}>Correo electrónico</Text>
+            <Text style={{ ...s.size(4) }}>Correo electrónico</Text>
             <Controller
               control={control}
               render={({ onChange, onBlur, value }) => (
-                <TextInput
-                  style={{ ...s.input }}
+                <Input
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
@@ -151,34 +140,24 @@ function Login({ login }) {
               <Controller
                 control={control}
                 render={({ onChange, onBlur, value }) => (
-                  <TextInput
+                  <Input
                     secureTextEntry={hidePassword}
-                    style={{ ...s.input}}
                     onBlur={onBlur}
                     onChangeText={(value) => onChange(value)}
                     value={value}
                     placeholder="••••••••"
                     autoCapitalize="none"
+                    iconRight={hidePassword
+                      ? require("../assets/eye.png")
+                      : require("../assets/eye-slash.png")
+                    }
+                    onIconRightPress={()=>setHidePassword(!hidePassword)}
                   />
                 )}
                 name="password"
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <View style={{ position:'absolute', top:40, right: 15 }}>
-                <TouchableWithoutFeedback
-                  onPress={() => setHidePassword(!hidePassword)}
-                >
-                  <Image
-                    style={styles.eye}
-                    source={
-                      hidePassword
-                        ? require("../assets/eye.png")
-                        : require("../assets/eye-slash.png")
-                    }
-                  />
-                </TouchableWithoutFeedback>
-              </View>
               <Link to="/passwordreset" component={TouchableOpacity}>
                 <Text style={s.textColor('orange')}>¿Olvidaste tu contraseña?</Text>
               </Link>
@@ -197,7 +176,7 @@ function Login({ login }) {
                 ¿No tienes una cuenta? Registrate
             </Text>
         </Link>
-      </View>
+      </Container>
     );
 }
 
