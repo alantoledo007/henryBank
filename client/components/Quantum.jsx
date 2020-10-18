@@ -7,8 +7,8 @@ import { StatusBar } from 'expo-status-bar';
 import {Dimensions} from 'react-native';
 
 
-export const bn = useBootnative();
-export const bootnative = useBootnative;
+export const bn = useBootnative(); //este si
+export const bootnative = useBootnative; //este no
 
 export function Container({children, styles}){
     return (
@@ -18,6 +18,16 @@ export function Container({children, styles}){
                 <StatusBar style="auto" />
             </View>
         </ScrollView>
+    );
+}
+
+export function Alert({variant, content, style, textStyle}){
+    return (
+        <View style={bn('row')}>
+            <View style={{ ...bn('col-12 p-3 bg-'+(variant||'#f1f1f1')+' borderRadius-5 mt-5'),...style }}>
+                <Text style={{ ...bn('text-center text-#999'),...s.size(3.5),...textStyle }}>{content}</Text>
+            </View>
+        </View>
     );
 }
 

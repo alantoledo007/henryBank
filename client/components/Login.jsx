@@ -21,7 +21,7 @@ import { login } from "../redux/actions/auth";
 import axios from "axios";
 import { AppLoading } from "expo";
 import env from "../env";
-import {Container, Logo, bootnative, QTLink, Button, Input} from './Quantum';
+import {Container, Logo, QTLink, Button, Input, bn, Alert} from './Quantum';
 
 //Estilos
 import { LinearGradient } from 'expo-linear-gradient';
@@ -106,9 +106,7 @@ function Login({ login }) {
         <View>
           <Logo />
         </View>
-        <View>
-          <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(5) }}>Iniciar sesión</Text>
-        </View>
+        <Alert content="Ingrese a su cuenta Quantunm" style={bn('mb-4')} />
         <View>
           {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
           <View style={s.mb(4)}>
@@ -136,7 +134,7 @@ function Login({ login }) {
 
           <View>
             <View style={s.mb(4)}>
-              <Text style={{ ...s.textWhite, ...s.size(4) }}>Contraseña</Text>
+              <Text style={{ ...s.size(4) }}>Contraseña</Text>
               <Controller
                 control={control}
                 render={({ onChange, onBlur, value }) => (
@@ -158,24 +156,13 @@ function Login({ login }) {
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <Link to="/passwordreset" component={TouchableOpacity}>
-                <Text style={s.textColor('orange')}>¿Olvidaste tu contraseña?</Text>
-              </Link>
+              <QTLink to="/passwordreset" style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
             </View>
           </View>
-          <TouchableOpacity
-            style={s.btn()}
-            onPress={handleSubmit(onSubmit)}
-          >
-            <Text style={{ ...s.textWhite, fontWeight:'bold' }}>INGRESAR</Text>
-          </TouchableOpacity>
+          <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />
           
         </View>
-        <Link to="/register" component={TouchableOpacity} style={s.mt(6)}>
-            <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
-                ¿No tienes una cuenta? Registrate
-            </Text>
-        </Link>
+        <QTLink to="/register" component={TouchableOpacity} style={s.mt(6)} label="¿No tienes una cuenta? Registrate" />
       </Container>
     );
 }
