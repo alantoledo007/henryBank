@@ -14,12 +14,12 @@ import { CreditCardInput } from "react-native-credit-card-input";
 
 import { connect } from "react-redux";
 import axios from "axios";
-import env from "../../env";
+import env from "../../../env";
 
-import { styles as s } from "../style/styleSheet";
-import colors from "../style/colors";
+import { styles as s } from "../../style/styleSheet";
+import colors from "../../style/colors";
 
-const DepositCard = ({ token }) => {
+const DepositCard = ({ token, close }) => {
   const [form, setForm] = useState({
     amount: "",
     values: {},
@@ -153,19 +153,20 @@ const DepositCard = ({ token }) => {
         <View style={styles.cardInputWrapper}>
           <Text style={{ ...styles.text }}>Datos de tu tarjeta:</Text>
           <CreditCardInput
+            inputStyle={styles.creditCardInputStyle}
             requiresName={true}
             onChange={onChange}
-            cardScale={0.7}
+            cardScale={0.9}
             labelStyle={{ ...styles.text, ...styles.cardInputLabel }}
             labels={{
               number: "NÚMERO DE TARJETA",
-              expiry: "EXPIRACIÓN",
+              expiry: "VENCIMIENTO",
               cvc: "CVC",
               name: "NOMBRE",
             }}
           />
         </View>
-      </ScrollView>
+      
 
       <View style={styles.submitWrapper}>
         <Text style={styles.error}>{error}</Text>
@@ -175,7 +176,7 @@ const DepositCard = ({ token }) => {
           </Text>
         </TouchableOpacity>
       </View>
-
+      </ScrollView>
       {/* MODAL DE RECARGA CON ÉXITO */}
       <Modal animationType="slide" transparent={true} visible={showModal}>
         <View style={styles.centeredView}>
@@ -222,9 +223,9 @@ const DepositCard = ({ token }) => {
               </Text>
             </Text>
 
-            <Link to="/dash" component={TouchableOpacity} style={styles.successButton}>
+            <TouchableOpacity onPress={close} style={styles.successButton}>
               <Text style={{ ...styles.text }}>Listo</Text>
-            </Link>
+            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -234,8 +235,9 @@ const DepositCard = ({ token }) => {
 const styles = StyleSheet.create({
   container: {
     // backgroundColor: "yellow",
-    height: 400,
+    height: 500,
     justifyContent: "space-evenly",
+    paddingBottom: 10
   },
   text: {
     ...s.font,
@@ -245,8 +247,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     width: 400,
+    marginBottom: 0,
     // backgroundColor: "#6b538a",
-    paddingHorizontal: 15,
+    paddingHorizontal: 0,
     //   paddingVertical: 7
   },
   amountInputWrapper: {
@@ -254,9 +257,14 @@ const styles = StyleSheet.create({
   },
   amountInput: {
     ...s.input,
-    width: 80,
+    width: 250,
     alignSelf: "center",
     fontSize: 20,
+    marginBottom: 10
+  },
+  creditCardInputStyle: {
+    ...s.input,
+    padding: 5
   },
   input: {
     ...s.input,
@@ -270,11 +278,10 @@ const styles = StyleSheet.create({
   cardInputLabel: {
     ...s.font,
     ...s.textColor("white"),
-    paddingTop: 10,
-    fontSize: 15,
+    fontSize: 10,
   },
   submitWrapper: {
-    paddingTop: 15,
+    paddingTop: 5,
   },
   error: {
     color: colors.pink,
@@ -289,7 +296,8 @@ const styles = StyleSheet.create({
     height: 75,
     justifyContent: "center",
     alignSelf: "center",
-    marginTop: 10,
+    marginTop: 25,
+    marginBottom: 10
   },
   confirmButtonText: {
     fontSize: 35,
@@ -330,4 +338,10 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DepositCard;
+const mapStateToProps = state => {
+  return {
+      token: state.auth.token
+  }
+}
+
+export default connect(mapStateToProps)(DepositCard);

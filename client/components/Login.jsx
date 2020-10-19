@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
+  ActivityIndicator,
 } from "react-native";
 import { Link, useHistory } from "react-router-native";
 import { useForm, Controller } from "react-hook-form";
@@ -32,18 +33,21 @@ function Login({ login, navigation }) {
 
   const { control, handleSubmit } = useForm();
 
+  const [dis, setDis] = useState(false);
+
   const [hidePassword, setHidePassword] = useState(true);
 
   //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
-  const [error, setError] = useState("");
+  const [error, setError] = useState(" ");
   const mostrarError = (err) => {
     setError(err);
     setTimeout(() => {
-      setError("");
+      setError(" ");
     }, 5000);
   };
 
   const onSubmit = (data) => {
+    setDis(true);
     axios
       .post(env.API_URI + "/auth/login", JSON.stringify(data), {
         headers: {
@@ -54,6 +58,7 @@ function Login({ login, navigation }) {
         const { data } = res.data;
         //Mando la data del usuario (token + id, email, nombre si lo hay, etc) a redux. Redux va a guardarlo en el store y en AsyncStorage
         login(data);
+        setDis(false);
         return data;
       })
       .then((data) => {
@@ -63,6 +68,7 @@ function Login({ login, navigation }) {
         //history.push("/register-confirmation");
       })
       .catch((err) => {
+        setDis(false);
         //Manejo de errores:
         if (err.response.data.type == "AUTHENTICATION_FAILED")
           mostrarError("Dirección de correo o contraseña incorrectos.");
@@ -79,7 +85,6 @@ function Login({ login, navigation }) {
         </View>
         <Alert content="Ingrese a su cuenta Quantunm" style={bn('mb-4')} />
         <View>
-          {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
           <View style={s.mb(4)}>
             <Label text="Correo electrónico" />
             <Controller
@@ -131,6 +136,7 @@ function Login({ login, navigation }) {
             </View>
           </View>
           <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />
+
           
         </View>
         <QTLink to="Register" {...{navigation}} component={TouchableOpacity} style={s.mt(6)} label="¿No tienes una cuenta? Registrate" />

@@ -14,10 +14,7 @@ import RegisterStepThree from './components/RegisterStepThree';
 import Login from './components/Login';
 import PasswordReset from './components/PasswordReset/Index'
 import Reset from './components/PasswordReset/Reset';
-import Dash from './components/Dash';
-import Deposit from './components/Deposit/Deposit';
-import Contacts from './components/Contacts/Index';
-import SendMoney from './components/SendMoney';
+import Dash from './components/DashboardNav/Index';
 
 //navigation
 import 'react-native-gesture-handler';

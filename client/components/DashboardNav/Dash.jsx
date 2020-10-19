@@ -1,14 +1,20 @@
 //general
 import React,{useEffect, useState} from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, StatusBar, ScrollView, ActivityIndicator} from 'react-native';
+import { StyleSheet, Image, View, Text, TouchableOpacity, StatusBar, Modal, ScrollView, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-native';
 import {Dimensions } from "react-native";
-import { Rect } from 'react-native-svg';
+// import { Rect } from 'react-native-svg';
 
 //actions
 
-function Dash({user}){
+//components
+import Deposit from './Deposit/Deposit';
+import SendMoney from './SendMoney';
+
+function Dash({user, navigation}){
+    const [showDeposit, setShowDeposit] = useState(false);
+    const [showTransfer, setShowTransfer] = useState(false);
 
     const urlAvatar = (name,surname) => {
         return 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000'
@@ -93,7 +99,7 @@ function Dash({user}){
                     <View style={{ display:'flex',justifyContent:'center', flexDirection:'row',marginBottom:15 }}>
                         <Link style={styles.buttonStats} component={TouchableOpacity} to="/">
                                 <Text style={{ padding:10,fontWeight:'bold' }}>
-                                    <Image style={{ width:15, height:15 }} source={require('../assets/stats-white.png')} />
+                                    <Image style={{ width:15, height:15 }} source={require('../../assets/stats-white.png')} />
                                 </Text>
                         </Link>
                     </View>
@@ -101,28 +107,28 @@ function Dash({user}){
                 
                 <View style={{ ...styles.row,flexWrap:'wrap', marginBottom:20 }}>
                     <Link style={styles.panelButton} component={TouchableOpacity} to="/">
-                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/transactions.png')} />
+                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/transactions.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Movimientos</Text>
                     </Link>
                     <Link style={styles.panelButton} component={TouchableOpacity} to="/">
-                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/account.png')} />
+                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/account.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis datos</Text>
                     </Link>
-                    <Link style={styles.panelButton} component={TouchableOpacity} to="/contacts">
-                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/products.png')} />
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>{}}>
+                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/products.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis productos</Text>
-                    </Link>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.row}>
-                    <Link style={styles.buttonTransaction} component={TouchableOpacity} to="/send-money">
-                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/send.png')} />
+                    <TouchableOpacity style={styles.buttonTransaction} onPress={()=>setShowTransfer(true)}>
+                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/send.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginTop:15, marginBottom:15, color:'white', fontWeight:'bold' }}>ENVIAR</Text>
-                    </Link>
-                    <Link style={styles.buttonTransaction} component={TouchableOpacity} to="/deposit">
-                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../assets/wallet.png')} />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.buttonTransaction} onPress={()=>setShowDeposit(true)}>
+                        <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/wallet.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginTop:15, marginBottom:15, color:'white', fontWeight:'bold' }}>DEPOSITAR</Text>
-                    </Link>
+                    </TouchableOpacity>
                 </View>
                 
             </ScrollView>
@@ -132,6 +138,30 @@ function Dash({user}){
                     <Text style={{ color:'white', marginTop:10 }}>CARGANDO...</Text>
                 </View>
             )}
+
+            {/* MODAL RECARGA DINERO */}
+            <Modal
+                transparent={true}
+                animationType="slide"
+                visible={showDeposit}
+                onRequestClose={()=>{
+                    setShowDeposit(false);
+                }}
+            >
+                <Deposit close={() => setShowDeposit(false)}/>
+            </Modal>
+
+            {/* MODAL TRANSFERENCIA */}
+            <Modal
+                transparent={true}
+                animationType="slide"
+                visible={showTransfer}
+                onRequestClose={()=>{
+                    setShowTransfer(false);
+                }}
+            >
+                <SendMoney close={() => setShowTransfer(false)}/>
+            </Modal>
         </React.Fragment>
     );
 }
@@ -154,7 +184,7 @@ const styles = StyleSheet.create({
         paddingRight:30,
         paddingTop: 30, 
         backgroundColor: '#221F3B',
-        marginTop: StatusBar.currentHeight
+        // marginTop: StatusBar.currentHeight
       },
       buttonTransaction:{
         width: ((Dimensions.get('window').width -60) / 2) - 10,

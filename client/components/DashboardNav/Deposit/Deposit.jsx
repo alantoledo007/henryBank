@@ -5,14 +5,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
-  Image
+  Image,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Link } from "react-router-native";
 
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import colors from "../style/colors";
-import { styles as s } from "../style/styleSheet";
+import colors from "../../style/colors";
+import { styles as s } from "../../style/styleSheet";
 import { LinearGradient } from "expo-linear-gradient";
 
 import { Picker, PickerIOS } from "@react-native-community/picker";
@@ -20,7 +21,7 @@ import { Picker, PickerIOS } from "@react-native-community/picker";
 import DepositCash from "./DepositCash";
 import DepositCard from "./DepositCard";
 
-const Deposit = ({token, recharge_code}) => {
+const Deposit = ({ token, recharge_code, close }) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   return (
@@ -37,9 +38,11 @@ const Deposit = ({token, recharge_code}) => {
         }}
       />
 
-      <Link style={{alignSelf: "flex-end", marginBottom: 15}} component={TouchableOpacity} to="/dash">
-        <Image source={require('../../assets/close-pink.png')}/>
-      </Link>
+      <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
+        {close && <TouchableWithoutFeedback onPress={close}>
+          <Image style={{height: 15}} source={require("../../../assets/close-pink.png")} />
+        </TouchableWithoutFeedback>}
+      </View>
       <View style={styles.pickerWrapper}>
         <Text style={{ ...styles.text, fontSize: 40 }}>Recargar dinero</Text>
         <Picker
@@ -54,8 +57,8 @@ const Deposit = ({token, recharge_code}) => {
         </Picker>
       </View>
       {/* Según el state paymentMethod, renderizamos un componente u otro: */}
-      {paymentMethod === "cash" && <DepositCash recharge_code={recharge_code} />}
-      {paymentMethod === "card" && <DepositCard token={token} />}
+      {paymentMethod === "cash" && <DepositCash />}
+      {paymentMethod === "card" && <DepositCard close={close}/>}
       <Link>
         <Text style={styles.needHelp}>¿Necesitás ayuda?</Text>
       </Link>
@@ -67,7 +70,7 @@ const styles = StyleSheet.create({
   container: {
     ...s.container,
     ...s.itemsCenter,
-    backgroundColor: "black"
+    backgroundColor: "black",
   },
   text: {
     ...s.font,
@@ -100,11 +103,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     recharge_code: state.auth.user.recharge_code,
-    token: state.auth.token
-  }
-}
+    token: state.auth.token,
+  };
+};
 
 export default connect(mapStateToProps)(Deposit);

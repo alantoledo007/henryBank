@@ -1,8 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet,  } from 'react-native';
 
-import {styles as s} from '../style/styleSheet';
-import colors from '../style/colors';
+import { connect } from 'react-redux';
+
+import {styles as s} from '../../style/styleSheet';
+import colors from '../../style/colors';
 
 const DepositCash = ({ recharge_code }) => {
     //Ya que el código de recarga es un poquito largo, lo separo a la mitad levemente para que sea un poco mas facil de leer
@@ -47,4 +49,10 @@ const styles = StyleSheet.create({
 })
 
 
-export default DepositCash;
+const mapStateToProps = state => {
+    return {
+        recharge_code: state.auth.user.recharge_code
+    }
+}
+
+export default connect(mapStateToProps)(DepositCash);
