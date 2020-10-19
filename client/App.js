@@ -16,6 +16,7 @@ import PasswordReset from './components/PasswordReset/Index'
 import IndexReset from './components/PasswordReset/Index';
 import Reset from './components/PasswordReset/Reset';
 import Dash from './components/DashboardNav/Index';
+import Graphics from './components/DashboardNav/graphics';
 
 //navigation
 import 'react-native-gesture-handler';
@@ -44,6 +45,7 @@ return (
               <Stack.Screen name="Reset" component={Reset} {...screenConfig} />
               <Stack.Screen name="Login" component={Login} {...screenConfig} />
               <Stack.Screen name="Register" component={Register} {...screenConfig} />
+              <Stack.Screen name="Graphics" component={Graphics} {...screenConfig} />
             </Stack.Navigator>
           </NavigationContainer>
       {/*<NativeRouter>
