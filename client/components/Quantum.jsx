@@ -48,13 +48,21 @@ const darkColors= {
     labelErrorBg: "rgba(221, 65, 69, .2)",
     labelError:defaultColors.danger,
     link: "rgba(255,255,255, .5)",
+    
+    toastdangerBg: "rgba(0, 0, 0, .9)",
+    toastdangerText2: "rgba(255, 255, 255, .5)",
+    toastsuccessBg: "rgba(0, 0, 0, .9)",
+    toastsuccessText2: "rgba(255, 255, 255, .5)",
+    toastinfoBg: "rgba(0, 0, 0, .9)",
+    toastinfoText2: "rgba(255, 255, 255, .5)",
+    toastclose: '#fff',
 
     light2: "rgba(255,255,255, .1)",
     light3: "rgba(255,255,255, .5)",
     inputBg: "#3d4954",
     inputBorder: "rgba(0,0,0, .1)",
     inputBorderFocus: "rgba(255,255,255, .7)",
-    inputColor: "rgba(255,255,255, .7)"
+    inputColor: "rgba(255,255,255, .7)",
 }
 
 const lightColors={
@@ -63,6 +71,14 @@ const lightColors={
     labelErrorBg: "rgba(221, 65, 69, .2)",
     labelError:defaultColors.danger,
     link: defaultColors.primary,
+
+    toastdangerBg: "rgba(255,255,255, .9)",
+    toastdangerText2: "rgba(0,0,0, .5)",
+    toastsuccessBg: "rgba(255,255,255, .9)",
+    toastsuccessText2: "rgba(0,0,0, .5)",
+    toastinfoBg: "rgba(255,255,255, .9)",
+    toastinfoText2: "rgba(0,0,0, .5)",
+    toastclose: '#000',
 
     light2: "#f1f1f1",
     light3: "#999",
@@ -81,6 +97,41 @@ export const hbn = (styles = '',darkMode = 'light') => {
     }
     return bnLight(styles);
 }
+
+function QTToast(props){
+    const theme = useColorScheme();
+    const { type, text1, text2, hide} = props;
+    const types = {
+        error:'danger',
+    }
+    return (
+        <View style={{ ...bn("p-3"),marginTop:(statusBar.currentHeight -30) }}>
+            <View style={{ ...hbn('bg-toast'+(types[type]||type)+'Bg borderRadius-5 borderLeft-5-'+(types[type]||type)+' row p-3',theme),alignItems:'center' }}>
+                <View style={bn('col-10')}>
+                    {text1 && <Text style={{ ...hbn('bold text-'+(types[type]||type),theme),...s.size(4) }}>{text1}</Text>}
+                    {text2 && <Text style={{ ...hbn('bold text-toast'+(types[type]||type)+'Text2',theme),...s.size(3) }}>{text2}</Text>}
+                </View>
+                <View style={bn('col-2')}>
+                    <Button label="x" color="transparent" textStyle={hbn('text-toastclose',theme)} onPress={hide} />
+                </View>
+            </View>
+        </View>
+    );
+}
+
+export const toastConfig =  {
+    error:(internalState) => {
+        return <QTToast {...internalState} type="danger" />
+    },
+    success:(internalState) => {
+        return <QTToast {...internalState} />
+    },
+    info:(internalState) => {
+        return <QTToast {...internalState} />
+    }
+}
+
+
 
 
 export function Container({children, styles}){
