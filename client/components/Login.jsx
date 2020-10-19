@@ -3,13 +3,8 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   View,
-  Text,
-  TextInput,
   StatusBar,
   TouchableOpacity,
-  Image,
-  TouchableWithoutFeedback,
-  ActivityIndicator,
 } from "react-native";
 import { Link, useHistory } from "react-router-native";
 import { useForm, Controller } from "react-hook-form";
@@ -20,12 +15,10 @@ import { login } from "../redux/actions/auth";
 
 //Otros
 import axios from "axios";
-import { AppLoading } from "expo";
 import env from "../env";
 import {Container, Logo, QTLink, Button, Input, bn, Alert, Label} from './Quantum';
 
 //Estilos
-import { LinearGradient } from 'expo-linear-gradient';
 import colors from "./style/colors";
 import s from './style/styleSheet';
 
@@ -38,7 +31,6 @@ function Login({ login, navigation }) {
   const [hidePassword, setHidePassword] = useState(true);
 
   //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
-  const [error, setError] = useState(" ");
   const mostrarError = (err) => {
     setError(err);
     setTimeout(() => {
@@ -62,6 +54,7 @@ function Login({ login, navigation }) {
         return data;
       })
       .then((data) => {
+        navigation.navigate('Dash')
         //Si los datos incluyen el nombre, significa que el usuario ya verificó su cuenta, por lo tanto redireccionamos a la posición consolidada
         //if (data.user.name) return history.push("/dash");
         //Si no hay nombre, redireccionamos a la pantalla de confirmar registro
@@ -155,116 +148,5 @@ const mapDispatchToProps = (dispatch) => {
     login: (data) => dispatch(login(data)),
   };
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: colors.blue,
-    paddingTop: StatusBar.currentHeight,
-  },
-  titleWrapper: {
-    justifyContent: "flex-end",
-    paddingTop: 10,
-  },
-  title: {
-    alignSelf: "center",
-    textAlign: "center",
-    color: colors.white,
-    fontSize: 55,
-    paddingTop: 70
-  },
-  inputWrapper: {
-    justifyContent: "flex-start",
-    marginBottom: 50,
-  },
-  inputs: {
-    justifyContent: "space-around",
-    marginBottom: 20,
-  },
-  input: {
-    fontFamily: "Poppins_400Regular_Italic",
-    color: "#221F3B",
-    backgroundColor: colors.white,
-    fontSize: 20,
-    height: 40,
-    borderBottomColor: colors.pink,
-    borderBottomWidth: 5,
-    paddingLeft: 8,
-  },
-  email: {
-    marginHorizontal: 15,
-    width: 290,
-    borderBottomColor: colors.pink,
-    borderBottomWidth: 5,
-    borderRadius: 5,
-    fontSize: 20,
-  },
-  passwordWrapper: {
-    width: 322,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingRight: 17,
-  },
-  password: {
-    flex: 1,
-    marginVertical: 15,
-    marginLeft: 15,
-    borderTopLeftRadius: 5,
-    borderBottomLeftRadius: 5,
-  },
-  eye: {
-    height: 25,
-    width: 25,
-  },
-  errorMessage: {
-    color: colors.pink,
-    alignSelf: "center",
-    fontFamily: "Poppins_400Regular",
-  },
-  button: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: colors.pink,
-    alignSelf: "center",
-    width: 250,
-    height: 60,
-    borderRadius: 5,
-  },
-  buttonText: {
-    textAlign: "center",
-    padding: 20,
-    color: colors.white,
-    fontSize: 30,
-    fontFamily: "Poppins_600SemiBold",
-  },
-  buttonsContainer: {
-    flexDirection: "row",
-  },
-  forgotPass: {
-    alignSelf: "center",
-    paddingTop: 10,
-    fontFamily: "Poppins_400Regular",
-    color: colors.orange,
-    fontSize: 20,
-  },
-  backButton: {
-    backgroundColor: colors.pink,
-    height: 40,
-    width: 80,
-    borderRadius: 7,
-    alignSelf: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
-  },
-  backButtonText: {
-    color: colors.white,
-    fontSize: 20,
-    fontFamily: "Poppins_400Regular",
-  },
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);
