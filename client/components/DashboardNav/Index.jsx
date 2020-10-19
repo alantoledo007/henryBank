@@ -9,13 +9,10 @@ import { Menu, DashboardRoutes, ContactsRoute } from "./Routes";
 
 export default function Index() {
   const MenuStack = createDrawerNavigator();
-  return (
-    <NavigationContainer>
-        <StatusBar hidden={true}/>
+  return (       
       <MenuStack.Navigator>
         <MenuStack.Screen name="Menu" component={Menu} />
       </MenuStack.Navigator>
-    </NavigationContainer>
   );
 }
 // export function Menu() {

@@ -2,6 +2,7 @@ import React from 'react';
 import { NativeRouter, Route } from 'react-router-native';
 import { Provider } from 'react-redux';
 import store from './redux/store/index';
+import { StatusBar } from 'expo-status-bar';
 
 //Componentes
 import Fox from './components/Fox';
@@ -35,6 +36,7 @@ export default function App() {
   }
 return (
   <Provider store={store}>
+     <StatusBar hidden={true}/>
           <NavigationContainer>
             <Stack.Navigator headerMode="none">
               <Stack.Screen name="Home" component={Home} {...screenConfig} />

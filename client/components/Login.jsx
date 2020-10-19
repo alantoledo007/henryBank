@@ -54,6 +54,7 @@ function Login({ login, navigation }) {
         return data;
       })
       .then((data) => {
+        navigation.navigate('Dash')
         //Si los datos incluyen el nombre, significa que el usuario ya verificó su cuenta, por lo tanto redireccionamos a la posición consolidada
         //if (data.user.name) return history.push("/dash");
         //Si no hay nombre, redireccionamos a la pantalla de confirmar registro
