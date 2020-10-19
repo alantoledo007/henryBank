@@ -82,7 +82,7 @@ function Index({ email, passwordReset, navigation }) {
 
                 </View>
                 <Button label='Enviar Codigo' onPress={ handleSubmit(onSubmit) } />                
-                {errors.email && <Label text={errors.email.message} /> }
+                {errors.email && <Label type='error' text={errors.email.message} /> }
 
         </Container>
     )

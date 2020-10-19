@@ -186,7 +186,7 @@ function Index({ email, passwordReset, navigation }) {
                  }}
                 defaultValue=""
             />
-            {errors.code && <Label style={{fontSize: 15, color: 'red'}} text={errors.code.message} />}
+            {errors.code && <Label type='error' style={{fontSize: 15, color: 'red'}} text={errors.code.message} />}
             <Label text='Nueva Contraseña' />
             <Controller
                 control={control}
@@ -207,7 +207,7 @@ function Index({ email, passwordReset, navigation }) {
                 rules={{ required: 'Ingresa una nueva contraseña' }}
                 defaultValue=""
             />
-            {errors.newPassword && <Label style={{fontSize: 15, color: 'red'}} text={errors.newPassword.message} />}
+            {errors.newPassword && <Label type='error' text={errors.newPassword.message} />}
             <Label text='Repetir Nueva Contraseña' />
             <Controller
                 control={control}
@@ -228,8 +228,8 @@ function Index({ email, passwordReset, navigation }) {
                 rules={{ required: 'Repite la contraseña' }}
                 defaultValue=""
             />
-            {errors.confirmaPassword && <Label style={{fontSize: 15, color: 'red'}} text={errors.confirmaPassword.message} />}
-            {error.error && <Label style={{fontSize: 15, color: 'red'}} text={error.message} />}
+            {errors.confirmaPassword && <Label type='error' style={{fontSize: 15, color: 'red'}} text={errors.confirmaPassword.message} />}
+            {error.error && <Label type='error' style={{fontSize: 15, color: 'red'}} text={error.message} />}
             <View style={{marginTop: 10}}>
             <Button label="Modificar Contraseña" onPress={handleSubmit(onSubmit)} />
             </View>
