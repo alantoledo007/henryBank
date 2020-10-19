@@ -20,7 +20,7 @@ export const bn = useBootnative(); //este si
 export const bootnative = useBootnative; //este no
 
 const defaultColors = {
-    primary: "#057AFC",
+    primary: "#E94560",
     secondary: "#6C757D",
     success: "#51A846",
     danger: "#DD4145",
@@ -45,6 +45,7 @@ const defaultColors = {
 const darkColors= {
     body: defaultColors.dark,
     label: "rgba(255,255,255, .7)",
+    link: "rgba(255,255,255, .5)",
 
     light2: "rgba(255,255,255, .1)",
     light3: "rgba(255,255,255, .5)",
@@ -57,6 +58,7 @@ const darkColors= {
 const lightColors={
     body: defaultColors.light,
     label: defaultColors.dark,
+    link: defaultColors.primary,
 
     light2: "#f1f1f1",
     light3: "#999",
@@ -66,8 +68,8 @@ const lightColors={
     inputBorderFocus: defaultColors.primary
 }
 
-let bnDark = useBootnative({colors:darkColors});
-let bnLight = useBootnative({colors:lightColors});
+let bnDark = useBootnative({colors:{...defaultColors,...darkColors}});
+let bnLight = useBootnative({colors:{...defaultColors,...lightColors}});
 
 export const hbn = (styles = '',darkMode = 'light') => {
     if(darkMode === 'dark'){
@@ -155,9 +157,10 @@ export function Button(props){
 }
 
 export function QTLink({to,navigation, label, style}){
+    const theme = useColorScheme();
     return (
         <TouchableOpacity onPress={() => navigation.navigate(to)}>
-            <Text style={{ ...bn('text-primary text-center'),textDecorationLine:'underline',...style }}>{label}</Text>
+            <Text style={{ ...hbn('text-link text-center',theme),textDecorationLine:'underline',...style }}>{label}</Text>
         </TouchableOpacity>
     );
 }

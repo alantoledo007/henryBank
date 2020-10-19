@@ -21,36 +21,15 @@ import { login } from "../redux/actions/auth";
 import axios from "axios";
 import { AppLoading } from "expo";
 import env from "../env";
-import {Container, Logo, QTLink, Button, Input, bn, Alert} from './Quantum';
+import {Container, Logo, QTLink, Button, Input, bn, Alert, Label} from './Quantum';
 
 //Estilos
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from "./style/colors";
 import s from './style/styleSheet';
-import {
-  useFonts,
-  Poppins_100Thin,
-  Poppins_100Thin_Italic,
-  Poppins_200ExtraLight,
-  Poppins_200ExtraLight_Italic,
-  Poppins_300Light,
-  Poppins_300Light_Italic,
-  Poppins_400Regular,
-  Poppins_400Regular_Italic,
-  Poppins_500Medium,
-  Poppins_500Medium_Italic,
-  Poppins_600SemiBold,
-  Poppins_600SemiBold_Italic,
-  Poppins_700Bold,
-  Poppins_700Bold_Italic,
-  Poppins_800ExtraBold,
-  Poppins_800ExtraBold_Italic,
-  Poppins_900Black,
-  Poppins_900Black_Italic,
-} from "@expo-google-fonts/poppins";
 
 function Login({ login, navigation }) {
-  const history = useHistory();
+
   const { control, handleSubmit } = useForm();
 
   const [hidePassword, setHidePassword] = useState(true);
@@ -92,16 +71,8 @@ function Login({ login, navigation }) {
       });
   };
 
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_400Regular_Italic,
-    Poppins_600SemiBold,
-  });
-
   //Pantalla de carga para mostrar mientras no hayan cargado aún las fonts
-  if (!fontsLoaded) return <AppLoading />;
-  else
-    return (
+  return (
       <Container>
         <View>
           <Logo />
@@ -110,7 +81,7 @@ function Login({ login, navigation }) {
         <View>
           {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
           <View style={s.mb(4)}>
-            <Text style={{ ...s.size(4) }}>Correo electrónico</Text>
+            <Label text="Correo electrónico" />
             <Controller
               control={control}
               render={({ onChange, onBlur, value }) => (
@@ -134,7 +105,7 @@ function Login({ login, navigation }) {
 
           <View>
             <View style={s.mb(4)}>
-              <Text style={{ ...s.size(4) }}>Contraseña</Text>
+              <Label style={bn('mt-2')} text="Contraseña" />
               <Controller
                 control={control}
                 render={({ onChange, onBlur, value }) => (
@@ -162,7 +133,7 @@ function Login({ login, navigation }) {
           <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />
           
         </View>
-        <QTLink to="/register" component={TouchableOpacity} style={s.mt(6)} label="¿No tienes una cuenta? Registrate" />
+        <QTLink to="Register" {...{navigation}} component={TouchableOpacity} style={s.mt(6)} label="¿No tienes una cuenta? Registrate" />
       </Container>
     );
 }
