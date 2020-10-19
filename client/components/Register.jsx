@@ -16,9 +16,10 @@ import colors from './style/colors';
 import s from './style/styleSheet';
 import Toast from 'react-native-toast-message';
 
+import rules from '../rules';
 
 function Register({ register, navigation}) {
-    const { control, handleSubmit } = useForm();
+    const { control, handleSubmit, errors} = useForm();
     const [hidePassword, setHidePassword] = useState(true);
 
     const [ dis, setDis ] = useState(false);
@@ -88,9 +89,11 @@ function Register({ register, navigation}) {
                             />
                         )}
                         name="email"
-                        rules={{ required: true }}
+                        rules={{ required: true, pattern:rules.email }}
                         defaultValue=""
                     />
+                    {errors.email?.type === 'required' && <Label type="error" text="Se requiere un email" />}
+                    {errors.email?.type === 'pattern' && <Label type="error" text="El email no es válido" />}
                 </View>
                 <View style={bn('col-12')}>
                     <Label style={bn('mt-2')} text="Contraseña" />
@@ -113,6 +116,7 @@ function Register({ register, navigation}) {
                         rules={{ required: true }}
                         defaultValue=""
                     />
+                    {errors.password?.type === 'required' && <Label type="error" text="Se requiere una contraseña" />}
                 </View>
                 <View style={bn('col-12 mt-5')}>
                     {error ? <Text style={{ ...s.textWhite, fontWeight: "bold", ...s.size(3), ...s.mb(1) }}>{error}</Text> : null}
