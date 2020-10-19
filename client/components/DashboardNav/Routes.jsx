@@ -13,6 +13,7 @@ import Dash from "./Dash";
 import Deposit from "./Deposit/Deposit";
 import SendMoney from "./SendMoney";
 import Contacts from "./Contacts/Index";
+import Graphics from "./graphics";
 
 export function Menu() {
     const MenuStack = createDrawerNavigator();
@@ -22,6 +23,7 @@ export function Menu() {
             <MenuStack.Screen name="Recarga" component={Deposit} />
             <MenuStack.Screen name="Transferencia" component={SendMoney} />
             <MenuStack.Screen name="Contactos" component={Contacts} />
+            <MenuStack.Screen name="Estadística" component={Graphics} />
         </MenuStack.Navigator>
     );
 }
