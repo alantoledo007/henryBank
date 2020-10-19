@@ -1,19 +1,88 @@
-import React,{useState} from 'react';
-import {TouchableOpacity, Text, TextInput, TouchableWithoutFeedback, Image, View, ScrollView,StatusBar as statusBar} from 'react-native';
+import React,{useState, useEffect} from 'react';
+import {
+    TouchableOpacity,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    Image,
+    View,
+    ScrollView,
+    StatusBar as statusBar,
+    Dimensions,
+    useColorScheme
+} from 'react-native';
 import useBootnative from 'bootnative';
-import {Link} from 'react-router-native';
 import s from './style/styleSheet';
 import { StatusBar } from 'expo-status-bar';
-import {Dimensions} from 'react-native';
 
 
 export const bn = useBootnative(); //este si
 export const bootnative = useBootnative; //este no
 
+const defaultColors = {
+    primary: "#057AFC",
+    secondary: "#6C757D",
+    success: "#51A846",
+    danger: "#DD4145",
+    waring: "#FBC230",
+    info: "#3DA3B9",
+    light: "#F8F9FA",
+    dark: "#343A40",
+    white: "#ffffff",
+ 
+    blue: "#057AFC",
+    indigo: "#7066F2",
+    purple: "#7152C1",
+    pink: "#E9548C",
+    red: "#DD4145",
+    orange: "#F37D30",
+    yellow: "#FBC230",
+    green: "#51A846",
+    teal: "#5CCA98",
+    cyan: "#3DA3B9",
+}
+
+const darkColors= {
+    body: defaultColors.dark,
+    label: "rgba(255,255,255, .7)",
+
+    light2: "rgba(255,255,255, .1)",
+    light3: "rgba(255,255,255, .5)",
+    inputBg: "#3d4954",
+    inputBorder: "rgba(0,0,0, .1)",
+    inputBorderFocus: "rgba(255,255,255, .7)",
+    inputColor: "rgba(255,255,255, .7)"
+}
+
+const lightColors={
+    body: defaultColors.light,
+    label: defaultColors.dark,
+
+    light2: "#f1f1f1",
+    light3: "#999",
+    inputBg: "#fff",
+    inputBorder: '#999',
+    inputColor: "#222",
+    inputBorderFocus: defaultColors.primary
+}
+
+let bnDark = useBootnative({colors:darkColors});
+let bnLight = useBootnative({colors:lightColors});
+
+export const hbn = (styles = '',darkMode = 'light') => {
+    if(darkMode === 'dark'){
+        return bnDark(styles);
+    }
+    return bnLight(styles);
+}
+
+
 export function Container({children, styles}){
+    const colorScheme = useColorScheme();
+    
     return (
         <ScrollView>
-            <View style={{ ...bn('container p-3 bg-light'),height:(Dimensions.get('window').height + statusBar.currentHeight), justifyContent:'center',...styles}}>
+            <View style={{ ...hbn('container p-3 bg-body',colorScheme),height:(Dimensions.get('window').height + statusBar.currentHeight), justifyContent:'center',...styles}}>
                 {children}
                 <StatusBar style="auto" />
             </View>
@@ -21,11 +90,17 @@ export function Container({children, styles}){
     );
 }
 
+export function Label(props){
+    const theme = useColorScheme();
+    return <Text {...props} style={{ ...hbn('text-label mb-1',theme),...s.size(4),...props.style }}>{props.text}</Text>
+}
+
 export function Alert({variant, content, style, textStyle}){
+    const theme = useColorScheme();
     return (
         <View style={bn('row')}>
-            <View style={{ ...bn('col-12 p-3 bg-'+(variant||'#f1f1f1')+' borderRadius-5 mt-5'),...style }}>
-                <Text style={{ ...bn('text-center text-#999'),...s.size(3.5),...textStyle }}>{content}</Text>
+            <View style={{ ...hbn('col-12 p-3 bg-'+(variant||'light2')+' borderRadius-5 mt-5',theme),...style }}>
+                <Text style={{ ...hbn('text-center text-light3',theme),...s.size(3.5),...textStyle }}>{content}</Text>
             </View>
         </View>
     );
@@ -51,14 +126,21 @@ export function Logo({size, style}){
     );
 };
 
-function DefaultButton({navigation, label, color, onPress, style, textStyle, editable, to}){
+function DefaultButton({label, color, onPress, style, textStyle, editable, outline}){
+    const colorScheme = useColorScheme();
+
+    const defaultStyles = {
+        ...hbn((outline ? 'border-1-primary-solid ' : '') + 'borderRadius-5 p-3.5 bg-'+(color || 'primary'), colorScheme)
+    }
+
+
     return (
         <TouchableOpacity
-        editable={editable}
-        style={{ ...bn('borderRadius-5 p-3.5 bg-'+(color || 'primary')),...style }}
-        onPress={onPress}
+            editable={editable}
+            style={{ ...defaultStyles,...style }}
+            onPress={onPress}
         >
-            <Text style={{ ...bn('bold text-white text-center'),textTransform:'uppercase',...textStyle }}>
+            <Text style={{ ...hbn('bold text-'+(outline ? outline : 'white')+' text-center',colorScheme),textTransform:'uppercase',...textStyle }}>
                 {label}
             </Text>
         </TouchableOpacity>
@@ -81,42 +163,45 @@ export function QTLink({to,navigation, label, style}){
 }
 
 export function Input({placeholder, style,secureTextEntry, onFocus ,onChangeText, value,onIconRightPress, autoCapitalize, editable, keyboardType, onBlur, iconRight = null}){
-    const defaultStyles = {
-        ...bn('p-3 border-1-#999-solid-5 bg-white'),
-    }
-    const blurStyles = {
-        ...defaultStyles
-    }
+    const theme = useColorScheme();
+
+    const [focused, setFocused] = useState(false);
     
-    const focusStyles = {
-        ...defaultStyles,
-        ...bn('borderColor-primary'),
+    const focusStyles ={
         shadowOffset:{  width: 0,  height: 0,  },
         shadowOpacity: 1.0,
         elevation:15
     }
-
-    const [styles,setStyles] = useState(blurStyles);
     
     const onBlurDefault = cb => {
         return () => {
-            setStyles(blurStyles);
+            setFocused(false);
             if(typeof cb === 'function') cb();
         }
     }
 
     const onFocusDefault = cb => {
         return () => {
-            setStyles(focusStyles);
+            setFocused(true);
             if(typeof cb === 'function') cb();
         }
     }
+
+    
     return (
         <View>
             <TextInput
                 secureTextEntry={secureTextEntry}
                 placeholder={placeholder}
-                style={{ ...defaultStyles,...styles,...iconRight ? {paddingRight:45} : {}, ...s.size(3.5),...style }}
+                style={{
+                        ...hbn('p-3 border-1-inputBorder-solid-5 bg-inputBg text-inputColor', theme),
+                        ...(focused ? {...hbn('borderColor-inputBorderFocus bg-inputBg',theme),...focusStyles} :{}),
+                        ...iconRight ? {paddingRight:45} : {},
+                        ...s.size(3.5),
+                        ...style
+                    }}
+                selectionColor={theme === 'dark' ? 'rgba(255,255,255,.2)' : defaultColors.primary}
+                placeholderTextColor={theme === 'dark' ? darkColors.light2 : "#d9d9d9"}
                 onBlur={onBlurDefault(onBlur)}
                 onFocus={onFocusDefault(onFocus)}
                 onChangeText={onChangeText}

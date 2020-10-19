@@ -24,6 +24,9 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+//For Light/Dark Mode
+import { AppearanceProvider } from 'react-native-appearance';
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -33,9 +36,9 @@ export default function App() {
     }
   }
 return (
-      <Provider store={store}>
+  <Provider store={store}>
           <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator headerMode="none">
               <Stack.Screen name="Home" component={Home} {...screenConfig} />
               <Stack.Screen name="Dash" component={Dash} {...screenConfig} />
 
@@ -60,6 +63,6 @@ return (
           <Route exact path="/contacts" component={Contacts} />
           <Route exact path="/send-money" component={SendMoney} /> 
         </NativeRouter>*/}
-      </Provider>
+    </Provider>
   );
 }

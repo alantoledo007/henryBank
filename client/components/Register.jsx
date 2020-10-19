@@ -1,5 +1,5 @@
 //general
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Image, Text, TextInput, TouchableWithoutFeedback, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Link } from "react-router-native";
@@ -11,12 +11,15 @@ import { connect } from "react-redux";
 import { register } from "../redux/actions/auth";
 
 //UI
-import {Button, Input, bootnative, QTLink, Container, Logo} from './Quantum';
+import {Button, Input, bn, QTLink, Container, Logo, Alert, Label} from './Quantum';
 import colors from './style/colors';
 import s from './style/styleSheet';
 
+//For Linght/Dark mode
+import { useColorScheme } from 'react-native';
+
+
 function Register({ register, navigation}) {
-    const bn = bootnative();
     const { control, handleSubmit } = useForm();
     const [hidePassword, setHidePassword] = useState(true);
 
@@ -57,7 +60,7 @@ function Register({ register, navigation}) {
                 <View style={bn('row')}>
                     <View style={bn('col-12')}>
                         <Logo />
-                        <Text style={{ ...bn('bg-#f1f1f1 p-2 borderRadius-10 text-center mt-4'),...s.size(4) }}>Creá una cuenta y administrá tu plata como quieras, cuando quieras</Text>
+                        <Alert content="Su primer paso en Quantum, crearse una cuenta" />
                     </View>
                 </View>
 
@@ -65,9 +68,7 @@ function Register({ register, navigation}) {
                 <ActivityIndicator animating={dis} size="large" color={colors.pink} />
                 <View style={bn('row')}>
                     <View style={bn('col-12')}>
-                        <Text style={{ ...s.size(4), ...s.mb(1) }}>
-                            Correo electrónico
-                        </Text>
+                        <Label text="Correo electrónico" />
                         <Controller
                             control={control}
                             render={({ onChange, onBlur, value }) => (
@@ -88,9 +89,7 @@ function Register({ register, navigation}) {
                         />
                     </View>
                     <View style={bn('col-12')}>
-                        <Text style={{ ...s.size(4), ...s.mt(2), ...s.mb(1) }}>
-                            Contraseña
-                        </Text>
+                        <Label style={bn('mt-2')} text="Contraseña" />
                         <Controller
                             control={control}
                             render={({ onChange, onBlur, value }) => (
