@@ -1,11 +1,12 @@
 require("dotenv").config();
 const { MoleculerError } = require("moleculer").Errors;
 const jwt = require('jsonwebtoken');
-const {User} = require('../../db');
+const {User, Account} = require('../../db');
+const Accounts = require("../../models/Accounts");
 
 module.exports = async (ctx,res) => {
     const {email, password} = ctx.params;
-    const data = await User.findOne({where:{email:email}, attributes:['id','name','surname', 'balance', 'avatar','password', 'dataCompletedAt','emailVerifiedAt','email', 'recharge_code']})
+    const data = await User.findOne({where:{email:email}, include:Account, attributes:['id','name','surname', 'avatar','password', 'dataCompletedAt','emailVerifiedAt','email']})
     .then(async user => {
         if(!user || (user && !await user.matchPassword(password)))
             throw new MoleculerError("Email or password wrong", 401, "AUTHENTICATION_FAILED", { nodeID: ctx.nodeID, action:ctx.action.name });
@@ -14,7 +15,14 @@ module.exports = async (ctx,res) => {
             expiresIn: '1d'
         });
         user.password = undefined;
-        return {user, token};
+        let recharge_code = null;
+        let cvu = null;
+        if(user.Accounts.lenght){
+            let acc = Accounts[0];
+            cvu = acc.cvu;
+            recharge_code = acc.rechage_code;
+        }
+        return {user:{...user.toJSON(), cvu, recharge_code}, token};
     });
     return {data};
 }

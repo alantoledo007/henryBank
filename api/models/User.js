@@ -34,10 +34,6 @@ module.exports = (sequelize) => {
 				type: DataTypes.STRING(10),
 				allowNull: true,
 			},
-			recharge_code: {
-				type: DataTypes.BIGINT(10),
-				allowNull: true
-			},
 			phone_number: {
 				type: DataTypes.STRING(20),
 				allowNull: true,
@@ -46,11 +42,6 @@ module.exports = (sequelize) => {
 				type: DataTypes.ENUM(["client", "admin", "CCE"]),
 				allowNull: false,
 				defaultValue: "client",
-			},
-			balance: {
-				type: DataTypes.FLOAT(12, 2),
-				allowNull: false,
-				defaultValue: 0,
 			},
 			email: {
 				type: DataTypes.STRING(255),
@@ -75,10 +66,6 @@ module.exports = (sequelize) => {
 			},
 			country: {
 				type: DataTypes.STRING(80),
-				allowNull: true,
-			},
-			cvu: {
-				type: DataTypes.STRING(22),
 				allowNull: true,
 			},
 			birthdate: {
