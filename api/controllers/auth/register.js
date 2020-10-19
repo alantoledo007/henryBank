@@ -1,15 +1,22 @@
 const { User } = require("../../db");
 const LocalStorage = require("node-localstorage").LocalStorage;
-const nodemailer = require("nodemailer");
 const sender = require("../../emails/sender");
+const { MoleculerError } = require("moleculer").Errors;
 require("dotenv").config();
 
 module.exports = async (ctx) => {
 	let data = ctx.params;
+	
+	let existsUser = await User.findOne({where:{email:data.email}});
+	if(existsUser)
+		throw new MoleculerError("An user is registered with those email address.", 422, "EMAIL_DUPLICATED", { nodeID: ctx.nodeID, action:ctx.action.name });
+
 	let newUser = new User();
+
 	newUser.password = await newUser.encryptPassword(data.password);
 	newUser.email = data.email;
-	await newUser.save();
+
+	await newUser.save()
 
 	const localStorage = new LocalStorage("./email_validation_storage");
 

@@ -29,15 +29,6 @@ module.exports = {
 		 *
 		 * @returns
 		 */
-		hello: {
-			rest: {
-				method: "GET",
-				path: "/hello"
-			},
-			async handler() {
-				return "Hello Moleculer";
-			}
-		},
 
 		/**
 		 * Welcome, a username
@@ -50,8 +41,8 @@ module.exports = {
                 path: "/register",
             },
 			params: {
-				email: "email",
-				password:"string"
+				email: {type:"email"},
+				password:{type:"string",min:8,max:16}
 			},
 			/** @param {Context} ctx  */
 			handler: controller.register
