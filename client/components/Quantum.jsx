@@ -99,7 +99,7 @@ export function Container({children, styles}){
 export function Label(props){
     const theme = useColorScheme();
 
-    return <Text {...props} style={{ ...hbn('text-label mb-1',theme),...(props.type==='error' ? hbn('borderRadius-5 p-2 bg-labelErrorBg text-labelError',theme):{}),...s.size(4),...props.style }}>{props.text}</Text>
+    return <Text {...props} style={{ ...s.size(4),...hbn('text-label mb-1',theme),...(props.type==='error' ? {...s.size(2.5),...hbn('border-1-danger-solid-5 mt-1 p-1 text-center bg-labelErrorBg text-labelError',theme) }:{}),...props.style }}>{props.text}</Text>
 }
 
 export function Alert({variant, content, style, textStyle}){
