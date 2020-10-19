@@ -22,35 +22,15 @@ import { login } from "../redux/actions/auth";
 import axios from "axios";
 import { AppLoading } from "expo";
 import env from "../env";
+import {Container, Logo, QTLink, Button, Input, bn, Alert, Label} from './Quantum';
 
 //Estilos
 import { LinearGradient } from 'expo-linear-gradient';
 import colors from "./style/colors";
 import s from './style/styleSheet';
-import {
-  useFonts,
-  Poppins_100Thin,
-  Poppins_100Thin_Italic,
-  Poppins_200ExtraLight,
-  Poppins_200ExtraLight_Italic,
-  Poppins_300Light,
-  Poppins_300Light_Italic,
-  Poppins_400Regular,
-  Poppins_400Regular_Italic,
-  Poppins_500Medium,
-  Poppins_500Medium_Italic,
-  Poppins_600SemiBold,
-  Poppins_600SemiBold_Italic,
-  Poppins_700Bold,
-  Poppins_700Bold_Italic,
-  Poppins_800ExtraBold,
-  Poppins_800ExtraBold_Italic,
-  Poppins_900Black,
-  Poppins_900Black_Italic,
-} from "@expo-google-fonts/poppins";
 
-function Login({ login }) {
-  const history = useHistory();
+function Login({ login, navigation }) {
+
   const { control, handleSubmit } = useForm();
 
   const [dis, setDis] = useState(false);
@@ -97,42 +77,20 @@ function Login({ login }) {
       });
   };
 
-  const [fontsLoaded] = useFonts({
-    Poppins_400Regular,
-    Poppins_400Regular_Italic,
-    Poppins_600SemiBold,
-  });
-
   //Pantalla de carga para mostrar mientras no hayan cargado aún las fonts
-  if (!fontsLoaded) return <AppLoading />;
-  else
-    return (
-      <View style={s.container}>
-        <LinearGradient
-              // Background Linear Gradient
-              colors={['rgba(0,0,0,0.8)', 'transparent']}
-              style={{
-                  position: 'absolute',
-                  left: 0,
-                  right: 0,
-                  top: 0,
-                  height: 300,
-              }}
-          />
+  return (
+      <Container>
         <View>
-                <Image source={require("../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
-                </View>
-        <View>
-          <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(5) }}>Iniciar sesión</Text>
+          <Logo />
         </View>
+        <Alert content="Ingrese a su cuenta Quantunm" style={bn('mb-4')} />
         <View>
           <View style={s.mb(4)}>
-            <Text style={{ ...s.textWhite, ...s.size(4) }}>Correo electrónico</Text>
+            <Label text="Correo electrónico" />
             <Controller
               control={control}
               render={({ onChange, onBlur, value }) => (
-                <TextInput
-                  style={{ ...s.input }}
+                <Input
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
@@ -152,60 +110,37 @@ function Login({ login }) {
 
           <View>
             <View style={s.mb(4)}>
-              <Text style={{ ...s.textWhite, ...s.size(4) }}>Contraseña</Text>
+              <Label style={bn('mt-2')} text="Contraseña" />
               <Controller
                 control={control}
                 render={({ onChange, onBlur, value }) => (
-                  <TextInput
+                  <Input
                     secureTextEntry={hidePassword}
-                    style={{ ...s.input}}
                     onBlur={onBlur}
                     onChangeText={(value) => onChange(value)}
                     value={value}
                     placeholder="••••••••"
                     autoCapitalize="none"
+                    iconRight={hidePassword
+                      ? require("../assets/eye.png")
+                      : require("../assets/eye-slash.png")
+                    }
+                    onIconRightPress={()=>setHidePassword(!hidePassword)}
                   />
                 )}
                 name="password"
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <View style={{ position:'absolute', top:40, right: 15  }}>
-                <TouchableWithoutFeedback
-                  onPress={() => setHidePassword(!hidePassword)}
-                >
-                  <Image
-                    style={styles.eye}
-                    source={
-                      hidePassword
-                        ? require("../assets/eye.png")
-                        : require("../assets/eye-slash.png")
-                    }
-                  />
-                </TouchableWithoutFeedback>
-              </View>
-              <Link to="/passwordreset" component={TouchableOpacity}>
-                <Text style={s.textColor('orange')}>¿Olvidaste tu contraseña?</Text>
-              </Link>
+              <QTLink to="IndexReset" {...{navigation}} style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
             </View>
           </View>
-          <ActivityIndicator animating={dis} size="large" color={colors.pink}/>
-          <Text style={styles.errorMessage}>{error}</Text>
-          <TouchableOpacity
-            style={s.btn()}
-            onPress={handleSubmit(onSubmit)}
-            disabled={dis}
-          >
-            <Text style={{ ...s.textWhite, fontWeight:'bold' }}>INGRESAR</Text>
-          </TouchableOpacity>
+          <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />
+
           
         </View>
-        <Link to="/register" component={TouchableOpacity} style={s.mt(6)}>
-            <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
-                ¿No tienes una cuenta? Registrate
-            </Text>
-        </Link>
-      </View>
+        <QTLink to="Register" {...{navigation}} component={TouchableOpacity} style={s.mt(6)} label="¿No tienes una cuenta? Registrate" />
+      </Container>
     );
 }
 

@@ -1,5 +1,5 @@
 //general
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Image, Text, TextInput, TouchableWithoutFeedback, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
 import { Link } from "react-router-native";
@@ -11,12 +11,15 @@ import { connect } from "react-redux";
 import { register } from "../redux/actions/auth";
 
 //UI
-import { LinearGradient } from 'expo-linear-gradient';
+import {Button, Input, bn, QTLink, Container, Logo, Alert, Label} from './Quantum';
 import colors from './style/colors';
 import s from './style/styleSheet';
+import Toast from 'react-native-toast-message';
 
-function Register({ register }) {
-    const { control, handleSubmit } = useForm();
+import rules from '../rules';
+
+function Register({ register, navigation}) {
+    const { control, handleSubmit, errors} = useForm();
     const [hidePassword, setHidePassword] = useState(true);
 
     const [ dis, setDis ] = useState(false);
@@ -43,44 +46,40 @@ function Register({ register }) {
                 register(data.data);
                 setDis(!dis);
             })
-            .catch(err => {
+            .catch(async err => {
                 //Manejo de errores:
                 setDis(false);
+                console.log(err);
+                Toast.show({
+                    type:'error',
+                    text1:'¡Ups!',
+                    text2: error.response ? error.response.error.message : err
+                })
                 return showError("¡El correo ingresado ya está en uso!");
             });
     };
 
     return (
         
-        <View style={{ ...s.container}}>
-            <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
-            />
-            <ScrollView style={{ position:'relative',left:0, right:0, margin:0,padding:0, display:'flex'}}>
-            <View>
-                <Image source={require("../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
-                <Text style={{ ...s.textWhite, ...s.size(4), ...s.textCenter }}>Creá una cuenta y administrá tu plata como quieras, cuando quieras</Text>
+        <Container>
+            <Toast ref={(ref) => Toast.setRef(ref)} />
+            <View style={bn('row')}>
+                <View style={bn('col-12')}>
+                    <Logo />
+                    <Alert content="Su primer paso en Quantum, crearse una cuenta" />
+                </View>
             </View>
+
+            
             <ActivityIndicator animating={dis} size="large" color={colors.pink} />
-            <View style={{ width: "100%" }}>
-                <View style={s.mt(5)}>
-                    <Text style={{ ...s.textWhite, ...s.size(4), ...s.mb(1) }}>
-                        Correo electrónico
-                    </Text>
+            <View style={bn('row')}>
+                <View style={bn('col-12')}>
+                    <Label text="Correo electrónico" />
                     <Controller
                         control={control}
                         render={({ onChange, onBlur, value }) => (
-                            <TextInput
+                            <Input
                                 placeholder="ejemplo@mail.com"
-                                style={{ ...s.input, ...s.textColor('rgb(75,75,75)'), fontWeight: "normal", ...s.size(3.5) }}
                                 onBlur={onBlur}
                                 onChangeText={value => onChange(value)}
                                 value={value}
@@ -90,66 +89,44 @@ function Register({ register }) {
                             />
                         )}
                         name="email"
-                        rules={{ required: true }}
+                        rules={{ required: true, pattern:rules.email }}
                         defaultValue=""
-                        
                     />
+                    {errors.email?.type === 'required' && <Label type="error" text="Se requiere un email" />}
+                    {errors.email?.type === 'pattern' && <Label type="error" text="El email no es válido" />}
                 </View>
-                <View style={{ flex: 2 }}>
-                    <Text style={{ ...s.textWhite, ...s.size(4), ...s.mt(2), ...s.mb(1), flexDirection: "row" }}>
-                        Contraseña
-                    </Text>
+                <View style={bn('col-12')}>
+                    <Label style={bn('mt-2')} text="Contraseña" />
                     <Controller
                         control={control}
                         render={({ onChange, onBlur, value }) => (
-                            <View style={{ flexDirection: "row" }}>
-                                <TextInput
-                                    style={{ ...s.input, ...s.textColor('rgb(75,75,75)'), fontWeight: "normal", ...s.size(3.5), width: "90%", borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-                                    secureTextEntry={hidePassword}
-                                    onBlur={onBlur}
-                                    onChangeText={value => onChange(value)}
-                                    value={value}
-                                    placeholder="••••••••"
-                                    autoCapitalize="none"
-                                    editable={!dis} 
-                                />
-                                <View style={{ alignItems: "flex-end", width: "10%", height: 50, ...s.input, borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
-                                    <TouchableWithoutFeedback onPress={() => setHidePassword(!hidePassword)}>
-                                        <Image
-                                            style={{ marginVertical: -2, width: 25, height: 25 }}
-                                            source={
-                                                hidePassword
-                                                    ? require("../assets/eye.png")
-                                                    : require("../assets/eye-slash.png")
-                                            }
-                                        />
-                                    </TouchableWithoutFeedback>
-                                </View>
-                            </View>
+                            <Input
+                                secureTextEntry={hidePassword}
+                                onBlur={onBlur}
+                                onChangeText={value => onChange(value)}
+                                value={value}
+                                placeholder="••••••••"
+                                autoCapitalize="none"
+                                editable={!dis}
+                                iconRight={hidePassword ? require("../assets/eye.png") : require("../assets/eye-slash.png")}
+                                onIconRightPress={() => setHidePassword(!hidePassword)}
+                            />
                         )}
                         name="password"
                         rules={{ required: true }}
                         defaultValue=""
                     />
+                    {errors.password?.type === 'required' && <Label type="error" text="Se requiere una contraseña" />}
                 </View>
-                <View style={s.mt(5)}>
+                <View style={bn('col-12 mt-5')}>
                     {error ? <Text style={{ ...s.textWhite, fontWeight: "bold", ...s.size(3), ...s.mb(1) }}>{error}</Text> : null}
-                    <TouchableOpacity
-                        disabled={dis}
-                        style={{ ...s.btn(), ...s.mb(10) }}
-                        onPress={handleSubmit(onSubmit)}
-                    >
-                        <Text style={{ ...s.textWhite, fontWeight:'bold' }}>CREAR CUENTA</Text>
-                    </TouchableOpacity>
-                    <Link to="/login" component={TouchableOpacity}>
-                        <Text style={{ ...s.textCenter, ...s.textColor('orange'), ...s.size(3.5) }}>
-                            ¿Ya estás registrado? Iniciá sesión
-                        </Text>
-                    </Link>
+                    <Button label="CREAR CUENTA" style={bn('mb-5')} color="primary" 
+                        disabled={dis} onPress={handleSubmit(onSubmit)}></Button>
+
+                    <QTLink to="Login" {...{navigation}} label="¿Ya estás registrado? Iniciá sesión" />
                 </View>
             </View>
-        </ScrollView>
-        </View>
+        </Container>
     );
 }
 
