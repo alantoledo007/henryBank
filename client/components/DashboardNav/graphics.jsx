@@ -32,6 +32,8 @@ const Graphics = () => {
         labelColor: (opacity = 5) => `rgba(255, 255, 255, ${opacity})`,
         style: {
             borderRadius: 0,
+            justifyContent: 'flex-end',
+            color: 'blue'
         },
         propsForDots: {
             r: "6",
@@ -45,16 +47,30 @@ const Graphics = () => {
     const [month, setMonth] = useState(false);
     const [day, setDay] = useState(false);
 
+    const open = (state, set) => {
+        setWeek(false)
+        setMonth(false)
+        setDay(false)
+        state === false ? set(true) : set(false)
+    }
+
+
+//Prueba ----------------------------------------------------
     const data = {
         labels: ["January", "February", "March", "April", "May", "June"],
         datasets: [
           {
             data: [20, 45, 28, 80, 99, 43],
-            color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+            color: (opacity = 4) => `rgba(134, 65, 244, ${opacity})`, // optional
             strokeWidth: 2 // optional
           }
         ],
         legend: ["Tabla Mensual"] // optional
+      };
+      const dataDos = {
+        labels: ["Ingresos: 40.000", "Egresos: 60:000", "Resumen: -20.000"], // optional
+        data: [0.4, 0.6, 0.2],
+        legend: ["Dia Jueves"] // optional
       };
 
     return (
@@ -75,30 +91,37 @@ const Graphics = () => {
                 <Text style={{...s.textWhite, ...s.textCenter, ...s.size(6), ...s.my(6)}}>Estadísticas</Text>
                 <View>
                     <Button 
-                    onPress={() => month === false ? setMonth(true) : setMonth(false) }
-                    label='Mensual'
+                    onPress={() => open(day, setDay)}
+                    label='Diaria'
                     style={{...s.my(1)}}
                     />
                     
-                    { month && <LineChart
-                        data={data}
-                        width={360} // from react-native
-                        height={220}
-                        yAxisLabel="$"
-                        yAxisSuffix="k"
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{
-                        marginVertical: 30,
-                        borderRadius: 5,
-                        justifyContent:'center', alignItems:'center'
-                        }}
-                    />}
+                    { day && <ProgressChart
+                                data={dataDos}
+                                width={350}
+                                height={220}
+                                strokeWidth={16}
+                                radius={32}
+                                chartConfig={chartConfig}
+                                hideLegend={false}
+                                color='blue'
+                                style={{
+                                    marginVertical: 20,
+                                    borderRadius: 5,
+                                    alignContent:'flex-start',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    color: 'blue'
+                                    
+                                    }}
+                                />
+                    
+                    }
                 </View>
                 <View>
                     <Button 
-                    onPress={() => week === false ? setWeek(true) : setWeek(false) }
+                    onPress={() => open(week, setWeek)}
                     label='Semanal'
                     style={{...s.my(1)}}
                     />
@@ -121,12 +144,12 @@ const Graphics = () => {
                 </View>
                 <View>
                     <Button 
-                    onPress={() => day === false ? setMonth(true) : setMonth(false) }
-                    label='Diaria'
+                    onPress={() => open(month, setMonth)}
+                    label='Mensual'
                     style={{...s.my(1)}}
                     />
                     
-                    { day && <LineChart
+                    { month && <LineChart
                         data={data}
                         width={360} // from react-native
                         height={220}
@@ -141,12 +164,10 @@ const Graphics = () => {
                         justifyContent:'center', alignItems:'center'
                         }}
                     />}
-                </View>         
+                </View>    
 
             </ScrollView>
            
-            
-
         </Container>
     )
 }
