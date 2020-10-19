@@ -28,7 +28,7 @@ function Register({ userRegister, navigation}) {
         .catch(err => {
             //Manejo de errores:
             //setDis(false);
-            console.log(err);
+            console.log(err.response);
             if(err.request){
                 Toast.show({
                     type:'error',
