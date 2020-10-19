@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Controller } from 'react-hook-form';
 import { connect } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-native';
 

@@ -1,68 +1,56 @@
 //general
 import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Image, Text, TextInput, TouchableWithoutFeedback, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from "react-hook-form";
-import { Link } from "react-router-native";
 import axios from 'axios';
 import env from "../env";
 
 //redux
 import { connect } from "react-redux";
-import { register } from "../redux/actions/auth";
+import { register as userRegister } from "../redux/actions/auth";
 
 //UI
-import {Button, Input, bn, QTLink, Container, Logo, Alert, Label} from './Quantum';
+import {Button, Input, bn, QTLink, Container, Logo, Alert, Label, toastConfig} from './Quantum';
 import colors from './style/colors';
-import s from './style/styleSheet';
 import Toast from 'react-native-toast-message';
 
 import rules from '../rules';
 
-function Register({ register, navigation}) {
+function Register({ userRegister, navigation}) {
     const { control, handleSubmit, errors} = useForm();
     const [hidePassword, setHidePassword] = useState(true);
 
     const [ dis, setDis ] = useState(false);
 
-    //Muestra error por 5 segundos, igual que en login
-    const [error, setError] = useState("");
-    const showError = err => {
-        setError(err);
-        setTimeout(() => {
-            setError("");
-        }, 5000);
-    };
-
     const onSubmit = data => {
-        setDis(!dis);
-        axios.post(env.API_URI + "/auth/register", JSON.stringify(data), {
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-            .then(res => {
-                const { data } = res;
-                //Envío de data al store
-                register(data.data);
-                setDis(!dis);
-            })
-            .catch(async err => {
-                //Manejo de errores:
-                setDis(false);
-                console.log(err);
+        console.log(data);
+        userRegister(data)
+        .catch(err => {
+            //Manejo de errores:
+            //setDis(false);
+            console.log(err);
+            if(err.request){
                 Toast.show({
                     type:'error',
-                    text1:'¡Ups!',
-                    text2: error.response ? error.response.error.message : err
+                    text1:'Error de comunicación',
+                    text2: 'Verifique su conexión a internet',
                 })
-                return showError("¡El correo ingresado ya está en uso!");
-            });
+            }else{
+                if(err.request){
+                    Toast.show({
+                        type:'error',
+                        text1:'¡Ups!',
+                        text2: 'Error de comunicación con el servidor',
+                    })
+                }
+            }
+        });
     };
+    //const onSubmit = data => console.log(data);
 
     return (
         
         <Container>
-            <Toast ref={(ref) => Toast.setRef(ref)} />
             <View style={bn('row')}>
                 <View style={bn('col-12')}>
                     <Logo />
@@ -119,13 +107,14 @@ function Register({ register, navigation}) {
                     {errors.password?.type === 'required' && <Label type="error" text="Se requiere una contraseña" />}
                 </View>
                 <View style={bn('col-12 mt-5')}>
-                    {error ? <Text style={{ ...s.textWhite, fontWeight: "bold", ...s.size(3), ...s.mb(1) }}>{error}</Text> : null}
+
                     <Button label="CREAR CUENTA" style={bn('mb-5')} color="primary" 
                         disabled={dis} onPress={handleSubmit(onSubmit)}></Button>
 
                     <QTLink to="Login" {...{navigation}} label="¿Ya estás registrado? Iniciá sesión" />
                 </View>
             </View>
+            <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
         </Container>
     );
 }
@@ -136,7 +125,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        register: (data) => dispatch(register(data))
+        userRegister: data => dispatch(userRegister(data))
     }
 }
 
