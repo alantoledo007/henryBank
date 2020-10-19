@@ -22,7 +22,7 @@ export function register (data){
     // });
     console.log(data);
     return dispatch => {
-        return Axios.post(env.API_URI + '/auth/register',JSON.stringify(data),{headers:{'accept':'application/json','content-type':'application/json'}})
+        return Axios.post(env.API_URI + '/auth/register',data,{headers:{'accept':'application/json','content-type':'application/json'}})
         .then(res => res.data)
         .then(res => {
             dispatch({ type: REGISTER, payload: res.data});
