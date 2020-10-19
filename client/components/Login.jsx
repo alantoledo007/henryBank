@@ -132,7 +132,7 @@ function Login({ login, navigation }) {
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <QTLink to="/passwordreset" {...{navigation}} style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
+              <QTLink to="IndexReset" {...{navigation}} style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
             </View>
           </View>
           <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />

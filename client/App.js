@@ -13,6 +13,7 @@ import RegisterStepTwo from './components/RegisterStepTwo';
 import RegisterStepThree from './components/RegisterStepThree';
 import Login from './components/Login';
 import PasswordReset from './components/PasswordReset/Index'
+import IndexReset from './components/PasswordReset/Index';
 import Reset from './components/PasswordReset/Reset';
 import Dash from './components/DashboardNav/Index';
 
@@ -39,6 +40,7 @@ return (
               <Stack.Screen name="Home" component={Home} {...screenConfig} />
               <Stack.Screen name="Dash" component={Dash} {...screenConfig} />
 
+              <Stack.Screen name="IndexReset" component={IndexReset} {...screenConfig} />
               <Stack.Screen name="Reset" component={Reset} {...screenConfig} />
               <Stack.Screen name="Login" component={Login} {...screenConfig} />
               <Stack.Screen name="Register" component={Register} {...screenConfig} />

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Image, Text, TextInput, TouchableOpacity, Button, StyleSheet, StatusBar, Alert, ActivityIndicator, ScrollView, TouchableWithoutFeedback } from 'react-native'
+import { View, Image, Text, TextInput, TouchableOpacity, StyleSheet, StatusBar, ActivityIndicator, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import { Link, useHistory } from 'react-router-native'
 import colors from "../style/colors";
 import { useForm, Controller } from "react-hook-form";
@@ -12,9 +12,10 @@ import env from '../../env';
 import { connect } from "react-redux";
 import { PasswordReset } from "../../redux/actions/PasswordReset";
 
+import { Container, Logo, QTLink, Button, Input, bn, Alert, Label } from '../Quantum';
 import s from '../style/styleSheet';
 
-function Index({ email, passwordReset }) {
+function Index({ email, passwordReset, navigation }) {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -151,7 +152,7 @@ function Index({ email, passwordReset }) {
             })
                 .then((response) => {
                     setDis(false)
-                    history.push("/login");
+                    navigation.navigate('Login');
                 })
                 .catch((err) => {
                     setDis(false)
@@ -161,109 +162,80 @@ function Index({ email, passwordReset }) {
     };
 
     return (
-        <View style={s.container}>
-            <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
+        <Container>
+            <Logo />
+            <Alert content='Ingrese el codigo enviado a su correo electrónico' />
+            <ActivityIndicator animating={dis} size="large" color={colors.pink} />
+            
+            <Label text='Código' />
+            <Controller
+                control={control}
+                render={({ onChange, onBlur, value }) => (
+                    <Input
+                        onBlur={onBlur}
+                        onChangeText={value => onChange(value)}
+                        value={value}
+                        placeholder="Código"
+                        // autoFocus={true}
+                        editable={!dis}
+                    />
+                )}
+                name="code"
+                rules={{ 
+                    required: 'Ingrese el código'
+                 }}
+                defaultValue=""
             />
-            <ScrollView>
-                <View style={{ ...s.mb(5) }}>
-                    <Link to="/login" component={TouchableOpacity}>
-                        <Text style={s.textColor('orange')}> &lt; Volver</Text>
-                    </Link>
-                </View>
-                <View>
-                    <Image source={require("../../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
-                </View>
-
-                <View>
-                    <Text style={{ ...s.textColor("#fff"), ...s.size(5), textAlign: 'center' }}>Ingrese el codigo enviado a su correo electrónico</Text>
-                </View>
-
-
-                <View>
-                    <ActivityIndicator animating={dis} size="large" color={colors.pink} />
-                    {error.error && <View><Text style={{ ...s.textColor("#fff"), ...s.size(5), textAlign: 'center' }}>{error.message}</Text></View>}
-                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Código</Text>
-                    <Controller
-                        control={control}
-                        render={({ onChange, onBlur, value }) => (
-                            <TextInput
-                                style={{ ...s.input, ...s.mb(3) }}
-                                onBlur={onBlur}
-                                onChangeText={value => onChange(value)}
-                                value={value}
-                                placeholder="Código"
-                                // autoFocus={true}
-                                editable={!dis}
-                            />
-                        )}
-                        name="code"
-                        rules={{ required: true }}
-                        defaultValue=""
+            {errors.code && <Label type='error' style={{fontSize: 15, color: 'red'}} text={errors.code.message} />}
+            <Label text='Nueva Contraseña' />
+            <Controller
+                control={control}
+                render={({ onChange, onBlur, value }) => (
+                    <Input
+                        secureTextEntry={hidePassword}
+                        onBlur={onBlur}
+                        onChangeText={value => {
+                            onChange(value);
+                            setPassword(value);
+                        }}
+                        value={value}
+                        placeholder="Contraseña"
+                        editable={!dis}
                     />
-
-                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Nueva Contraseña</Text>
-                    <Controller
-                        control={control}
-                        render={({ onChange, onBlur, value }) => (
-                            <TextInput
-                                secureTextEntry={hidePassword}
-                                style={{ ...s.input, ...s.mb(3) }}
-                                onBlur={onBlur}
-                                onChangeText={value => {
-                                    onChange(value);
-                                    setPassword(value);
-                                }}
-                                value={value}
-                                placeholder="Contraseña"
-                                editable={!dis}
-                            />
-                        )}
-                        name="newPassword"
-                        rules={{ required: true }}
-                        defaultValue=""
+                )}
+                name="newPassword"
+                rules={{ required: 'Ingresa una nueva contraseña' }}
+                defaultValue=""
+            />
+            {errors.newPassword && <Label type='error' text={errors.newPassword.message} />}
+            <Label text='Repetir Nueva Contraseña' />
+            <Controller
+                control={control}
+                render={({ onChange, onBlur, value }) => (
+                    <Input
+                        secureTextEntry={hidePassword}
+                        onBlur={onBlur}
+                        onChangeText={value => {
+                            onChange(value)
+                            setC_Password(value);
+                        }}
+                        value={value}
+                        placeholder="Confirmar Contraseña"
+                        editable={!dis}
                     />
-                    
-                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Repetir Nueva Contraseña</Text>
-                    <Controller
-                        control={control}
-                        render={({ onChange, onBlur, value }) => (
-                            <TextInput
-                                secureTextEntry={hidePassword}
-                                style={{ ...s.input, ...s.mb(4) }}
-                                onBlur={onBlur}
-                                onChangeText={value => {
-                                    onChange(value)
-                                    setC_Password(value);
-                                }}
-                                value={value}
-                                placeholder="Confirmar Contraseña"
-                                editable={!dis}
-                            />
-                        )}
-                        name="confirmaPassword"
-                        rules={{ required: true }}
-                        defaultValue=""
-                    />     
-                </View>
-                <TouchableOpacity
-                    style={s.btn()}
-                    onPress={handleSubmit(onSubmit)}
-                    disabled={dis}
-                >
-                    <Text style={s.textButton()}>Modificar Contraseña</Text>
-                </TouchableOpacity>
+                )}
+                name="confirmaPassword"
+                rules={{ required: 'Repite la contraseña' }}
+                defaultValue=""
+            />
+            {errors.confirmaPassword && <Label type='error' style={{fontSize: 15, color: 'red'}} text={errors.confirmaPassword.message} />}
+            {error.error && <Label type='error' style={{fontSize: 15, color: 'red'}} text={error.message} />}
+            <View style={{marginTop: 10}}>
+            <Button label="Modificar Contraseña" onPress={handleSubmit(onSubmit)} />
+            </View>
+            
 
-            </ScrollView>
-        </View>
+        </Container>
     )
 }
 

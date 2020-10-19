@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, StatusBar, Alert, ActivityIndicator, ScrollView } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet, StatusBar, ActivityIndicator, ScrollView } from 'react-native'
 import { Link, useHistory } from 'react-router-native'
 import colors from "../style/colors";
 import { useForm, Controller } from "react-hook-form";
@@ -13,9 +13,10 @@ import { connect } from "react-redux";
 import { passwordReset } from "../../redux/actions/PasswordReset";
 
 //UI
+import {Container, Logo, QTLink, Button, Input, bn, Alert, Label} from '../Quantum';
 import s from '../style/styleSheet';
 
-function Index({ email, passwordReset }) {
+function Index({ email, passwordReset, navigation }) {
     
     /* Dis se utiliza para desabilitar el boton y el input y tambien habilitar el spinner */
     const [ dis, setDis ] = useState(false);
@@ -33,7 +34,8 @@ function Index({ email, passwordReset }) {
             })
             .then( response => {
                 setDis(false)
-                history.push("/reset");
+                console.log('reset')
+                navigation.navigate("Reset");
             })
             .catch((err) => { 
                 console.log(err)   
@@ -42,44 +44,21 @@ function Index({ email, passwordReset }) {
     };
     
     return (
-        <View style={s.container}>
-            <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
-            />
-            <ScrollView>
-                <View style={{ ...s.mb(5)}}>
-                    <Link to="/login" component={TouchableOpacity}>
-                        <Text style={s.textColor('orange')}> &lt; Volver</Text>
-                    </Link>
-                </View>
-                
-                <View>
-                    <Image source={require("../../logo.png")} style={{ width: 160, height: 160, alignSelf: "center" }}></Image>
-                </View>
+        <Container>
+                <Logo />
 
                 <View>
-                <Text style={{ ...s.textWhite, fontSize:25,...s.font, ...s.textCenter,...s.mb(1) }}>
-                    Recuperar Contraseña
-                </Text>
-                <Text style={{ ...s.textColor("#777"),...s.size(3.2) }}>Se le enviará un correo electronico con un código que debera utilizar a continuación</Text>
+                    <Alert content="Recuperar Contraseña" />
+                <Label text='Se le enviará un correo electronico con un código que debera utilizar a continuación' />
                 </View>
 
                 <View style={s.mb(4)}>
                 <ActivityIndicator animating={dis} size="large" color={colors.pink} />
-                    <Text style={{ ...s.textWhite, ...s.size(4) }}>Correo electrónico</Text>
+                <Label text="Correo electrónico" />
                      <Controller
                         control={control}
                         render={({ onChange, onBlur, value }) => (
-                            <TextInput
-                                style={s.input}
+                            <Input
                                 onBlur={onBlur}
                                 onChangeText={value => onChange(value)}
                                 value={value}
@@ -91,22 +70,21 @@ function Index({ email, passwordReset }) {
                             />
                         )}
                         name="email"
-                        rules={{ required: true}}
+                        rules={{                             
+                            required: "Debe ingresar un email",
+                            pattern: {
+                                value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                message: 'Debe ingresar un email válido'
+                            } 
+                        }}
                         defaultValue=""
                     />
 
                 </View>
-                <TouchableOpacity
-                    style={s.btn()}
-                    onPress={handleSubmit(onSubmit)}
-                    disabled={dis}
-                >
-                    <Text style={s.textButton()}>Enviar código</Text>
-                </TouchableOpacity>
-                {errors.email && <View style={styles.titleWrapper}><Text style={styles.error}>Email is required.</Text></View>}
+                <Button label='Enviar Codigo' onPress={ handleSubmit(onSubmit) } />                
+                {errors.email && <Label type='error' text={errors.email.message} /> }
 
-            </ScrollView>
-        </View>
+        </Container>
     )
 }
 
