@@ -45,6 +45,8 @@ const defaultColors = {
 const darkColors= {
     body: defaultColors.dark,
     label: "rgba(255,255,255, .7)",
+    labelErrorBg: "rgba(221, 65, 69, .2)",
+    labelError:defaultColors.danger,
     link: "rgba(255,255,255, .5)",
 
     light2: "rgba(255,255,255, .1)",
@@ -58,6 +60,8 @@ const darkColors= {
 const lightColors={
     body: defaultColors.light,
     label: defaultColors.dark,
+    labelErrorBg: "rgba(221, 65, 69, .2)",
+    labelError:defaultColors.danger,
     link: defaultColors.primary,
 
     light2: "#f1f1f1",
@@ -94,7 +98,8 @@ export function Container({children, styles}){
 
 export function Label(props){
     const theme = useColorScheme();
-    return <Text {...props} style={{ ...hbn('text-label mb-1',theme),...s.size(4),...props.style }}>{props.text}</Text>
+
+    return <Text {...props} style={{ ...hbn('text-label mb-1',theme),...(props.type==='error' ? hbn('borderRadius-5 p-2 bg-labelErrorBg text-labelError',theme):{}),...s.size(4),...props.style }}>{props.text}</Text>
 }
 
 export function Alert({variant, content, style, textStyle}){
