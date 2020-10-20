@@ -20,7 +20,7 @@ import EmailVerifier from "../EmailVerifier";
 import RegisterConfirmation from "../RegisterConfirmation";
 import RegisterStepTwo from "../RegisterStepTwo";
 import RegisterStepThree from "../RegisterStepThree";
-import Dash from "../DashboardNav/Index";
+// import Dash from "../DashboardNav/Index";
 
 const screenConfig = {
   options: {
@@ -54,7 +54,14 @@ export const EmailVerify = () => {
 export const CompleteUserData = () => {
   const CompleteUserDataStack = createStackNavigator();
   return (
-    <CompleteUserDataStack.Navigator screenOptions={{ headerShown: false }}>
+    <CompleteUserDataStack.Navigator
+      screenOptions={{
+        headerShown: false,
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+        ...TransitionPresets.SlideFromRightIOS,
+      }}
+    >
       <CompleteUserDataStack.Screen
         name="RegisterConfirmation"
         component={RegisterConfirmation}

@@ -106,11 +106,9 @@ function EmailVerifier({
 
   return (
     <Container>
+      <Logo />
       <View style={bn("row")}>
-        <View style={bn("col-12")}>
-          <Logo />
           <Alert content="Verifique su dirección de correo electrónico" />
-        </View>
       </View>
 
       {error && (
@@ -134,18 +132,6 @@ function EmailVerifier({
           <QTLink
             onPress={switchNeedCode}
             label="¿Ya tienes un código? ESTA ROTO ESTE LINK"
-          />
-        </Text>
-      )}
-
-      {!state.needCode && (
-        <Text style={{ ...s.mb(4), ...s.textWhite }}>
-          Te enviamos un correo electrónico con
-          <Text style={{ fontWeight: "bold" }}> un código de verificación</Text>
-          .
-          <QTLink
-            onPress={switchNeedCode}
-            label="¿Aún no te llegó el código? ESTA ROTO ESTE LINK"
           />
         </Text>
       )}
@@ -195,6 +181,12 @@ function EmailVerifier({
 
       {!state.needCode && (
         <View style={s.mb(4)}>
+          <Label style={{...bn('mt-2')}} text="Te enviamos un correo electrónico con un código de verificación"/>
+          {/* <Text style={{ ...s.mb(4), ...s.textWhite }}>
+          Te enviamos un correo electrónico con
+          <Text style={{ fontWeight: "bold" }}> un código de verificación</Text>
+          .
+        </Text> */}
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -216,6 +208,10 @@ function EmailVerifier({
               pattern: rules.code,
             }}
             defaultValue={null}
+          />
+          <QTLink
+            onPress={switchNeedCode}
+            label="¿Aún no te llegó el código? ESTA ROTO ESTE LINK"
           />
           {errors.code?.type === "required" && (
             <Text style={s.textColor("red")}>Debes ingresar el código</Text>

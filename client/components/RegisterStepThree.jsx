@@ -10,7 +10,7 @@ import colors from "./style/colors";
 import s from "./style/styleSheet"
 import { LinearGradient } from 'expo-linear-gradient';
 
-import { Button } from './Quantum';
+import { Input, Button, Container, Label, Logo, bn } from "./Quantum";
 
 function RegisterStepThree(props){
 
@@ -64,8 +64,7 @@ function RegisterStepThree(props){
         })
         .then((response) => {
             setModalVisible(true)
-            // loadAuth(payload)
-            // resetRegister();
+
 
         })
         .catch((error) => {
@@ -75,8 +74,8 @@ function RegisterStepThree(props){
     }
     
     return (
-        <View style={s.container}>
-            <LinearGradient
+        <Container >
+            {/* <LinearGradient
                 // Background Linear Gradient
                 colors={['rgba(0,0,0,0.8)', 'transparent']}
                 style={{
@@ -86,12 +85,11 @@ function RegisterStepThree(props){
                     top: 0,
                     height: 300,
                 }}
-            />
-            
-            <ScrollView>
-            <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB', ...s.mb(2)}}>
-                Completá tus datos
-            </Text>
+            /> */}
+
+            <Logo />
+
+            <Label text="Completá tus datos"/>
 
             <View style={s.bg('rgba(0,0,0, .2)')}>
                 <View opacity={0.8} style={{ ...s.col(12),...s.hr('orange', 4) }} />
@@ -99,55 +97,51 @@ function RegisterStepThree(props){
         
             <View style={s.mt(5)}>
 
-                <Text style={styles.text}>Dirección</Text>
+                <Label text="Dirección"/>
 
-                <View style={{flexDirection: 'row'}}>
+                <View style={{flexDirection: 'row', justifyContent:"space-between"}}>
 
-                    <TextInput
+                    <Input
                     placeholder='Calle'
-                    style={styles.input1}
+                    style={s.col(6)}
                     onChangeText={(text) => setDireccion(text)}
-
                     />
-                    <TextInput
+                    
+                    <Input
                     placeholder='Altura'
-                    style={styles.input2}
+                    style={s.col(6)}
                     onChangeText={(text) => setAltura(parseInt(text))}
                     keyboardType='numeric'
-
                     />
 
                 </View>
 
-                <Text style={styles.text}>Localidad</Text>
+                <Label text="Localidad"/>
 
-                <TextInput
+                <Input
                    placeholder='Localidad'
-                   style={s.input}
                    onChangeText={(text) => setBarrio(text)}
-
                 />
 
-                <Text style={styles.text}>Provincia</Text>
+                <Label text="Provincia"/>
 
-                <TextInput
+                <Input
                    placeholder='Provincia'
-                   style={s.input}
                    onChangeText={(text) => setCiudad(text)}
 
                 />
 
-                <Text style={styles.text}>País</Text>
+                <Label text="País"/>
 
-                <TextInput
-                   placeholder='País'
-                   style={s.input}
+                <Input
+                   placeholder='Argentina'
                    editable={false}
                    onChangeText={(text) => setPais(text)}
-                   defaultValue="Argentina"
+                //    defaultValue="Argentina"
 
                 />
-                <Text style={s.textWhite}>Se requiere residir en Argentina.</Text>
+                <Label text="Se requiere residir en Argentina."/>
+                {/* <Text style={s.textWhite}>Se requiere residir en Argentina.</Text> */}
 
                 <View style={{ ...s.row, justifyContent:'space-between', ...s.mt(4) }}>
                     <Button style={s.col(6,1)} onPress={()=>navigation.goBack()} label="Atrás"/>
@@ -203,9 +197,8 @@ function RegisterStepThree(props){
                     </View>
                 </View>
             </Modal>    
-            </ScrollView>
               
-        </View>
+        </Container>
     )
 }
 
