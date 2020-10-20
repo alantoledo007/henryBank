@@ -35,7 +35,10 @@ export default function userReducer(state = initialState, action) {
         case 'REGISTER_CONFIRMATION':
             return {
                 ...state,
-                user: action.payload
+                user: {
+                    ...state.user,
+                    ...action.payload
+                }
             };
         default:
             return state;

@@ -3,18 +3,19 @@ import React,  { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
     TextInput, Picker, ProgressBarAndroid, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-native';
+import { Link } from 'react-router-native';
 import { stepTwo } from '../redux/actions/register';
 import colors from "./style/colors";
 import s from "./style/styleSheet";
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { Input, Button, Container, Label, Logo } from "./Quantum";
+
 
 function RegisterStepTwo(props){
 
-    const { stepTwo } =props;
+    const { stepTwo, navigation } =props;
 
-    const history = useHistory()
 
     const [selectedValue, setSelectedValue] = useState("dni");
     const [telefono, onChangeTelofono] = useState(null);
@@ -34,7 +35,7 @@ function RegisterStepTwo(props){
         }
 
         stepTwo(payload)
-        history.push( '/register-step-three' )
+        navigation.navigate("RegisterStepThree")
     }
 
     const [error, setError] = useState("");
@@ -46,9 +47,8 @@ function RegisterStepTwo(props){
     };
 
     return (
-        <View style={s.container}>
-
-            <LinearGradient
+        <Container >
+            {/* <LinearGradient
                 // Background Linear Gradient
                 colors={['rgba(0,0,0,0.8)', 'transparent']}
                 style={{
@@ -58,13 +58,10 @@ function RegisterStepTwo(props){
                     top: 0,
                     height: 300,
                 }}
-            />
+            /> */}
+            <Logo />
 
-            <ScrollView>
-            <Text style={{ fontSize:20, justifyContent:'center', color:'#EBEBEB',
-                paddingVertical: 8}}>
-                Completá tus datos
-            </Text>
+            <Label text="Completá tus datos"/>
 
             <View style={s.bg('rgba(0,0,0, .2)')}>
                 <View opacity={0.8} style={{ ...s.col(8),...s.hr('orange', 4) }} />
@@ -72,62 +69,55 @@ function RegisterStepTwo(props){
         
 
             <View style={s.mt(4)}>
-
-                <Text style={styles.text}>Número teléfono</Text>
+                <Label text="Número de teléfono"/>
                 
-                <TextInput
+                <Input
                    placeholder='Teléfono'
-                   style={s.input}
                    keyboardType='numeric'
                    onChangeText={(text) => onChangeTelofono(text)}
-                   
-
-
                 />
-
-                <Text style={styles.text}>Tipo de documento</Text>
+                <Label text="Tipo de documento"/>
                 
                 <View style={{...s.input, justifyContent:"center"}}>
                     <Picker
                         selectedValue={selectedValue}
                         onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-                        
                     >
                         <Picker.Item label="DNI" value="dni" />
                         <Picker.Item label="Pasaporte" value="passport" />
                     </Picker>
                 </View>
                 
-                <Text style={styles.text}>Número documento</Text>
+                <Label text="Número de documento"/>
 
-                <TextInput
+                <Input
                    placeholder='Documento'
-                   style={s.input}
                    keyboardType='numeric'
                    onChangeText={text => onChangeNum_doc(text)}
                    
                 />
 
                 <View style={{ ...s.row, justifyContent:'space-between', ...s.mt(4) }}>
-                    <View style={s.col(6,1)}>
+                    <Button style={s.col(6,1)} onPress={() => navigation.goBack()} label="Atrás"/>
+                    {/* <View style={s.col(6,1)}>
                         <Link to="/register-confirmation" component={TouchableOpacity} style={{ ...s.btn() }}>
                                 <Text style={{ ...s.textButton() }}>Atrás</Text>
                         </Link>
-                    </View>
-                    <View style={s.col(6,1)}>
+                    </View> */}
+                    <Button style={s.col(6,1)} onPress={() => next()} label="Siguiente"/>
+                    {/* <View style={s.col(6,1)}>
                         <TouchableOpacity style={{ ...s.btn() }} onPress={() => next()}>
                                 <Text style={{ ...s.textButton() }}>Siguiente</Text>                 
                         </TouchableOpacity> 
-                    </View>
+                    </View> */}
                 </View>
                 
             </View>
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
-            </ScrollView>
     
-        </View>
+        </Container>
     )
 }
 

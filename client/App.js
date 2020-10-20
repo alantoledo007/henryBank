@@ -1,54 +1,32 @@
 import React from 'react';
-import { NativeRouter, Route } from 'react-router-native';
 import { Provider } from 'react-redux';
 import store from './redux/store/index';
 import { StatusBar } from 'expo-status-bar';
 
-//Componentes
-import Fox from './components/Fox';
-import Home from './components/Home';
-import Register from './components/Register';
-import EmailVerifier from './components/EmailVerifier';
-import RegisterConfirmation from './components/RegisterConfirmation';
-import RegisterStepTwo from './components/RegisterStepTwo';
-import RegisterStepThree from './components/RegisterStepThree';
-import Login from './components/Login';
-import PasswordReset from './components/PasswordReset/Index'
-import IndexReset from './components/PasswordReset/Index';
-import Reset from './components/PasswordReset/Reset';
-import Dash from './components/DashboardNav/Index';
-
 //navigation
 import 'react-native-gesture-handler';
+import AppNavigation from './components/IndexNav/AppNavigation';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
 
 //For Light/Dark Mode
 import { AppearanceProvider } from 'react-native-appearance';
 
-const Stack = createStackNavigator();
-
 export default function App() {
   const screenConfig = {
-    options:{
-      header:() => false
+    options: {
+      header: () => false
     }
   }
-return (
-  <Provider store={store}>
-     <StatusBar hidden={true}/>
-          <NavigationContainer>
-            <Stack.Navigator headerMode="none">
-              <Stack.Screen name="Home" component={Home} {...screenConfig} />
-              <Stack.Screen name="Dash" component={Dash} {...screenConfig} />
-
-              <Stack.Screen name="IndexReset" component={IndexReset} {...screenConfig} />
-              <Stack.Screen name="Reset" component={Reset} {...screenConfig} />
-              <Stack.Screen name="Login" component={Login} {...screenConfig} />
-              <Stack.Screen name="Register" component={Register} {...screenConfig} />
-            </Stack.Navigator>
-          </NavigationContainer>
-      {/*<NativeRouter>
+  return (
+    <Provider store={store}>
+      <StatusBar hidden={true} />
+      <NavigationContainer>
+        {/* AppNavigation contiene la lógica de navegación */}
+        <AppNavigation />
+      </NavigationContainer>
+    </Provider>
+  );
+  /*<NativeRouter>
           <Fox />
           <Route exact path="/" component={Home} />
           <Route exact path="/register" component={Register} />
@@ -63,7 +41,5 @@ return (
           <Route exact path="/deposit" component={Deposit}/>
           <Route exact path="/contacts" component={Contacts} />
           <Route exact path="/send-money" component={SendMoney} /> 
-        </NativeRouter>*/}
-    </Provider>
-  );
+        </NativeRouter>*/
 }
