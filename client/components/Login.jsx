@@ -30,6 +30,8 @@ function Login({ login, navigation }) {
 
   const [hidePassword, setHidePassword] = useState(true);
 
+  const [ error, setError ] = useState("")
+
   //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
   const mostrarError = (err) => {
     setError(err);
@@ -51,14 +53,7 @@ function Login({ login, navigation }) {
         //Mando la data del usuario (token + id, email, nombre si lo hay, etc) a redux. Redux va a guardarlo en el store y en AsyncStorage
         login(data);
         setDis(false);
-        return data;
-      })
-      .then((data) => {
-        navigation.navigate('Dash')
-        //Si los datos incluyen el nombre, significa que el usuario ya verificó su cuenta, por lo tanto redireccionamos a la posición consolidada
-        //if (data.user.name) return history.push("/dash");
-        //Si no hay nombre, redireccionamos a la pantalla de confirmar registro
-        //history.push("/register-confirmation");
+        //Al cambiar el state de redux, se va a renderizar otro stack (EmailVerify, CompleteUserData o Dash)
       })
       .catch((err) => {
         setDis(false);
@@ -125,7 +120,7 @@ function Login({ login, navigation }) {
                 rules={{ required: true }}
                 defaultValue=""
               />
-              <QTLink to="IndexReset" {...{navigation}} style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
+              <QTLink to="PasswordReset" {...{navigation}} style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
             </View>
           </View>
           <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />

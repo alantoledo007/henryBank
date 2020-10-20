@@ -3,7 +3,6 @@ import React, { useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
         TextInput, ProgressBarAndroid, Button, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { stepOne } from '../redux/actions/register';
 import colors from "./style/colors";
@@ -15,8 +14,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 function RegisterConfirmation(props){
 
-    const { stepOne } = props;
-    const history = useHistory()
+    const { stepOne, navigation } = props;
 
     const [date, setDate] = useState(new Date(null));
     const [mode, setMode] = useState('date');
@@ -61,7 +59,7 @@ function RegisterConfirmation(props){
         }
 
         stepOne(payload)
-        history.push('/register-step-two')
+        navigation.navigate("RegisterStepTwo");
     }
 
 

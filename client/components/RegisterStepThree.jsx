@@ -3,7 +3,6 @@ import React, { useState} from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
     TextInput, Picker, ProgressBarAndroid, Modal,TouchableHighlight, ScrollView} from 'react-native';
 import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-native';
 import { loadAuth, resetRegister } from '../redux/actions/register';
 import  axios  from 'axios';
 import env from '../env';
@@ -11,12 +10,13 @@ import colors from "./style/colors";
 import s from "./style/styleSheet"
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { Button } from './Quantum';
+
 function RegisterStepThree(props){
-    const history = useHistory()
 
     const [modalVisible, setModalVisible] = useState(false);
 
-    const { fullState, resetRegister, token, loadAuth } =props;
+    const { fullState, resetRegister, token, loadAuth, navigation } =props;
 
     const [direccion, setDireccion] = useState(null);
     const [altura, setAltura] = useState(null);
@@ -51,8 +51,9 @@ function RegisterStepThree(props){
             birthdate: fullState.birthdate,
             name: fullState.name, 
             surname: fullState.surname,
+            dataCompletedAt: true
         }
-        loadAuth(payload)
+        // loadAuth(payload)
         axios.put(`${env.API_URI}/auth/register_confirmation`, 
             payload,
         {
@@ -63,6 +64,7 @@ function RegisterStepThree(props){
         })
         .then((response) => {
             setModalVisible(true)
+            // loadAuth(payload)
             // resetRegister();
 
         })
@@ -148,16 +150,8 @@ function RegisterStepThree(props){
                 <Text style={s.textWhite}>Se requiere residir en Argentina.</Text>
 
                 <View style={{ ...s.row, justifyContent:'space-between', ...s.mt(4) }}>
-                    <View style={s.col(6,1)}>
-                        <Link to="/register-step-two" component={TouchableOpacity} style={{ ...s.btn() }}>
-                                <Text style={{ ...s.textButton() }}>Atrás</Text>
-                        </Link>
-                    </View>
-                    <View style={s.col(6,1)}>
-                        <TouchableOpacity style={s.btn()} onPress={() => next()}>
-                                <Text style={{ ...s.textButton() }}>Completar</Text>
-                        </TouchableOpacity>   
-                    </View>
+                    <Button style={s.col(6,1)} onPress={()=>navigation.goBack()} label="Atrás"/>
+                    <Button style={s.col(6,1)} onPress={()=>next()} label="Completar"/>
                 </View>
             </View>
 
@@ -187,8 +181,21 @@ function RegisterStepThree(props){
                         <TouchableHighlight
                             style={{ ...styles.openButton, backgroundColor: "#E94560" }}
                             onPress={() => {
-                            setModalVisible(!modalVisible);
-                            history.push('/dash')
+                                const payload = {
+                                    address_street: direccion,
+                                    address_number: altura,
+                                    locality: barrio,
+                                    province: ciudad,
+                                    country: pais,
+                                    doc_type: fullState.doc_type,
+                                    doc_number: fullState.doc_number,
+                                    phone_number: fullState.phone_number,
+                                    birthdate: fullState.birthdate,
+                                    name: fullState.name,
+                                    surname: fullState.surname,
+                                    dataCompletedAt: true
+                                }
+                                loadAuth(payload);
                             }}
                         >
                             <Text style={styles.textStyle}>Continuar</Text>

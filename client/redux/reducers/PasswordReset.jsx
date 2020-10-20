@@ -3,17 +3,16 @@ import {
 } from '../actions/PasswordReset';
 
 const initialState = {
-    email: 'hola',
-    code: '',
+    email: '',
 }
 
 export default function PasswordResetReducer(state = initialState, action) {
-    console.log('action redux', action);
-    console.log('RESET ', RESET);
-    console.log('action type: ', action.type)
+    // console.log('action redux', action);
+    // console.log('RESET ', RESET);
+    // console.log('action type: ', action.type)
     switch (action.type) {
         case RESET: {
-            console.log(action.type)
+            // console.log(action.type)
             return {
                 ...state,
                 email: action.payload,

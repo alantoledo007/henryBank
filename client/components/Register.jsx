@@ -25,6 +25,9 @@ function Register({ userRegister, navigation}) {
     const onSubmit = data => {
         console.log(data);
         userRegister(data)
+        .then(()=>{
+            navigation.navigate("EmailVerifier")
+        })
         .catch(err => {
             //Manejo de errores:
             //setDis(false);
