@@ -13,8 +13,9 @@ import { connect } from "react-redux";
 import { passwordReset } from "../../redux/actions/PasswordReset";
 
 //UI
-import {Container, Logo, QTLink, Button, Input, bn, Alert, Label} from '../Quantum';
+import {Container, Logo, QTLink, Button, Input, bn, Alert, Label, toastConfig} from '../Quantum';
 import s from '../style/styleSheet';
+import Toast from 'react-native-toast-message';
 
 function Index({ email, passwordReset, navigation }) {
     
@@ -39,51 +40,57 @@ function Index({ email, passwordReset, navigation }) {
             })
             .catch((err) => { 
                 console.log(err)   
-                setDis(false)    
+                setDis(false)
+                Toast.show({
+                    type: "error",
+                    text1: "Hubo un error",
+                    text2: "Inténtelo de nuevo"
+                })
             });
     };
     
     return (
         <Container>
-                <Logo />
+            <Logo />
 
-                <View>
-                    <Alert content="Recuperar Contraseña" />
-                <Label text='Se le enviará un correo electronico con un código que debera utilizar a continuación' />
-                </View>
+            <View>
+                <Alert content="Recuperar Contraseña" />
+            <Label style={{textAlign: "center"}} text='Se le enviará un correo electronico con un código que debera utilizar a continuación' />
+            </View>
 
-                <View style={s.mb(4)}>
-                <ActivityIndicator animating={dis} size="large" color={colors.pink} />
-                <Label text="Correo electrónico" />
-                     <Controller
-                        control={control}
-                        render={({ onChange, onBlur, value }) => (
-                            <Input
-                                onBlur={onBlur}
-                                onChangeText={value => onChange(value)}
-                                value={value}
-                                placeholder="Ingrese Email"
-                                placeholder="ejemplo@mail.com"    
-                                keyboardType="email-address"
-                                //autoFocus={true}
-                                editable={!dis}
-                            />
-                        )}
-                        name="email"
-                        rules={{                             
-                            required: "Debe ingresar un email",
-                            pattern: {
-                                value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                                message: 'Debe ingresar un email válido'
-                            } 
-                        }}
-                        defaultValue=""
-                    />
+            <View style={s.mb(4)}>
+            <ActivityIndicator animating={dis} size="large" color={colors.pink} />
+            <Label text="Correo electrónico" />
+                    <Controller
+                    control={control}
+                    render={({ onChange, onBlur, value }) => (
+                        <Input
+                            onBlur={onBlur}
+                            onChangeText={value => onChange(value)}
+                            value={value}
+                            placeholder="Ingrese Email"
+                            placeholder="ejemplo@mail.com"    
+                            keyboardType="email-address"
+                            //autoFocus={true}
+                            editable={!dis}
+                            autoCapitalize="none"
+                        />
+                    )}
+                    name="email"
+                    rules={{                             
+                        required: "Debe ingresar un email",
+                        pattern: {
+                            value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                            message: 'Debe ingresar un email válido'
+                        } 
+                    }}
+                    defaultValue=""
+                />
 
-                </View>
-                <Button label='Enviar Codigo' onPress={ handleSubmit(onSubmit) } />                
-                {errors.email && <Label type='error' text={errors.email.message} /> }
-
+            {errors.email && <Label type='error' text={errors.email.message} /> }
+            </View>
+            <Button label='Enviar Codigo' onPress={ handleSubmit(onSubmit) } />                
+            <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
         </Container>
     )
 }

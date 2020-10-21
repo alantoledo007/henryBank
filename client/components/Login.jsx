@@ -1,12 +1,10 @@
 //React
 import React, { useState } from "react";
 import {
-  StyleSheet,
+  ActivityIndicator,
   View,
-  StatusBar,
   TouchableOpacity,
 } from "react-native";
-import { Link, useHistory } from "react-router-native";
 import { useForm, Controller } from "react-hook-form";
 
 //Redux
@@ -16,30 +14,32 @@ import { login } from "../redux/actions/auth";
 //Otros
 import axios from "axios";
 import env from "../env";
-import {Container, Logo, QTLink, Button, Input, bn, Alert, Label} from './Quantum';
+import {
+  Container,
+  Logo,
+  QTLink,
+  Button,
+  Input,
+  bn,
+  Alert,
+  Label,
+  toastConfig
+} from "./Quantum";
+import Toast from 'react-native-toast-message';
+
 
 //Estilos
 import colors from "./style/colors";
-import s from './style/styleSheet';
+import s from "./style/styleSheet";
 
 function Login({ login, navigation }) {
-
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, errors } = useForm();
 
   const [dis, setDis] = useState(false);
 
   const [hidePassword, setHidePassword] = useState(true);
 
-  const [ error, setError ] = useState("")
-
-  //Decidí usar un estado nuevo para mostrar errores. Muestra el error durante 5 segundos
-  const mostrarError = (err) => {
-    setError(err);
-    setTimeout(() => {
-      setError(" ");
-    }, 5000);
-  };
-
+  
   const onSubmit = (data) => {
     setDis(true);
     axios
@@ -58,78 +58,100 @@ function Login({ login, navigation }) {
       .catch((err) => {
         setDis(false);
         //Manejo de errores:
-        if (err.response.data.type == "AUTHENTICATION_FAILED")
-          mostrarError("Dirección de correo o contraseña incorrectos.");
-        if (err.response.data.type == "VALIDATION_ERROR")
-          mostrarError("Por favor ingrese una dirección de correo válida.");
+        Toast.show({
+          type: "error",
+          text1: "Contraseña o email incorrectos",
+          text2: "Verifique los datos ingresados"
+        })
       });
   };
 
   //Pantalla de carga para mostrar mientras no hayan cargado aún las fonts
   return (
-      <Container>
-        <View>
-          <Logo />
+    <Container>
+      <View>
+        <Logo />
+      </View>
+      <Alert content="Ingrese a su cuenta Quantunm" style={bn("mb-4")} />
+      <ActivityIndicator animating={dis} size="large" color={colors.pink} />
+      <View>
+        <View style={s.mb(4)}>
+          <Label text="Correo electrónico" />
+          <Controller
+            control={control}
+            render={({ onChange, onBlur, value }) => (
+              <Input
+                onBlur={onBlur}
+                onChangeText={(value) => onChange(value)}
+                value={value}
+                placeholder="ejemplo@mail.com"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                //No estoy seguro si estos dos siguientes son necesarios así que por las dudas los dejo comentados
+                // textContentType="emailAddress"
+                // autoCompleteType="email"
+              />
+            )}
+            name="email"
+            rules={{
+              required: "Ingrese su email",
+              pattern: {
+                value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                message: "Dirección de correo inválida",
+              },
+            }}
+            defaultValue=""
+          />
+          {errors.email && <Label type="error" text={errors.email.message}/>}
         </View>
-        <Alert content="Ingrese a su cuenta Quantunm" style={bn('mb-4')} />
+
         <View>
           <View style={s.mb(4)}>
-            <Label text="Correo electrónico" />
+            <Label style={bn("mt-2")} text="Contraseña" />
             <Controller
               control={control}
               render={({ onChange, onBlur, value }) => (
                 <Input
+                  secureTextEntry={hidePassword}
                   onBlur={onBlur}
                   onChangeText={(value) => onChange(value)}
                   value={value}
-                  placeholder="ejemplo@mail.com"
-                  keyboardType="email-address"
+                  placeholder="••••••••"
                   autoCapitalize="none"
-                  //No estoy seguro si estos dos siguientes son necesarios así que por las dudas los dejo comentados
-                  // textContentType="emailAddress"
-                  // autoCompleteType="email"
-                />
-              )}
-              name="email"
-              rules={{ required: true }}
-              defaultValue=""
-            />
-          </View>
-
-          <View>
-            <View style={s.mb(4)}>
-              <Label style={bn('mt-2')} text="Contraseña" />
-              <Controller
-                control={control}
-                render={({ onChange, onBlur, value }) => (
-                  <Input
-                    secureTextEntry={hidePassword}
-                    onBlur={onBlur}
-                    onChangeText={(value) => onChange(value)}
-                    value={value}
-                    placeholder="••••••••"
-                    autoCapitalize="none"
-                    iconRight={hidePassword
+                  iconRight={
+                    hidePassword
                       ? require("../assets/eye.png")
                       : require("../assets/eye-slash.png")
-                    }
-                    onIconRightPress={()=>setHidePassword(!hidePassword)}
-                  />
-                )}
-                name="password"
-                rules={{ required: true }}
-                defaultValue=""
-              />
-              <QTLink to="PasswordReset" {...{navigation}} style={bn('text-left')} component={TouchableOpacity} label="¿Olvidaste tu contraseña?" />
-            </View>
+                  }
+                  onIconRightPress={() => setHidePassword(!hidePassword)}
+                />
+              )}
+              name="password"
+              rules={{ required: "Ingrese su contraseña" }}
+              defaultValue=""
+            />
+            {errors.password && <Label type="error" text={errors.password.message} />}
+            <QTLink
+              to="PasswordReset"
+              {...{ navigation }}
+              style={bn("text-left")}
+              component={TouchableOpacity}
+              label="¿Olvidaste tu contraseña?"
+            />
           </View>
-          <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />
-
-          
         </View>
-        <QTLink to="Register" {...{navigation}} component={TouchableOpacity} style={s.mt(6)} label="¿No tienes una cuenta? Registrate" />
-      </Container>
-    );
+        <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />
+      </View>
+      <QTLink
+        to="Register"
+        {...{ navigation }}
+        component={TouchableOpacity}
+        style={s.mt(6)}
+        label="¿No tienes una cuenta? Registrate"
+      />
+      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
+    </Container>
+  );
 }
 
 const mapStateToProps = (state) => {

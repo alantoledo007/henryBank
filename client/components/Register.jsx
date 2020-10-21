@@ -23,29 +23,32 @@ function Register({ userRegister, navigation}) {
     const [ dis, setDis ] = useState(false);
 
     const onSubmit = data => {
-        console.log(data);
+        // console.log(data);
+        setDis(true)
         userRegister(data)
         .then(()=>{
             navigation.navigate("EmailVerifier")
         })
         .catch(err => {
             //Manejo de errores:
-            //setDis(false);
-            console.log(err.response);
-            if(err.request){
-                Toast.show({
-                    type:'error',
-                    text1:'Error de comunicación',
-                    text2: 'Verifique su conexión a internet',
-                })
-            }else{
-                if(err.request){
-                    Toast.show({
-                        type:'error',
-                        text1:'¡Ups!',
-                        text2: 'Error de comunicación con el servidor',
+            setDis(false);
+            switch(err.response.data.message){
+                case "An user is registered with those email address.":
+                    return Toast.show({
+                        type: "error",
+                        text1: "La dirección de correo ingresada no está disponible"
                     })
-                }
+                case "The 'password' field length must be greater than or equal to 8 characters long.":
+                    return Toast.show({
+                        type: "error",
+                        text1: "La contraseña debe tener 8 caracteres como mínimo"
+                    })
+                default:
+                    return Toast.show({
+                        type: "error",
+                        text1: "Ups!",
+                        text2: "Hubo un error. Compruebe su conexión a internet"
+                    })
             }
         });
     };
@@ -104,10 +107,16 @@ function Register({ userRegister, navigation}) {
                             />
                         )}
                         name="password"
-                        rules={{ required: true }}
+                        rules={{
+                            required: "Ingrese una contraseña",
+                            minLength: {
+                                value: 8,
+                                message: "La contraseña debe tener mínimo 8 caracteres"
+                            }
+                        }}
                         defaultValue=""
                     />
-                    {errors.password?.type === 'required' && <Label type="error" text="Se requiere una contraseña" />}
+                    {errors.password && <Label type="error" text={errors.password.message} />}
                 </View>
                 <View style={bn('col-12 mt-5')}>
 
