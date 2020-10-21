@@ -1,12 +1,9 @@
 //general
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { ScrollView, View, Text, Image, TouchableOpacity} from 'react-native';
+import { View} from 'react-native';
 import { connect } from 'react-redux';
-import { Link, useHistory } from 'react-router-native';
 
 //UI
-import s from './style/styleSheet';
 import {Container, Logo, bootnative, QTLink, Button, Alert} from './Quantum';
 
 function Home({navigation}) {

@@ -16,11 +16,10 @@ import s from './style/styleSheet';
 import { StatusBar } from 'expo-status-bar';
 
 
-export const bn = useBootnative(); //este si
 export const bootnative = useBootnative; //este no
 
-const defaultColors = {
-    primary: "#E94560",
+export const defaultColors = {
+    primary: "#E94560", //rgb(233, 69, 96)
     secondary: "#6C757D",
     success: "#51A846",
     danger: "#DD4145",
@@ -29,7 +28,7 @@ const defaultColors = {
     light: "#F8F9FA",
     dark: "#343A40",
     white: "#ffffff",
- 
+    
     blue: "#057AFC",
     indigo: "#7066F2",
     purple: "#7152C1",
@@ -42,7 +41,9 @@ const defaultColors = {
     cyan: "#3DA3B9",
 }
 
-const darkColors= {
+export const bn = useBootnative({colors:defaultColors}); //este si
+
+export const darkColors= {
     body: defaultColors.dark,
     label: "rgba(255,255,255, .7)",
     labelErrorBg: "rgba(221, 65, 69, .2)",
@@ -65,7 +66,7 @@ const darkColors= {
     inputColor: "rgba(255,255,255, .7)",
 }
 
-const lightColors={
+export const lightColors={
     body: defaultColors.light,
     label: defaultColors.dark,
     labelErrorBg: "rgba(221, 65, 69, .2)",
@@ -135,14 +136,14 @@ export const toastConfig =  {
 
 
 export function Container({children, styles}){
-    const colorScheme = useColorScheme();
+    const theme = useColorScheme();
     
     return (
         <ScrollView>
-            <View style={{ ...hbn('container p-3 bg-body',colorScheme),height:(Dimensions.get('window').height + statusBar.currentHeight), justifyContent:'center',...styles}}>
+            <View style={{ ...hbn('container p-3 bg-body',theme),height:(Dimensions.get('window').height + statusBar.currentHeight), justifyContent:'center',...styles}}>
                 {children}
-                <StatusBar style="auto" />
             </View>
+            <StatusBar backgroundColor={theme === 'dark' ? 'rgba(23,22,23, .9)' : 'rgba(255, 255, 255, .9)'} style="auto" />
         </ScrollView>
     );
 }
@@ -212,13 +213,21 @@ export function Button(props){
     return <DefaultButton {...props} />
 }
 
-export function QTLink({to,navigation, label, style}){
+function DefaultLink(props){
     const theme = useColorScheme();
+    const {label, style} = props;
     return (
-        <TouchableOpacity onPress={() => navigation.navigate(to)}>
+        <TouchableOpacity {...props}>
             <Text style={{ ...hbn('text-link text-center',theme),textDecorationLine:'underline',...style }}>{label}</Text>
         </TouchableOpacity>
     );
+}
+
+export function QTLink(props){
+    const {to, navigation, params} = props
+    if(to && navigation)
+        return <DefaultLink {...props} onPress={() => navigation.navigate(to, params||{})} />
+    return <DefaultLink {...props} />
 }
 
 export function Input({placeholder, style,secureTextEntry, onFocus ,onChangeText, value,onIconRightPress, autoCapitalize, editable, keyboardType, onBlur, iconRight = null}){

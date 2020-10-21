@@ -15,7 +15,7 @@ export function sendEmailVerifier(data){
                 dispatch({type:EMAIL_VERIFIER_SENT});
         })
         .catch(err => {
-            console.log(err).response.status;
+            // console.log(err).response.status;
             dispatch({type: ERROR_EMAIL_VERIFIER, payload: err.response});
         })
     };
@@ -23,14 +23,10 @@ export function sendEmailVerifier(data){
 
 export function emailVerify(data){
     return dispatch => {
-        return Axios.put(env.API_URI + '/auth/email-verifier',data,{headers:{'Content-Type': 'application/json'}})
+        return Axios.put(env.API_URI + '/auth/email-verifier', JSON.stringify(data), {headers:{'Content-Type': 'application/json'}})
         .then(res => res.data)
         .then(res => {
             dispatch({type:EMAIL_VERIFIED, payload: res.data});
-        })
-        .catch(err => {
-            console.log(err).response.status;
-            dispatch({type: ERROR_EMAIL_VERIFIER, payload: err.response});
         })
     };
 }

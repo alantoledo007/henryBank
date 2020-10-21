@@ -18,15 +18,18 @@ import { LinearGradient } from "expo-linear-gradient";
 
 import { Picker, PickerIOS } from "@react-native-community/picker";
 // import RNPickerSelect from "react-native-picker-select";
+
+//Sub-components
 import DepositCash from "./DepositCash";
 import DepositCard from "./DepositCard";
+import { Container, Label, Button, QTLink } from "../../Quantum";
 
-const Deposit = ({ token, recharge_code, close }) => {
+const Deposit = ({ close, navigation }) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   return (
-    <View style={styles.container}>
-      <LinearGradient
+    <Container style={styles.container}>
+      {/* <LinearGradient
         // Background Linear Gradient
         colors={["rgba(0,0,0,0.8)", "#6b538a"]}
         style={{
@@ -36,18 +39,26 @@ const Deposit = ({ token, recharge_code, close }) => {
           top: 50,
           height: 1000,
         }}
-      />
+      /> */}
 
       <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
-        {close && <TouchableWithoutFeedback onPress={close}>
-          <Image style={{height: 15}} source={require("../../../assets/close-pink.png")} />
-        </TouchableWithoutFeedback>}
+        {close && (
+          <TouchableWithoutFeedback onPress={close}>
+            <Image
+              style={{ height: 15 }}
+              source={require("../../../assets/close-pink.png")}
+            />
+          </TouchableWithoutFeedback>
+        )}
       </View>
       <View style={styles.pickerWrapper}>
-        <Text style={{ ...styles.text, fontSize: 40 }}>Recargar dinero</Text>
+        <Label
+          text="Recargar dinero"
+          style={{ fontSize: 40, alignSelf: "center" }}
+        />
         <Picker
           style={styles.picker}
-          itemStyle={{ ...styles.text, color: "green" }}
+          // itemStyle={{ ...styles.text, color: "green" }}
           selectedValue={paymentMethod}
           onValueChange={(value) => setPaymentMethod(value)}
           mode="dropdown"
@@ -58,19 +69,20 @@ const Deposit = ({ token, recharge_code, close }) => {
       </View>
       {/* Según el state paymentMethod, renderizamos un componente u otro: */}
       {paymentMethod === "cash" && <DepositCash />}
-      {paymentMethod === "card" && <DepositCard close={close}/>}
-      <Link>
-        <Text style={styles.needHelp}>¿Necesitás ayuda?</Text>
-      </Link>
-    </View>
+      {paymentMethod === "card" && <DepositCard close={close} navigation={navigation} />}
+
+      {/* {navigation ? 
+        <QTLink label="¿Necesitás ayuda?" {...{ navigation }} to="Dash" />
+      : 
+        <Label style={styles.needHelp}text="¿Necesitás ayuda?" onPress={close} />
+      } */}
+    </Container>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    ...s.container,
-    ...s.itemsCenter,
-    backgroundColor: "black",
+    justifyContent: "space-between"
   },
   text: {
     ...s.font,
@@ -98,8 +110,10 @@ const styles = StyleSheet.create({
   },
   needHelp: {
     ...s.font,
-    color: colors.orange,
-    marginTop: 30,
+    color: colors.pink,
+    fontSize: 15,
+    alignSelf: "center",
+    // marginBottom: 30,
   },
 });
 

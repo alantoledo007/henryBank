@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StatusBar } from "react-native";
 
 //stack creators
 import {
@@ -15,10 +15,40 @@ import SendMoney from "./SendMoney";
 import Contacts from "./Contacts/Index";
 import Graphics from "./graphics";
 
+// UI
+import { Button, hbn } from '../Quantum';
+import IonIcon from "react-native-vector-icons/Ionicons";
+
+
+export const navigationOptionsHeader = ({ navigation }) => {
+    return {
+        headerShown: true,
+        title: false,
+        headerLeft: () => (
+            <Button
+                color='light'
+                textStyle={
+                    hbn('text-primary')
+                }
+                style={{
+                    marginLeft: 15,
+                }}
+                onPress={() => navigation.toggleDrawer()}
+                label={<IonIcon name="ios-menu" style={{ fontSize: 20 }} />}
+            />
+        ),
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+        ...TransitionPresets.SlideFromRightIOS,
+    };
+
+}
 export function Menu() {
     const MenuStack = createDrawerNavigator();
     return (
-        <MenuStack.Navigator>
+        <MenuStack.Navigator
+            initialRouteName="Dashboard"           
+        >
             <MenuStack.Screen name="Dashboard" component={DashboardRoutes} />
             <MenuStack.Screen name="Recarga" component={Deposit} />
             <MenuStack.Screen name="Transferencia" component={SendMoney} />
@@ -32,12 +62,7 @@ export const DashboardRoutes = (props) => {
     const DashStack = createStackNavigator();
     return (
         <DashStack.Navigator
-            screenOptions={{
-                headerShown: false,
-                gestureEnabled: true,
-                gestureDirection: "horizontal",
-                ...TransitionPresets.SlideFromRightIOS,
-            }}
+        screenOptions={navigationOptionsHeader}
         >
             <DashStack.Screen component={ContactsRoute} name="Dashboard" />
             {/* <DashStack.Screen component={Contacts} name="Contactos" /> */}
@@ -50,9 +75,6 @@ export const ContactsRoute = (props) => {
     return (
         <ContactsTabStack.Navigator
             tabBarPosition="bottom"
-            screenOptions={{
-                headerShown: false,
-            }}
         >
             <ContactsTabStack.Screen component={Dash} name="Panel" />
             <ContactsTabStack.Screen component={Contacts} name="Mis contactos" />

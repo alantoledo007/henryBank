@@ -23,27 +23,42 @@ function Register({ userRegister, navigation}) {
     const [ dis, setDis ] = useState(false);
 
     const onSubmit = data => {
-        console.log(data);
+        // console.log(data);
+        setDis(true)
         userRegister(data)
+        .then(()=>{
+            navigation.navigate("EmailVerifier")
+        })
         .catch(err => {
             //Manejo de errores:
-            //setDis(false);
-            console.log(err.response);
-            if(err.request){
-                Toast.show({
-                    type:'error',
-                    text1:'Error de comunicación',
-                    text2: 'Verifique su conexión a internet',
-                })
-            }else{
-                if(err.request){
-                    Toast.show({
-                        type:'error',
-                        text1:'¡Ups!',
-                        text2: 'Error de comunicación con el servidor',
-                    })
+            setDis(false);
+            if(err.response?.data?.code === 422){
+                if(err.response.data.type === 'EMAIL_DUPLICATED'){
+                    return Toast.show({
+                        type: "error",
+                        text1: "Ya está registrado",
+                        text2: "El correo electrónico ya está registrado, intenete ingresar, si no recuerda su clave la puede recuperar."
+                    });
                 }
+                return Toast.show({
+                    type: "error",
+                    text1: "Datos incorrectos",
+                    text2: "Uno o más campos no contienen información valida. Por favor verifique e intente nuevamente."
+                });
             }
+            if(err.response?.data?.code === 500){
+                return Toast.show({
+                    type: "error",
+                    text1: "Error interno",
+                    text2: "Ocurrió un error interno y nuestro equipo ya está trabajando para solucionarlo."
+                })
+            }
+      
+            return Toast.show({
+                type: "error",
+                text1: "Error de conexión",
+                text2: "Por favor, verifique su conexión a internet e intente nuevamente, si el problema persiste ponganse en contacto con el equipo técnico"
+            });
         });
     };
     //const onSubmit = data => console.log(data);
@@ -101,10 +116,16 @@ function Register({ userRegister, navigation}) {
                             />
                         )}
                         name="password"
-                        rules={{ required: true }}
+                        rules={{
+                            required: "Ingrese una contraseña",
+                            minLength: {
+                                value: 8,
+                                message: "La contraseña debe tener mínimo 8 caracteres"
+                            }
+                        }}
                         defaultValue=""
                     />
-                    {errors.password?.type === 'required' && <Label type="error" text="Se requiere una contraseña" />}
+                    {errors.password && <Label type="error" text={errors.password.message} />}
                 </View>
                 <View style={bn('col-12 mt-5')}>
 

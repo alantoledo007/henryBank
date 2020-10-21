@@ -11,6 +11,10 @@ import {Dimensions } from "react-native";
 //components
 import Deposit from './Deposit/Deposit';
 import SendMoney from './SendMoney';
+import { useHeaderHeight } from '@react-navigation/stack';
+
+// UI
+import { bn, Container, Label } from '../Quantum';
 
 function Dash({user, navigation}){
     const [showDeposit, setShowDeposit] = useState(false);
@@ -31,7 +35,6 @@ function Dash({user, navigation}){
         loading: true
     }
     const [state,setState] = useState(initialState);
-
 
     useEffect(() => {
         if(!user) return;
@@ -55,18 +58,14 @@ function Dash({user, navigation}){
         })
     },[state.load])
     return (
-        <React.Fragment>
-            <ScrollView style={styles.container}>
-                
-                <View style={{ marginBottom:25, ...styles.row}}>
-                    <Text style={{ ...styles.nameMessage,...styles.textWhite, borderBottomColor: '#E94560', borderBottomWidth: 3  }}>Hola, {state.user.name}</Text>
-                </View>
-
+        <>
+            <Container styles={{height: 'auto'}}>
+                <Label text={`Hola, ${state.user.name}`} />
                 <View style={{ marginBottom:25,...styles.row }}>
                     <Image style={styles.imgProfile} source={{ uri:state.user.avatar }} />
                     <View>
-                        <Text style={{ ...styles.textWhite }}>Mi dinero</Text>
-    <Text style={{...styles.textWhite, fontSize:25, fontWeight: 'bold'}}>{user.balance ? `$${user.balance}` : '$0.00'}</Text>
+                        <Label text='Mi dinero' />
+                        <Label style={{fontWeight: 'bold', fontSize:25}} text={user.balance ? `$${user.balance}` : '$0.00'} />
                     </View>
                 </View>
                 
@@ -104,7 +103,7 @@ function Dash({user, navigation}){
                         </Link>
                     </View>
                 </View>
-                
+
                 <View style={{ ...styles.row,flexWrap:'wrap', marginBottom:20 }}>
                     <Link style={styles.panelButton} component={TouchableOpacity} to="/">
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/transactions.png')} />
@@ -131,7 +130,7 @@ function Dash({user, navigation}){
                     </TouchableOpacity>
                 </View>
                 
-            </ScrollView>
+            </Container>
             {state.loading && (
                 <View style={{ position: 'absolute', top: StatusBar.currentHeight, left: 0, right: 0, bottom: 0,backgroundColor:'#221F3B', justifyContent: 'center', alignItems: 'center'}}>
                     <ActivityIndicator size="large" color='#E94560' />
@@ -162,7 +161,7 @@ function Dash({user, navigation}){
             >
                 <SendMoney close={() => setShowTransfer(false)}/>
             </Modal>
-        </React.Fragment>
+        </>
     );
 }
 
