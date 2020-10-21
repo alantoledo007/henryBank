@@ -19,9 +19,10 @@ const DepositCash = ({ recharge_code }) => {
     <View style={styles.container}>
       <Label style={{textAlign: "center"}} text="Este código te permitirá depositar dinero en tu cuenta pagando con efectivo:" />
       <View>
-        <View style={styles.codeWrapper}>
+        <Button label={splitRechargeCode} disabled={true} style={{alignSelf: "center", width: 300}} textStyle={{fontSize: 50}}/>
+        {/* <View style={styles.codeWrapper}>
           <Label style={styles.code} text={splitRechargeCode}/>
-        </View>
+        </View> */}
         <Label style={{fontSize: 15, alignSelf: "center"}} text="El monto mínimo es de $100." />
       </View>
       <Label style={{textAlign: "center"}} text="¡Es fácil! Sólo deberás  dirigirte a un Rapipago o Pago Fácil y mostrarle tu código al cajero." />
