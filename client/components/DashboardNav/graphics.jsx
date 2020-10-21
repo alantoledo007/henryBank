@@ -76,7 +76,7 @@ const Graphics = () => {
     return (
 
         <Container>
-            <LinearGradient
+            {/* <LinearGradient
                 // Background Linear Gradient
                 colors={['rgba(0,0,0,0.8)', 'transparent']}
                 style={{
@@ -86,8 +86,8 @@ const Graphics = () => {
                     top: 0,
                     height: 300,
                 }}
-            />
-            <ScrollView>
+            /> */}
+           
                 <Text style={{...s.textWhite, ...s.textCenter, ...s.size(6), ...s.my(6)}}>Estadísticas</Text>
                 <View>
                     <Button 
@@ -166,7 +166,7 @@ const Graphics = () => {
                     />}
                 </View>    
 
-            </ScrollView>
+           
            
         </Container>
     )
