@@ -117,7 +117,8 @@ module.exports = async (ctx) => {
             email: usuario.email,
             avatar: usuario.avatar,
             emailVerifiedAt:usuario.emailVerifiedAt,
-            dataCompletedAt:usuario.dataCompletedAt
+            dataCompletedAt:usuario.dataCompletedAt,
+            balance:account.balance
         }
     }}
     
