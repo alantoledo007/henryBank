@@ -6,6 +6,7 @@ const Accounts = require("../../models/Accounts");
 
 module.exports = async (ctx,res) => {
     const {email, password} = ctx.params;
+
     const data = await User.findOne({where:{email:email}, include:Account, attributes:['id','name','surname', 'avatar','password', 'dataCompletedAt','emailVerifiedAt','email']})
     .then(async user => {
         if(!user || (user && !await user.matchPassword(password)))
@@ -14,10 +15,11 @@ module.exports = async (ctx,res) => {
         const token = await jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: '1d'
         });
+
         user.password = undefined;
         let recharge_code = null;
         let cvu = null;
-        if(user.Accounts.lenght){
+        if(user.Accounts.length){
             let acc = Accounts[0];
             cvu = acc.cvu;
             recharge_code = acc.rechage_code;
