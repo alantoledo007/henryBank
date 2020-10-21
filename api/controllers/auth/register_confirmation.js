@@ -1,4 +1,4 @@
-const {User} = require('../../db');
+const {User,Account} = require('../../db');
 const axios = require('axios');
 const { MoleculerError } = require("moleculer").Errors;
 
@@ -7,7 +7,7 @@ module.exports = async (ctx) => {
     const {doc_type,doc_number,name,surname,birthdate,phone_number,address_street,address_number,locality,province,country} = ctx.params
     const {id} = ctx.meta.user
     
-    let usuario = await User.findOne({where:{id}})
+    let usuario = await User.findOne({where:{id},include:Account})
     
     //Verificación de usuario eliminado
     if(usuario == null){
@@ -60,10 +60,13 @@ module.exports = async (ctx) => {
     //Normalización de la dirección del usuario.
     
     if(address_street.length<1){
-        throw new MoleculerError("Invalid address format",422,"STREET_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name });
+        throw new MoleculerError("Invalid address format",422,"STREET_WRONG", { nodeID: ctx.nodeID, action:ctx.action.name});
 
     }
-
+    if(usuario.accounts.length>0){
+        throw new MoleculerError("You already have an account",422,"FATAL_ERROR",{ nodeID: ctx.nodeID, action:ctx.action.name})
+    }
+    console.log(usuario.accounts)
 
     const data = await axios.get(`https://apis.datos.gob.ar/georef/api/direcciones?direccion=${address_street} ${address_number}&provincia=${province}&localidad=${locality}`)
     .then(async response =>{
@@ -74,6 +77,9 @@ module.exports = async (ctx) => {
         }
 
         if(information.cantidad !== 0){
+            
+        
+
             User.update({
                 doc_type,
                 doc_number,
@@ -88,14 +94,21 @@ module.exports = async (ctx) => {
                 country,
                 dataCompletedAt: Date.now()
             },{where:{id}})
-            .then(()=>{
-                usuario = User.findOne({where:id})
-            })
-
+            
+            
+            
             return {status: 200, message: 'Register confirmation success'};
         }
     })
+
+    usuario = await User.findOne({where:{id}})
+
+    const account = await Account.create({
+        recharge_code:'123123123'
+    })
     
+    await usuario.addAccount(account,{through:{selfGranted:true}})
+
     return {data:{
         user:{
             id: usuario.id,

@@ -36,15 +36,17 @@ sequelize.models = Object.fromEntries(capsEntries);
 // Para relacionarlos hacemos un destructuring
 const { User, Transaction, Contact, Account} = sequelize.models;
 
-//Aca vendrian las relaciones
+//Aca vendrian las relaciones|
 
 
-User.hasMany(Transaction,{
-	foreignKey:'user_id'
+
+Account.hasMany(Transaction,{
+	foreignKey:'account_id'
 });
-Transaction.belongsTo(User,{
-	foreignKey: 'user_id'
+Transaction.belongsTo(Account,{
+	foreignKey: 'account_id'
 });
+
 
 User.hasMany(Contact,{
 	foreignKey:'user_id'
@@ -56,9 +58,10 @@ Contact.belongsTo(User,{
 	foreignKey: 'contact_id'
 });
 
+const account_user = sequelize.define('account_user',{})
 
-User.belongsToMany(Account, { through: "account_user" });
-Account.belongsToMany(User, { through: "account_user" });
+User.belongsToMany(Account, { through: account_user });
+Account.belongsToMany(User, { through: account_user });
 
 // User.hasMany(Order, { foreignKey: 'userId' });
 // Order.belongsTo(User)
