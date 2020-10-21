@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { Link } from "react-router-native";
 import {
   View,
   Text,
@@ -10,7 +8,6 @@ import {
   ScrollView,
   Modal,
 } from "react-native";
-import { CreditCardInput } from "react-native-credit-card-input";
 
 import { connect } from "react-redux";
 import axios from "axios";
@@ -19,7 +16,17 @@ import env from "../../../env";
 import { styles as s } from "../../style/styleSheet";
 import colors from "../../style/colors";
 
-const DepositCard = ({ token, close }) => {
+import { CreditCardInput } from "react-native-credit-card-input";
+import {
+  Container,
+  Label,
+  Button,
+  DefaultButton,
+  Input,
+  QTLink,
+} from "../../Quantum";
+
+const DepositCard = ({ token, close, navigation }) => {
   const [form, setForm] = useState({
     amount: "",
     values: {},
@@ -131,52 +138,54 @@ const DepositCard = ({ token, close }) => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <View style={styles.amountInputWrapper}>
-          <Text style={styles.text}>Monto de la recarga:</Text>
-          <TextInput
-            //monto de la recarga
-            style={styles.amountInput}
-            onChangeText={(value) =>
-              setForm({
-                ...form,
-                amount: value,
-              })
-            }
-            textContentType="number"
-            keyboardType="number-pad"
-          />
-          <Text style={{ ...styles.text, fontSize: 15 }}>
-            El monto mínimo es de $100.
-          </Text>
-        </View>
-        <View style={styles.cardInputWrapper}>
-          <Text style={{ ...styles.text }}>Datos de tu tarjeta:</Text>
-          <CreditCardInput
-            inputStyle={styles.creditCardInputStyle}
-            requiresName={true}
-            onChange={onChange}
-            cardScale={0.9}
-            labelStyle={{ ...styles.text, ...styles.cardInputLabel }}
-            labels={{
-              number: "NÚMERO DE TARJETA",
-              expiry: "VENCIMIENTO",
-              cvc: "CVC",
-              name: "NOMBRE",
-            }}
-          />
-        </View>
-      
+      <View style={styles.amountInputWrapper}>
+        <Label style={styles.text} text="Monto de la recarga:" />
+        <Input
+          style={{ width: 100, alignSelf: "center", fontSize: 25 }}
+          keyboardType="number-pad"
+          onChangeText={(value) =>
+            setForm({
+              ...form,
+              amount: value,
+            })
+          }
+        />
+        <Label
+          style={{ ...styles.text, fontSize: 15 }}
+          text="El monto mínimo es de $100."
+        />
+      </View>
+      <View style={styles.cardInputWrapper}>
+        <Label style={styles.text} text="Datos de tu tarjeta:" />
+        <CreditCardInput
+          // inputStyle={styles.creditCardInputStyle}
+          requiresName={true}
+          onChange={onChange}
+          cardScale={0.7}
+          labelStyle={{color: "black", fontSize: 13}}
+          labels={{
+            number: "NÚMERO DE TARJETA",
+            expiry: "VENCIMIENTO",
+            cvc: "CVC",
+            name: "NOMBRE",
+          }}
+        />
+      </View>
 
       <View style={styles.submitWrapper}>
-        <Text style={styles.error}>{error}</Text>
-        <TouchableOpacity style={styles.confirmButton} onPress={onSubmit}>
-          <Text style={{ ...styles.text, ...styles.confirmButtonText }}>
-            CONFIRMAR
-          </Text>
-        </TouchableOpacity>
+        <Label style={styles.error} text={error}/>
+        <Button
+          style={{
+            width: 200,
+            height: 60,
+            alignSelf: "center",
+            justifyContent: "center",
+          }}
+          textStyle={{ fontSize: 25 }}
+          onPress={onSubmit}
+          label="Confirmar"
+        />
       </View>
-      </ScrollView>
       {/* MODAL DE RECARGA CON ÉXITO */}
       <Modal animationType="slide" transparent={true} visible={showModal}>
         <View style={styles.centeredView}>
@@ -200,7 +209,7 @@ const DepositCard = ({ token, close }) => {
               a tu cuenta.
             </Text>
             <Text style={{ ...styles.text, ...styles.successText }}>
-              Información del pago:{"\n"}
+              Información de la tarjeta:{"\n"}
               <Text
                 style={{
                   ...styles.text,
@@ -222,10 +231,8 @@ const DepositCard = ({ token, close }) => {
                 {hiddenInfo().name}
               </Text>
             </Text>
+            <Button label="Listo" onPress={navigation ? ()=>navigation.navigate("Dashboard") : close}/>
 
-            <TouchableOpacity onPress={close} style={styles.successButton}>
-              <Text style={{ ...styles.text }}>Listo</Text>
-            </TouchableOpacity>
           </View>
         </View>
       </Modal>
@@ -234,37 +241,29 @@ const DepositCard = ({ token, close }) => {
 };
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "yellow",
-    height: 500,
     justifyContent: "space-evenly",
-    paddingBottom: 10
+    alignItems: "center",
+    // backgroundColor: "red"
   },
   text: {
-    ...s.font,
+    // ...s.font,
     textAlign: "center",
     ...s.size(4.5),
-    ...s.textColor("white"),
-  },
-  scrollView: {
-    width: 400,
-    marginBottom: 0,
-    // backgroundColor: "#6b538a",
-    paddingHorizontal: 0,
-    //   paddingVertical: 7
+    // ...s.textColor("white"),
   },
   amountInputWrapper: {
-    marginBottom: 80,
+    marginBottom: 30,
   },
   amountInput: {
     ...s.input,
     width: 250,
     alignSelf: "center",
     fontSize: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
   creditCardInputStyle: {
     ...s.input,
-    padding: 5
+    padding: 5,
   },
   input: {
     ...s.input,
@@ -281,27 +280,15 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   submitWrapper: {
-    paddingTop: 5,
+    marginTop: 5,
   },
   error: {
     color: colors.pink,
     ...s.font,
-    fontSize: 20,
+    fontSize: 25,
     alignSelf: "center",
     textAlign: "center",
-  },
-  confirmButton: {
-    ...s.btn(),
-    width: 280,
-    height: 75,
-    justifyContent: "center",
-    alignSelf: "center",
-    marginTop: 25,
-    marginBottom: 10
-  },
-  confirmButtonText: {
-    fontSize: 35,
-    fontWeight: "800",
+    marginBottom: 20
   },
   centeredView: {
     flex: 1,
@@ -334,14 +321,14 @@ const styles = StyleSheet.create({
     marginTop: 25,
     paddingBottom: 10,
     justifyContent: "center",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-      token: state.auth.token
-  }
-}
+    token: state.auth.token,
+  };
+};
 
 export default connect(mapStateToProps)(DepositCard);
