@@ -1,6 +1,7 @@
 const { User, Account } = require("../../db");
 const axios = require("axios");
 const { MoleculerError } = require("moleculer").Errors;
+const LocalStorage = require("node-localstorage").LocalStorage;
 const recharge_code_storage = new LocalStorage("./recharge_code_storage");
 
 const generateCode = async () => {
