@@ -50,8 +50,12 @@ module.exports = async (ctx) => {
 		account_id: client.accounts[0].id,
 	});
 
-	client.accounts[0].balance = client.accounts[0].balance + amount;
-	await client.save();
+	const account = await Account.findOne({
+		where: { id: recharge.account_id },
+	});
+
+	account.balance = account.balance + amount;
+	await account.save();
 
 	return recharge;
 };
