@@ -29,14 +29,6 @@ function Home({navigation}) {
                     <QTLink to="Login" {...{navigation}} label="¿Necesitas ayuda?"/>
                 </View>
                 
-                
-                {/* Prueba */}
-                <View style={bn('col-12 my-5')}>
-                    <Button to="Graphics" {...{navigation}} label="Estadistica" />
-                </View>
-
-
-
             </View>
         </Container>
     );
