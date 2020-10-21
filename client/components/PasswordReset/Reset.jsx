@@ -16,123 +16,13 @@ import { Container, Logo, QTLink, Button, Input, bn, Alert, Label } from '../Qua
 import s from '../style/styleSheet';
 
 function Index({ email, passwordReset, navigation }) {
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            alignItems: "center",
-            justifyContent: "space-between",
-            paddingTop: StatusBar.currentHeight,
-        },
-        header: {
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            width: '100%',
-            height: StatusBar.currentHeight * 2,
-            backgroundColor: colors.orange,
-        },
-        headerText: {
-            fontSize: 30,
-        },
-        content: {
-            flex: 5,
-            paddingTop: 60,
-            backgroundColor: "rgb(34,31,59)",
-            width: '100%'
-        },
-        titleWrapper: {
-            // flex: 0.7,
-            justifyContent: "center",
-            alignItems: 'center',
-            alignSelf: 'center',
-            paddingTop: 10,
-            width: '90%',
-        },
-        title: {
-            alignSelf: "center",
-            color: colors.white,
-            fontSize: 35,
-            fontFamily: "Poppins_600SemiBold",
-            textAlign: 'center',
-        },
-        subTitle: {
-            color: 'white',
-            alignSelf: 'center',
-            fontSize: 20,
-            paddingTop: 10,
-            textAlign: 'center',
-
-        },
-        inputWrapper: {
-            // flex: 1.7,
-            alignItems: "center",
-            marginTop: 40,
-            marginBottom: 10,
-        },
-        inputs: {
-            // flex: 0.5,
-            justifyContent: "space-around",
-        },
-        input: {
-            fontFamily: "Poppins_400Regular_Italic",
-            color: "#221F3B",
-            backgroundColor: colors.white,
-            margin: 5,
-            height: 50,
-            width: 250,
-            borderBottomColor: colors.pink,
-            borderBottomWidth: 5,
-            borderRadius: 5,
-            fontSize: 20,
-            paddingLeft: 8,
-            paddingBottom: 5,
-        },
-        button: {
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: colors.pink,
-            alignSelf: "center",
-            width: 250,
-            height: 60,
-            borderRadius: 5,
-        },
-        buttonText: {
-            textAlign: "center",
-            padding: 20,
-            color: colors.white,
-            fontSize: 20,
-            fontFamily: "Poppins_600SemiBold",
-        },
-        backButton: {
-            backgroundColor: colors.pink,
-            height: 40,
-            width: 80,
-            borderRadius: 7,
-            alignSelf: "center",
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 20,
-        },
-        backButtonText: {
-            color: colors.white,
-            fontSize: 15,
-            fontFamily: "Poppins_400Regular",
-        },
-        error: {
-            color: colors.white,
-            fontSize: 30,
-
-        }
-    });
-
+    
     /* Dis se utiliza para desabilitar el boton y el input y tambien habilitar el spinner */
     const [dis, setDis] = useState(false);
     const [hidePassword, setHidePassword] = useState(true);
     const [password, setPassword] = useState();
     const [c_password, setC_Password] = useState();
     const [error, setError] = useState({ error: false, message: '' })
-    const history = useHistory();
     const { control, handleSubmit, errors } = useForm();
     //console.log('reset email', email);
     const onSubmit = data => {
@@ -160,7 +50,7 @@ function Index({ email, passwordReset, navigation }) {
                 });
         }
     };
-
+    
     return (
         <Container>
             <Logo />
@@ -178,8 +68,9 @@ function Index({ email, passwordReset, navigation }) {
                         placeholder="Código"
                         // autoFocus={true}
                         editable={!dis}
+                        keyboardType="number-pad"
                     />
-                )}
+                    )}
                 name="code"
                 rules={{ 
                     required: 'Ingrese el código'
@@ -201,19 +92,25 @@ function Index({ email, passwordReset, navigation }) {
                         value={value}
                         placeholder="Contraseña"
                         editable={!dis}
-                    />
+                        autoCapitalize="none"
+                        iconRight={hidePassword
+                          ? require("../../assets/eye.png")
+                          : require("../../assets/eye-slash.png")
+                        }
+                        onIconRightPress={()=>setHidePassword(!hidePassword)}
+                        />
                 )}
                 name="newPassword"
                 rules={{ required: 'Ingresa una nueva contraseña' }}
                 defaultValue=""
-            />
+                />
             {errors.newPassword && <Label type='error' text={errors.newPassword.message} />}
             <Label text='Repetir Nueva Contraseña' />
             <Controller
                 control={control}
                 render={({ onChange, onBlur, value }) => (
                     <Input
-                        secureTextEntry={hidePassword}
+                        secureTextEntry={true}
                         onBlur={onBlur}
                         onChangeText={value => {
                             onChange(value)
@@ -222,6 +119,7 @@ function Index({ email, passwordReset, navigation }) {
                         value={value}
                         placeholder="Confirmar Contraseña"
                         editable={!dis}
+                        autoCapitalize="none"
                     />
                 )}
                 name="confirmaPassword"
@@ -251,4 +149,113 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-between",
+        paddingTop: StatusBar.currentHeight,
+    },
+    header: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        width: '100%',
+        height: StatusBar.currentHeight * 2,
+        backgroundColor: colors.orange,
+    },
+    headerText: {
+        fontSize: 30,
+    },
+    content: {
+        flex: 5,
+        paddingTop: 60,
+        backgroundColor: "rgb(34,31,59)",
+        width: '100%'
+    },
+    titleWrapper: {
+        // flex: 0.7,
+        justifyContent: "center",
+        alignItems: 'center',
+        alignSelf: 'center',
+        paddingTop: 10,
+        width: '90%',
+    },
+    title: {
+        alignSelf: "center",
+        color: colors.white,
+        fontSize: 35,
+        fontFamily: "Poppins_600SemiBold",
+        textAlign: 'center',
+    },
+    subTitle: {
+        color: 'white',
+        alignSelf: 'center',
+        fontSize: 20,
+        paddingTop: 10,
+        textAlign: 'center',
+
+    },
+    inputWrapper: {
+        // flex: 1.7,
+        alignItems: "center",
+        marginTop: 40,
+        marginBottom: 10,
+    },
+    inputs: {
+        // flex: 0.5,
+        justifyContent: "space-around",
+    },
+    input: {
+        fontFamily: "Poppins_400Regular_Italic",
+        color: "#221F3B",
+        backgroundColor: colors.white,
+        margin: 5,
+        height: 50,
+        width: 250,
+        borderBottomColor: colors.pink,
+        borderBottomWidth: 5,
+        borderRadius: 5,
+        fontSize: 20,
+        paddingLeft: 8,
+        paddingBottom: 5,
+    },
+    button: {
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: colors.pink,
+        alignSelf: "center",
+        width: 250,
+        height: 60,
+        borderRadius: 5,
+    },
+    buttonText: {
+        textAlign: "center",
+        padding: 20,
+        color: colors.white,
+        fontSize: 20,
+        fontFamily: "Poppins_600SemiBold",
+    },
+    backButton: {
+        backgroundColor: colors.pink,
+        height: 40,
+        width: 80,
+        borderRadius: 7,
+        alignSelf: "center",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 20,
+    },
+    backButtonText: {
+        color: colors.white,
+        fontSize: 15,
+        fontFamily: "Poppins_400Regular",
+    },
+    error: {
+        color: colors.white,
+        fontSize: 30,
+
+    }
+});
 export default connect(mapStateToProps, mapDispatchToProps)(Index);
