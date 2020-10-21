@@ -8,9 +8,6 @@ import 'react-native-gesture-handler';
 import AppNavigation from './components/IndexNav/AppNavigation';
 import { NavigationContainer } from '@react-navigation/native';
 
-//For Light/Dark Mode
-import { AppearanceProvider } from 'react-native-appearance';
-
 export default function App() {
   const screenConfig = {
     options: {
@@ -19,7 +16,6 @@ export default function App() {
   }
   return (
     <Provider store={store}>
-      <StatusBar hidden={true} />
       <NavigationContainer>
         {/* AppNavigation contiene la lógica de navegación */}
         <AppNavigation />
