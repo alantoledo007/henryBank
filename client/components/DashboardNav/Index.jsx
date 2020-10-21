@@ -5,7 +5,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { StatusBar } from 'expo-status-bar';
 
-import { Menu, DashboardRoutes, ContactsRoute } from "./Routes";
+import { Menu } from "./Routes";
 
 export default function Index() {
   const MenuStack = createDrawerNavigator();
