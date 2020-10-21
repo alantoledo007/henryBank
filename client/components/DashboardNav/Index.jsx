@@ -3,8 +3,6 @@ import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import { StatusBar } from 'expo-status-bar';
-
 import { Menu } from "./Routes";
 
 export default function Index() {

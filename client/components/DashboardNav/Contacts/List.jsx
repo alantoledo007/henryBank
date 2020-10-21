@@ -13,6 +13,7 @@ import colors from "../../style/colors";
 import IonIcon from "react-native-vector-icons/Ionicons";
 
 import Contact from "./Contact";
+import { Label } from "../../Quantum";
 
 export default function List({ contacts, isFetching, token, getContacts }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -49,27 +50,16 @@ export default function List({ contacts, isFetching, token, getContacts }) {
                   }}
                 ></Image>
                 <View>
+                    <Label text={` ${contact.nickname.toLowerCase()}`} />
                   <Text
                     style={{
-                      ...s.textColor(colors.white),
-                      ...s.size(3.5),
-                      ...s.ml(4),
-                      ...s.mb(1),
-                      fontWeight: "bold",
-                      textTransform: "capitalize",
+                      ...s.textColor('black'),
+                      ...s.size(2),
+                      ...s.ml(1),
                     }}
                   >
-                    {" "}
-                    {contact.nickname.toLowerCase()}{" "}
-                  </Text>
-                  <Text
-                    style={{
-                      ...s.textColor(colors.white),
-                      ...s.size(2.5),
-                      ...s.ml(4),
-                    }}
-                  >
-                    <IonIcon name="ios-mail" /> {contact.User.email}{" "}
+                    <IonIcon name="ios-mail" />
+                    <Label style={{...s.size(2.5)}}  text={`${contact.User.email}`} />
                   </Text>
                 </View>
                 <IonIcon
@@ -80,7 +70,7 @@ export default function List({ contacts, isFetching, token, getContacts }) {
                   }}
                   name="ios-arrow-forward"
                   size={30}
-                  color={colors.white}
+                  color={'black'}
                 />
               </View>
             </TouchableOpacity>

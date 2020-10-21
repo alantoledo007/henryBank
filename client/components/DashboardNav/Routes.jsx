@@ -13,10 +13,12 @@ import Dash from "./Dash";
 import Deposit from "./Deposit/Deposit";
 import SendMoney from "./SendMoney";
 import Contacts from "./Contacts/Index";
+import DrawerContent from "./DrawerContent";
 
 // UI
 import { Button, hbn } from '../Quantum';
 import IonIcon from "react-native-vector-icons/Ionicons";
+import Logout from "./Logout";
 
 
 export const navigationOptionsHeader = ({ navigation }) => {
@@ -42,20 +44,28 @@ export const navigationOptionsHeader = ({ navigation }) => {
     };
 
 }
+
+
 export function Menu() {
     const MenuStack = createDrawerNavigator();
     return (
-        <MenuStack.Navigator
-            initialRouteName="Dashboard"           
-        >
+        <MenuStack.Navigator drawerContent={ props => <DrawerContent {...props}/>} >
             <MenuStack.Screen name="Dashboard" component={DashboardRoutes} />
             <MenuStack.Screen name="Recarga" component={Deposit} />
             <MenuStack.Screen name="Transferencia" component={SendMoney} />
-            <MenuStack.Screen name="Contactos" component={Contacts} />
+            <MenuStack.Screen name="Contactos" component={ContactRoute} />
+            <MenuStack.Screen name="Logout" component={Logout} />
         </MenuStack.Navigator>
     );
 }
-
+export const ContactRoute = () => {
+    const ContactStackNavigator = createStackNavigator();
+    return (
+        <ContactStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+            <ContactStackNavigator.Screen name='Contacts' component={Contacts} />
+        </ContactStackNavigator.Navigator>
+    )
+}
 export const DashboardRoutes = (props) => {
     const DashStack = createStackNavigator();
     return (
