@@ -28,10 +28,6 @@ export function emailVerify(data){
         .then(res => {
             dispatch({type:EMAIL_VERIFIED, payload: res.data});
         })
-        .catch(err => {
-            // console.log(err).response.status;
-            dispatch({type: ERROR_EMAIL_VERIFIER, payload: err.response});
-        })
     };
 }
 

@@ -11,7 +11,6 @@ import {
   Modal,
 } from "react-native";
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-native";
 import { useForm, Controller } from "react-hook-form";
 import {
   sendEmailVerifier,
@@ -33,14 +32,14 @@ import {
   bn,
   Alert,
   Label,
+  toastConfig
 } from "./Quantum";
+import Toast from 'react-native-toast-message';
 
 function EmailVerifier({
   email,
-  error,
   emailVerify,
-  sendEmailVerifier,
-  navigation,
+  sendEmailVerifier
 }) {
   const { control, handleSubmit, errors } = useForm();
 
@@ -68,10 +67,38 @@ function EmailVerifier({
           loading: false,
         });
       })
-      .catch(() => {
+      .catch((err) => {
         setState({
           ...state,
           loading: false,
+        });
+        console.log(err.response.data);
+        if(err.response?.data?.code === 401){
+          return Toast.show({
+            type: "error",
+            text1: "Código incorrecto",
+            text2: "Por favor, verifique el código ingresado."
+          })
+        }
+        if(err.response?.data?.code === 422){
+          return Toast.show({
+            type: "error",
+            text1: "Datos incorrectos",
+            text2: "Uno o más campos no contienen información valida. Por favor verifique e intente nuevamente."
+          })
+        }
+        if(err.response?.data?.code === 500){
+          return Toast.show({
+            type: "error",
+            text1: "Error interno",
+            text2: "Ocurrió un error interno y nuestro equipo ya está trabajando para solucionarlo."
+          })
+        }
+
+        return Toast.show({
+          type: "error",
+          text1: "Error de conexión",
+          text2: "Por favor, verifique su conexión a internet e intente nuevamente, si el problema persiste ponganse en contacto con el equipo técnico"
         });
       });
   };
@@ -89,7 +116,7 @@ function EmailVerifier({
           loading: false,
         });
       })
-      .catch(() => {
+      .catch((err) => {
         setState({
           ...state,
           loading: false,
@@ -107,33 +134,10 @@ function EmailVerifier({
   return (
     <Container>
       <Logo />
-      <View style={bn("row")}>
-          <Alert content="Verifique su dirección de correo electrónico" />
-      </View>
-
-      {error && (
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={true}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
-        >
-          <View style={{ ...s.bg("#fff") }}>
-            <Text>{error.status}</Text>
-          </View>
-        </Modal>
-      )}
+      <Alert style={bn('mb-4')} content="Verificación de correo electrónico" />
 
       {state.needCode && (
-        <Text style={{ ...s.mb(4), ...s.textWhite }}>
-          Te enviaremos un nuevo código.
-          <QTLink
-            onPress={switchNeedCode}
-            label="¿Ya tienes un código? ESTA ROTO ESTE LINK"
-          />
-        </Text>
+          <Label text="Te enviaremos un nuevo código." />
       )}
 
       {(email === null || state.needCode) && (
@@ -141,7 +145,7 @@ function EmailVerifier({
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
-              <TextInput
+              <Input
                 placeholder="Correo electrónico"
                 keyboardType="email-address"
                 onBlur={onBlur}
@@ -160,6 +164,11 @@ function EmailVerifier({
               maxLength: 191,
             }}
             defaultValue={email}
+          />
+          <QTLink
+            style={bn('text-left')}
+            onPress={switchNeedCode}
+            label="¿Ya tienes un código?"
           />
           {errors.email?.type === "required" && (
             <Text style={s.textColor("red")}>
@@ -180,13 +189,8 @@ function EmailVerifier({
       )}
 
       {!state.needCode && (
-        <View style={s.mb(4)}>
+        <View style={bn('mb-4')}>
           <Label style={{...bn('mt-2')}} text="Te enviamos un correo electrónico con un código de verificación"/>
-          {/* <Text style={{ ...s.mb(4), ...s.textWhite }}>
-          Te enviamos un correo electrónico con
-          <Text style={{ fontWeight: "bold" }}> un código de verificación</Text>
-          .
-        </Text> */}
           <Controller
             control={control}
             render={({ onChange, onBlur, value }) => (
@@ -209,18 +213,17 @@ function EmailVerifier({
             }}
             defaultValue={null}
           />
-          <QTLink
-            onPress={switchNeedCode}
-            label="¿Aún no te llegó el código? ESTA ROTO ESTE LINK"
-          />
           {errors.code?.type === "required" && (
-            <Text style={s.textColor("red")}>Debes ingresar el código</Text>
+            <Label type="error" text="Debes ingresar el código" />
           )}
           {errors.code?.type === "pattern" && (
-            <Text style={s.textColor("red")}>
-              El código ingresado no es válido
-            </Text>
+            <Label type="error" text="El código ingresado no es válido" />
           )}
+          <QTLink
+            style={bn('text-left')}
+            onPress={switchNeedCode}
+            label="¿Aún no te llegó el código?"
+          />
         </View>
       )}
 
@@ -233,18 +236,13 @@ function EmailVerifier({
           />
         )}
         {state.needCode && (
-          <Link
+          <Button
             onPress={handleSubmit(sendCode)}
-            component={TouchableOpacity}
-            style={s.btn()}
-          >
-            <Text style={{ fontWeight: "bold", ...s.textColor("white") }}>
-              {!state.loading && "REENVIAR CODIGO"}
-              {state.loading && "CARGANDO..."}
-            </Text>
-          </Link>
+            label={!state.loading ? "REENVIAR CODIGO" : "CARGANDO..."}
+          />
         )}
       </View>
+      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
     </Container>
   );
 }
@@ -252,7 +250,6 @@ function EmailVerifier({
 function mapStateToProps(state) {
   return {
     email: state.auth.user.email,
-    error: state.email_verifier.error,
     sent: state.email_verifier.sent,
   };
 }
