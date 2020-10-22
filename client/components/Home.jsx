@@ -28,6 +28,7 @@ function Home({navigation}) {
                 <View style={bn('col-12 mt-5')}>
                     <QTLink to="Login" {...{navigation}} label="¿Necesitas ayuda?"/>
                 </View>
+                
             </View>
         </Container>
     );

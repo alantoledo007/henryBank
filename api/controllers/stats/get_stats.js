@@ -7,8 +7,9 @@ module.exports = async (ctx) => {
 	const client_id = ctx.meta.user.id;
 
 	const client = await User.findOne({
-		where: { id: client_id, include: Account },
-	});
+		where: { id: client_id}, 
+		include:{model:Account, through:'account_user',as:'accounts'}
+		});
 
 	let transactions;
 	let data;

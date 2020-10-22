@@ -43,11 +43,14 @@ module.exports = async (ctx)=>{
         description:description,
         amount: 0-amount,
         account_id:usuario_emisor.accounts[0].id
-    }).then((res)=>{
+    }).then( async (res)=>{
         
-        usuario_emisor.accounts[0].update({
-            balance:usuario_emisor.accounts[0].balance-amount
-        })
+        const emisor_account = await Account.findOne({
+            where: { id: usuario_emisor.accounts[0].id },
+        });
+    
+        emisor_account.balance = emisor_account.balance - amount;
+        await emisor_account.save();
 
 
         Transaction.create({
@@ -55,11 +58,14 @@ module.exports = async (ctx)=>{
             description:description,
             amount,
             account_id:usuario_receptor.accounts[0].id
-        }).then(()=>{
+        }).then( async ()=>{
             
-            usuario_receptor.accounts[0].update({
-                balance:usuario_receptor.accounts[0].balance+amount
-            })
+            const receptor_account = await Account.findOne({
+                where: { id: usuario_receptor.accounts[0].id },
+            });
+        
+            receptor_account.balance = receptor_account.balance + amount;
+            await receptor_account.save();
 
         })
         
