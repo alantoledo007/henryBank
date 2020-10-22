@@ -12,10 +12,15 @@ import {Dimensions } from "react-native";
 import Deposit from './Deposit/Deposit';
 import SendMoney from './SendMoney';
 import { useHeaderHeight } from '@react-navigation/stack';
+import { AppLoading } from 'expo'
 
 // UI
 import { bn, Container, hbn, Label } from '../Quantum';
-
+import {
+    useFonts,
+    Poppins_600SemiBold,
+  } from '@expo-google-fonts/poppins';
+  
 function Dash({user, navigation}){
     const headerHeight = useHeaderHeight();
     const [showDeposit, setShowDeposit] = useState(false);
@@ -58,6 +63,10 @@ function Dash({user, navigation}){
             }
         })
     },[state.load])
+    const [fontsLoaded] = useFonts({
+        Poppins_600SemiBold
+    })
+    if(!fontsLoaded) return <AppLoading />
     return (
         <>
             <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
@@ -108,10 +117,10 @@ function Dash({user, navigation}){
                 </View>
 
                 <View style={{ ...styles.row,flexWrap:'wrap', marginBottom:20 }}>
-                    <Link style={styles.panelButton} component={TouchableOpacity} to="/">
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>navigation.navigate("Transacciones")}>
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/transactions.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Movimientos</Text>
-                    </Link>
+                    </TouchableOpacity>
                     <Link style={styles.panelButton} component={TouchableOpacity} to="/">
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/account.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis datos</Text>

@@ -15,6 +15,7 @@ import SendMoney from "./SendMoney";
 import Contacts from "./Contacts/Index";
 import DrawerContent from "./DrawerContent";
 import Graphics from "./graphics";
+import Transactions from './Transactions/Transactions';
 
 // UI
 import { Button, hbn } from '../Quantum';
@@ -62,6 +63,7 @@ export function Menu() {
             <MenuStack.Screen name="Transferencia" component={SendMoneyRoute} />
             <MenuStack.Screen name="Contactos" component={ContactRoute} />
             <MenuStack.Screen name="Logout" component={Logout} />
+            <MenuStack.Screen name="Transacciones" component={Transactions}/>
             <MenuStack.Screen name="Estadísticas" component={GraphicsRoute} />
         </MenuStack.Navigator>
     );
