@@ -80,6 +80,7 @@ function DrawerContent(props) {
                                     />
                                 )}
                                 label='Recarga'
+                                onPress={ () => navigation.navigate('Recarga')}
                             />
                             <DrawerItem
                                 icon={({ color, size }) => (
@@ -90,6 +91,7 @@ function DrawerContent(props) {
                                     />
                                 )}
                                 label='Transferencia'
+                                onPress={ () => navigation.navigate('Transferencia')}
                             />
                         </Drawer.Section>
                         <Drawer.Section title='Preferencias'>

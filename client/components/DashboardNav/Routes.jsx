@@ -21,10 +21,11 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import Logout from "./Logout";
 
 
-export const navigationOptionsHeader = ({ navigation }) => {
+export const navigationOptionsHeader = ({ title, navigation,  }) => {
     return {
         headerShown: true,
-        title: false,
+        title: title,
+        headerTitleAlign: "center",
         headerLeft: () => (
             <Button
                 color='light'
@@ -51,28 +52,46 @@ export function Menu() {
     return (
         <MenuStack.Navigator drawerContent={ props => <DrawerContent {...props}/>} >
             <MenuStack.Screen name="Dashboard" component={DashboardRoutes} />
-            <MenuStack.Screen name="Recarga" component={Deposit} />
-            <MenuStack.Screen name="Transferencia" component={SendMoney} />
+            <MenuStack.Screen name="Recarga" component={DepositRoute} />
+            <MenuStack.Screen name="Transferencia" component={SendMoneyRoute} />
             <MenuStack.Screen name="Contactos" component={ContactRoute} />
             <MenuStack.Screen name="Logout" component={Logout} />
         </MenuStack.Navigator>
     );
 }
+export const DepositRoute = () => {
+    const DepositoStackNavigator = createStackNavigator();
+    return (
+        <DepositoStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+            <DepositoStackNavigator.Screen name='Recarga' component={Deposit} />
+        </DepositoStackNavigator.Navigator>
+    )
+}
+export const SendMoneyRoute = () => {
+    const SendMoneyStackNavigator = createStackNavigator();
+    return (
+        <SendMoneyStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+            <SendMoneyStackNavigator.Screen name='Transferencia' component={SendMoney} />
+        </SendMoneyStackNavigator.Navigator>
+    )
+}
+
 export const ContactRoute = () => {
     const ContactStackNavigator = createStackNavigator();
     return (
         <ContactStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
-            <ContactStackNavigator.Screen name='Contacts' component={Contacts} />
+            <ContactStackNavigator.Screen name='Contactos' component={Contacts} />
         </ContactStackNavigator.Navigator>
     )
 }
+
 export const DashboardRoutes = (props) => {
     const DashStack = createStackNavigator();
     return (
         <DashStack.Navigator
         screenOptions={navigationOptionsHeader}
         >
-            <DashStack.Screen component={ContactsRoute} name="Dashboard" />
+            <DashStack.Screen component={ContactsRoute} name="Panel" />
             {/* <DashStack.Screen component={Contacts} name="Contactos" /> */}
         </DashStack.Navigator>
     );

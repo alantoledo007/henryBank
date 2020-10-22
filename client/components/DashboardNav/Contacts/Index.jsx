@@ -100,14 +100,14 @@ function Index(props) {
 
             {/* Modal para agregar contactos */}
             <Modal
-                transparent={true}
+                transparent={false}
                 animationType="slide"
                 visible={modalVisible}
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}
             >
-                <Container style={{ ...s.mt(20), margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.7 }} >
+                <View style={{ ...s.mt(20), margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.7 }} >
                     <View >
                         <Label text='Alias de Contacto *' style={{...s.size(3)}} />
                         <Controller
@@ -157,7 +157,7 @@ function Index(props) {
                         <Label text='(*Campos obligatorios)' style={s.size(2.5)} />
                         </View>
                     </View>
-                </Container>
+                </View>
             </Modal>
         </Container>
     )
