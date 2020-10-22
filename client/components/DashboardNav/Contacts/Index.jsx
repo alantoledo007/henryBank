@@ -100,14 +100,14 @@ function Index(props) {
 
             {/* Modal para agregar contactos */}
             <Modal
-                transparent={false}
+                transparent={true}
                 animationType="slide"
                 visible={modalVisible}
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}
             >
-                <View style={{ ...s.mt(20), margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.7 }} >
+                <Container style={{ ...s.mt(20), margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.7 }} >
                     <View >
                         <Label text='Alias de Contacto *' style={{...s.size(3)}} />
                         <Controller
@@ -124,15 +124,16 @@ function Index(props) {
                                 />
                             )}
                             name="nickname"
-                            rules={{ required: true }}
+                            rules={{ required: "El Alias es obligatorio" }}
                             defaultValue=""
                         />
+                        {errors.nickname && <Label text={errors.nickname.message} type='error' />}
+                        
                         <Label text='Email *' style={{...s.size(3)}} />
                         <Controller
                             control={control}
                             render={({ onChange, onBlur, value }) => (
                                 <Input
-                                    style={{ ...s.mt(4), ...s.mb(4) }}
                                     onChangeText={(value) => onChange(value)}
                                     onBlur={onBlur}
                                     value={value}
@@ -143,21 +144,27 @@ function Index(props) {
                                 />
                             )}
                             name="email"
-                            rules={{ required: true }}
+                            rules={{ 
+                                required: "El email es obligatorio",
+                                pattern: {
+                                    value: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                                    message: "Dirección de correo inválida",
+                                  }, 
+                            }}
                             defaultValue=""
                         />
-                        {errors && <Text>{errors.message}</Text>}
+                        {errors.email && <Label text={errors.email.message} type='error' />}
                         <ActivityIndicator animating={dis} size="large" color={colors.pink} />
                         <Button label='Agregar' 
                             onPress={handleSubmit(onSubmit)}
                             disabled={dis}/>
                         <View>
-                            <Label style={s.textCenter} text='Si el usuario no tiene Quantum se le enviara una invitación' />
+                            <Label style={{...s.textCenter, fontSize: 15 }} text='Si el usuario no tiene Quantum se le enviara una invitación' />
                         
                         <Label text='(*Campos obligatorios)' style={s.size(2.5)} />
                         </View>
                     </View>
-                </View>
+                </Container>
             </Modal>
         </Container>
     )
