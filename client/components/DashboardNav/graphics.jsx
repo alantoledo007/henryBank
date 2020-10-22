@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 //Estilo
 import {
     LineChart,
+    BarChart
   } from "react-native-chart-kit";
 import {Container, Logo, bootnative, QTLink, Button, Alert, hbn, Label, Input, bn, defaultColors} from '../Quantum';
 import { useHeaderHeight } from '@react-navigation/stack';
@@ -119,7 +120,7 @@ const Graphics = (props) => {
                 
                     <ScrollView horizontal={true} 
                         style={hbn('bg-stats borderRadius-5',theme)}>
-                        <LineChart
+                        <BarChart
                             renderDotContent={({x, y, index}) => <Label style={{position: 'absolute', fontSize:12, top: y-25, left: x-10}} text={stats.daily.data[index] > 0? stats.daily.data[index] : ''} />}
                             data={{ 
                                 labels:stats.daily.labels,
@@ -151,7 +152,7 @@ const Graphics = (props) => {
 
                 { week && <ScrollView horizontal={true} 
                         style={hbn('bg-stats borderRadius-5',theme)}>
-                        <LineChart
+                        <BarChart
                             renderDotContent={({x, y, index}) => <Label style={{position: 'absolute', fontSize:12, top: y-25, left: x-10}} text={stats.weekly.data[index] > 0? stats.weekly.data[index] : ''} />}
                             data={{ 
                                 labels:stats.weekly.labels,
@@ -182,7 +183,7 @@ const Graphics = (props) => {
 
                 { month && <ScrollView horizontal={true} 
                         style={hbn('bg-stats borderRadius-5',theme)}>
-                        <LineChart
+                        <BarChart
                             renderDotContent={({x, y, index}) => <Label style={{position: 'absolute', fontSize:12, top: y-25, left: x-10}} text={stats.monthly.data[index] > 0? stats.monthly.data[index] : ''} />}
                             data={{ 
                                 labels:stats.monthly.labels,

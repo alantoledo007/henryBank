@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import validator from "email-validator";
+import {updateBalance} from '../../redux/actions/transactions';
 
 //redux
 import { connect } from "react-redux";
@@ -27,7 +28,7 @@ import { Container, Label, Input, Alert, toastConfig } from "../Quantum";
 import Toast from 'react-native-toast-message';
 
 const SendMoney = (props) => {
-  const { token, balance, close, navigation } = props;
+  const { token, balance, close, navigation, updateBalance } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState("Contactos");
@@ -116,6 +117,7 @@ const SendMoney = (props) => {
         },
       })
       .then(async (response) => {
+        updateBalance(response.data.balance);
         return await Toast.show({
           type: "success",
           text1: "Transeferencia completa",
@@ -334,15 +336,17 @@ const styles = StyleSheet.create({
   },
 });
 
-function mapDispatchToProps(state) {
+function mapStateToProps(state) {
   return {
     token: state.auth.token,
     balance: state.auth.user.balance,
   };
 }
 
-function mapStateToProps() {
-  return {};
+function mapDispatchToProps(dispatch) {
+  return {
+    updateBalance: balance => dispatch(updateBalance(balance))
+  };
 }
 
-export default connect(mapDispatchToProps, mapStateToProps)(SendMoney);
+export default connect(mapStateToProps, mapDispatchToProps)(SendMoney);

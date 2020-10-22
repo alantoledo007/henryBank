@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Modal, ActivityIndicator, ScrollView } from "react-native";
+import { Modal, Dimensions, StatusBar, ScrollView, View} from "react-native";
 import { connect } from "react-redux";
 import { getTransactions } from "../../../redux/actions/transactions";
 
-import { Container, Label, Alert, Button } from "../../Quantum";
+import { Container, Label, Alert, Button, bn, hbn } from "../../Quantum";
 import Transaction from "./Transaction";
 import List from "./List";
-import s from "../../style/styleSheet";
+import { useHeaderHeight } from '@react-navigation/stack';
 
 export function Transactions({
   user,
@@ -15,6 +15,7 @@ export function Transactions({
   isFetching,
   transactions,
 }) {
+  const headerHeight = useHeaderHeight();
   const { id, name, surname, avatar } = user;
   const [state, setState] = useState({
     user: {
@@ -53,19 +54,15 @@ export function Transactions({
     });
   }, []);
   return (
-    <Container>
-      {/* <Label style={{ fontSize: 35 }} text="Mis movimientos" /> */}
+    <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
       <Alert content="Mis movimientos" />
-      {/* <ActivityIndicator
-        animating={isFetching}
-        size="large"
-        color={colors.pink}
-    /> */}
-      {/* <ScrollView  >*/}
 
+
+      <ScrollView style={bn('my-2')}>
         <List transactions={transactions} select={select} isFetching={isFetching} />
-      {/* </ScrollView> */}
-      <Button style={{width: 190, alignSelf: "center"}} onPress={()=>getTransactions(token)} label="Recargar"/>
+      </ScrollView>
+
+      <Button outline="primary" color="transparent" style={{width:120,alignSelf: "center",...bn('my-1')}} onPress={()=>getTransactions(token)} label="Actualizar"/>
       <Modal
         visible={show}
         animationType="slide"

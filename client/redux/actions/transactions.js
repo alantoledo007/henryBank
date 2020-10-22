@@ -3,6 +3,14 @@ import env from '../../env';
 
 const RECEIVE_TRANSACTIONS = 'RECEIVE_TRANSACTIONS';
 const REQUEST_TRANSACTIONS = 'REQUEST_TRANSACTIONS';
+export const UPDATE_BALANCE = "UPDATE_BALANCE";
+
+export const updateBalance = (balace) => {
+    return {
+        type: UPDATE_BALANCE,
+        payload: balace
+    }
+}
 
 export const getTransactions = token => {
     return dispatch => {

@@ -18,25 +18,27 @@ import Graphics from "./graphics";
 import Transactions from './Transactions/Transactions';
 
 // UI
-import { Button, hbn } from '../Quantum';
+import { Button, hbn, darkColors, lightColors, defaultColors} from '../Quantum';
 import IonIcon from "react-native-vector-icons/Ionicons";
 import Logout from "./Logout";
 
 
-export const navigationOptionsHeader = ({ title, navigation,  }) => {
-    const theme = useColorScheme();
-    return {
+export const navigationOptionsHeader = (theme = 'light') => {
+    return ({ title, navigation}) => {return {
         headerShown: true,
         title: title,
         headerTitleAlign: "center",
         headerLeft: () => (
             <Button
-                color={theme === 'dark' ? '#353535':'#f0f0f0'}
+                outline={theme === 'dark' ? '#fff':'#f0f0f0'}
+                color="transparent"
                 textStyle={
-                    hbn('text-primary')
+                    {color: (theme === 'dark' ? '#fff': defaultColors.primary)}
                 }
                 style={{
                     marginLeft: 15,
+                    paddingVertical: 8,
+                    borderColor: theme === 'dark' ? 'rgba(255,255,255, .2)':'#f0f0f0'
                 }}
                 onPress={() => navigation.toggleDrawer()}
                 label={<IonIcon name="ios-menu" style={{ fontSize: 20 }} />}
@@ -49,7 +51,7 @@ export const navigationOptionsHeader = ({ title, navigation,  }) => {
         gestureEnabled: true,
         gestureDirection: "horizontal",
         ...TransitionPresets.SlideFromRightIOS,
-    };
+    }};
 
 }
 
@@ -63,7 +65,7 @@ export function Menu() {
             <MenuStack.Screen name="Transferencia" component={SendMoneyRoute} />
             <MenuStack.Screen name="Contactos" component={ContactRoute} />
             <MenuStack.Screen name="Logout" component={Logout} />
-            <MenuStack.Screen name="Transacciones" component={Transactions}/>
+            <MenuStack.Screen name="Transferencias" component={TransactionsRoute}/>
             <MenuStack.Screen name="Estadísticas" component={GraphicsRoute} />
         </MenuStack.Navigator>
     );
@@ -71,7 +73,7 @@ export function Menu() {
 export const DepositRoute = () => {
     const DepositoStackNavigator = createStackNavigator();
     return (
-        <DepositoStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+        <DepositoStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
             <DepositoStackNavigator.Screen name='Recarga' component={Deposit} />
         </DepositoStackNavigator.Navigator>
     )
@@ -79,8 +81,9 @@ export const DepositRoute = () => {
 
 export const GraphicsRoute = () => {
     const GraphicsStackNavigator = createStackNavigator();
+    const theme = useColorScheme();
     return (
-        <GraphicsStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+        <GraphicsStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
             <GraphicsStackNavigator.Screen name='Estadísticas' component={Graphics} />
         </GraphicsStackNavigator.Navigator>
     )
@@ -88,8 +91,9 @@ export const GraphicsRoute = () => {
 
 export const SendMoneyRoute = () => {
     const SendMoneyStackNavigator = createStackNavigator();
+    const theme = useColorScheme();
     return (
-        <SendMoneyStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+        <SendMoneyStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
             <SendMoneyStackNavigator.Screen name='Transferencia' component={SendMoney} />
             <SendMoneyStackNavigator.Screen name='Dashboard' component={Dash} />
         </SendMoneyStackNavigator.Navigator>
@@ -98,27 +102,42 @@ export const SendMoneyRoute = () => {
 
 export const ContactRoute = () => {
     const ContactStackNavigator = createStackNavigator();
+    const theme = useColorScheme();
     return (
-        <ContactStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+        <ContactStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
             <ContactStackNavigator.Screen name='Contactos' component={Contacts} />
         </ContactStackNavigator.Navigator>
     )
 }
 
+export const TransactionsRoute = () => {
+    const TransactionsStackNavigator = createStackNavigator();
+    const theme = useColorScheme();
+    return (
+        <TransactionsStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
+            <TransactionsStackNavigator.Screen name='Transferencias' component={Transactions} />
+        </TransactionsStackNavigator.Navigator>
+    )
+}
+
 export const DashboardRoutes = (props) => {
     const DashStack = createStackNavigator();
+    const theme = useColorScheme();
     return (
         <DashStack.Navigator
-        screenOptions={navigationOptionsHeader}
+        screenOptions={navigationOptionsHeader(theme)}
         >
             <DashStack.Screen component={Dash} name="Panel" />
-            {/* <DashStack.Screen component={Contacts} name="Contactos" /> */}
+            <DashStack.Screen component={Graphics} name="Estadísticas" />
+            <DashStack.Screen component={Transactions} name="Transacciones" />
+            <DashStack.Screen component={Contacts} name="Contactos" />
         </DashStack.Navigator>
     );
 };
 
 export const ContactsRoute = (props) => {
     const ContactsTabStack = createMaterialTopTabNavigator();
+    const theme = useColorScheme();
     return (
         <ContactsTabStack.Navigator
             tabBarPosition="bottom"

@@ -6,10 +6,11 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { Container, Label, Alert } from "../../Quantum";
+import { useColorScheme } from "react-native-appearance";
+import { Container, Label, Alert, bn, hbn, defaultColors, Button } from "../../Quantum";
 import colors from "../../style/colors";
-import { LinearGradient } from "expo-linear-gradient";
 export default function Transaction({ data, close }) {
+  const theme = useColorScheme();
   console.log(data);
   const { title, description, amount, createdAt } = data;
 
@@ -21,29 +22,28 @@ export default function Transaction({ data, close }) {
   const income = title.split(" ")[0] === "Recargaste";
 
   return (
-    <View style={styles.container}>
-      <View style={styles.modal}>
+    <View style={{...styles.container }}>
+      <View style={{
+          ...styles.modal,
+          ...theme === 'dark' ? hbn('bg-stats','dark') : hbn('bg-stats'),
+          ...bn('borderRadius-5')
+        }}>
         
-        <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
-          <TouchableWithoutFeedback onPress={close}>
-            <Image
-              style={{ height: 15 }}
-              source={require("../../../assets/close-pink.png")}
+          <Button onPress={close}
+            style={{...bn('w-100 py-1 bg-red px-1 w-30'),position:'absolute', top:-5,right:-5 }}
+            textStyle={{ color:'#fff' }}
+            label="x"
             />
-          </TouchableWithoutFeedback>
-        </View>
-
-        <Label style={{ ...styles.text, fontSize: 25 }} text={title} />
+        <Label style={bn('h3')} text={title} />
         <View>
-          <Label
-            style={{ ...styles.text, fontSize: 15 }}
-            text={income ? "Descripción:" : "Mensaje:"}
-          />
-          <Label style={{ ...styles.text }} text={description} />
+          {description.length > 0 && <Label
+            style={bn('h6')}
+            text={(income ? "Descripción:" : "Mensaje:") +' '+ description}
+          />}
         </View>
         <View>
-          <Label style={{ ...styles.text, fontSize: 15 }} text="Fecha:" />
-          <Label style={{ ...styles.text }} text={fechaHora} />
+          <Label style={bn('h5')} text="Fecha:" />
+          <Label style={bn('h6')} text={fechaHora} />
         </View>
       </View>
     </View>
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // marginTop: 22
     marginHorizontal: 7,
+    ...bn('p-1')
   },
   modal: {
     padding: 25,
@@ -64,6 +65,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     position: "absolute",
     borderRadius: 15,
+    shadowOffset:{  width: 0,  height: 0,  },
+        shadowOpacity: 1.0,
+        elevation:15
     // top: 90,
   },
   text: {

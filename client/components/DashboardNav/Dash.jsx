@@ -15,11 +15,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { AppLoading } from 'expo'
 
 // UI
-import { bn, Container, hbn, Label } from '../Quantum';
-import {
-    useFonts,
-    Poppins_600SemiBold,
-  } from '@expo-google-fonts/poppins';
+import { bn, Container, hbn, Label, QTLink } from '../Quantum';
   
 function Dash({user, navigation}){
     const headerHeight = useHeaderHeight();
@@ -36,6 +32,7 @@ function Dash({user, navigation}){
             name:null,
             surname: null,
             avatar: null,
+            balance:0
         },
         load: 0,
         loading: true
@@ -44,16 +41,20 @@ function Dash({user, navigation}){
 
     useEffect(() => {
         if(!user) return;
+        console.log(user)
         let data = user;
         data.avatar = user.avatar ? user.avatar : urlAvatar(user.name, user.surname);
         setState(state => {
             return {
                 ...state,
-                user:data,
+                user:{
+                    ...data,
+                    balance:user.balance,
+                },
                 load: state.load +1
             }
         });
-    },[user]);
+    },[user, user.balance]);
 
     useEffect(()=>{
         setState(state => {
@@ -63,10 +64,12 @@ function Dash({user, navigation}){
             }
         })
     },[state.load])
-    const [fontsLoaded] = useFonts({
-        Poppins_600SemiBold
-    })
-    if(!fontsLoaded) return <AppLoading />
+
+    // const [fontsLoaded] = useFonts({
+    //     Poppins_600SemiBold
+    // })
+
+    //if(!fontsLoaded) return <AppLoading />
     return (
         <>
             <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
@@ -84,18 +87,18 @@ function Dash({user, navigation}){
                 <View style={styles.card}>
                     <Text style={{ textAlign:'center', marginTop:15, fontSize:18}}>General</Text>
                     <View style={{ ...styles.row, justifyContent:'center' }}>
-                        <Link component={TouchableOpacity} to="/">
+                        <TouchableOpacity>
                                 <Text style={{ padding:10,fontWeight:'bold', color:false ? '#E94560' : '#000' }}>1D</Text>
-                        </Link>
-                        <Link component={TouchableOpacity} to="/">
+                        </TouchableOpacity>
+                        <TouchableOpacity>
                             <Text style={{ padding:10,fontWeight:'bold', color:true ? '#E94560' : '#000' }}>7D</Text>
-                        </Link>
-                        <Link component={TouchableOpacity} to="/">
+                        </TouchableOpacity>
+                        <TouchableOpacity>
                             <Text style={{ padding:10,fontWeight:'bold', color:false ? '#E94560' : '#000' }}>1M</Text>
-                        </Link>
-                        <Link component={TouchableOpacity} to="/">
+                        </TouchableOpacity>
+                        <TouchableOpacity>
                             <Text style={{ padding:10,fontWeight:'bold', color:false ? '#E94560' : '#000' }}>6M</Text>
-                        </Link>
+                        </TouchableOpacity>
                     </View>
                     <View style={{ ...styles.row, marginLeft:25, marginBottom:10, marginRight:25 }}>
                         <View>
@@ -108,11 +111,11 @@ function Dash({user, navigation}){
                         </View>
                     </View>
                     <View style={{ display:'flex',justifyContent:'center', flexDirection:'row',marginBottom:15 }}>
-                        <Link style={styles.buttonStats} component={TouchableOpacity} to="/">
+                        <TouchableOpacity style={styles.buttonStats} onPress={()=>navigation.navigate('Estadísticas')}>
                                 <Text style={{ padding:10,fontWeight:'bold' }}>
                                     <Image style={{ width:15, height:15 }} source={require('../../assets/stats-white.png')} />
                                 </Text>
-                        </Link>
+                        </TouchableOpacity>
                     </View>
                 </View>
 
@@ -121,10 +124,10 @@ function Dash({user, navigation}){
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/transactions.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Movimientos</Text>
                     </TouchableOpacity>
-                    <Link style={styles.panelButton} component={TouchableOpacity} to="/">
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>null}>
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/account.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis datos</Text>
-                    </Link>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.panelButton} onPress={()=>{}}>
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/products.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis productos</Text>

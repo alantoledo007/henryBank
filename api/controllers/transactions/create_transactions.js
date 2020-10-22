@@ -38,23 +38,23 @@ module.exports = async (ctx)=>{
     }   
 
 
+    const emisor_account = await Account.findOne({
+        where: { id: usuario_emisor.accounts[0].id },
+    });
+
     const transaccion = Transaction.create({
-        title:`Enviaste ${amount} a ${usuario_receptor.name} ${usuario_receptor.surname}`,
+        title:`Enviaste $${amount} a ${usuario_receptor.name} ${usuario_receptor.surname}`,
         description:description,
         amount: 0-amount,
         account_id:usuario_emisor.accounts[0].id
     }).then( async (res)=>{
         
-        const emisor_account = await Account.findOne({
-            where: { id: usuario_emisor.accounts[0].id },
-        });
-    
         emisor_account.balance = emisor_account.balance - amount;
         await emisor_account.save();
 
 
         Transaction.create({
-            title:`Recibiste ${amount} de ${usuario_emisor.name} ${usuario_emisor.surname}`,
+            title:`Recibiste $${amount} de ${usuario_emisor.name} ${usuario_emisor.surname}`,
             description:description,
             amount,
             account_id:usuario_receptor.accounts[0].id
@@ -73,6 +73,6 @@ module.exports = async (ctx)=>{
     })
 
     
-    return transaccion
+    return {transaccion,balance:emisor_account.balance}
 }
  

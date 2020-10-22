@@ -87,7 +87,7 @@ export const styles = { //por si se requiere modificar un estilo dentro de un co
 
 
     font: {
-        fontFamily:"Poppins_600SemiBold"
+        //fontFamily:"Poppins_600SemiBold"
     },
 
     input: {

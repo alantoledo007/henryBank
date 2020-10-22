@@ -3,7 +3,6 @@ import {
     TouchableOpacity,
     Text,
     TextInput,
-    TouchableWithoutFeedback,
     Image,
     View,
     ScrollView,
@@ -51,6 +50,8 @@ export const darkColors= {
     link: "rgba(255,255,255, .5)",
 
     stats: 'rgba(79, 95, 125, 1)',
+    sidebar: '#516375',
+    cardbg: 'red',
     
     toastdangerBg: "rgba(0, 0, 0, .9)",
     toastdangerText2: "rgba(255, 255, 255, .5)",
@@ -76,6 +77,7 @@ export const lightColors={
     link: defaultColors.primary,
 
     stats: "rgba(230, 239, 255, 1)",
+    sidebar: 'light',
 
     toastdangerBg: "rgba(255,255,255, .9)",
     toastdangerText2: "rgba(0,0,0, .5)",
@@ -155,7 +157,7 @@ export function Container({children, style}){
 export function Label(props){
     const theme = useColorScheme();
 
-    return <Text {...props} style={{ ...s.size(4),...hbn('text-label mb-1',theme),...(props.type==='error' ? {...s.size(2.5),...hbn('border-1-danger-solid-5 mt-1 p-1 text-center bg-labelErrorBg text-labelError',theme) }:{}),...props.style, ...s.font }}>{props.text}</Text>
+    return <Text {...props} style={{ ...s.size(4),...hbn('text-label mb-1',theme),...(props.type==='error' ? {...s.size(2.5),...hbn('border-1-danger-solid-5 mt-1 p-1 text-center bg-labelErrorBg text-labelError',theme) }:{})/*,...s.font*/,...props.style }}>{props.text}</Text>
 }
 
 export function Alert({variant, content, style, textStyle}){

@@ -8,11 +8,9 @@ import {
     DrawerItem
 } from "@react-navigation/drawer";
 import {
-    useTheme,
     Avatar,
     Title,
     Caption,
-    Paragraph,
     Drawer,
     Text,
     TouchableRipple,
@@ -21,12 +19,14 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconsMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconsMCI2 from 'react-native-vector-icons/Ionicons';
-import { Label } from '../Quantum';
 import { useState } from 'react';
+import { hbn } from '../Quantum';
+import { useColorScheme } from 'react-native';
 
 function DrawerContent(props) {
     const { user, navigation } = props
     const [ isDarkTheme, setIsDarkTheme ] = useState(false);
+    const theme = useColorScheme();
 
     const toggleTheme = () =>{
         setIsDarkTheme(!isDarkTheme);
@@ -34,7 +34,7 @@ function DrawerContent(props) {
     
     // console.log(user)
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{...hbn('bg-sidebar',theme), flex: 1 }}>
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
@@ -54,10 +54,11 @@ function DrawerContent(props) {
                                 icon={({ color, size }) => (
                                     <Icon
                                         name='dashboard'
-                                        color={color}
+                                        color={theme === 'dark' ? '#fff' : '#000'}
                                         size={size}
                                     />
                                 )}
+                                labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
                                 label='Tablero'
                                 onPress={ () => navigation.navigate('Dashboard')}
                             />
@@ -66,12 +67,13 @@ function DrawerContent(props) {
                                 icon={({ color, size }) => (
                                     <IconsMCI
                                         name='bank-transfer'
-                                        color={color}
+                                        color={theme === 'dark' ? '#fff' : '#000'}
                                         size={size}
                                     />
                                 )}
-                                label='Transferencia'
-                                onPress={ () => navigation.navigate('Transferencia')}
+                                label='Transferencias'
+                                labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
+                                onPress={ () => navigation.navigate('Transferencias')}
                             />
 
                             <DrawerItem
@@ -79,11 +81,13 @@ function DrawerContent(props) {
                                     <IconsMCI2
 
                                         name='ios-stats'
-                                        color={color}
+                        
+                            color={theme === 'dark' ? '#fff' : '#000'}
                                         size={size}
                                     />
                                 )}
                                 label='Estadísticas'
+                                labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
                                 onPress={ () => navigation.navigate('Estadísticas')}
                             />
                         </Drawer.Section>
@@ -92,21 +96,26 @@ function DrawerContent(props) {
                                 icon={({ color, size }) => (
                                     <Icon
                                         name='team'
-                                        color={color}
+                        
+                            color={theme === 'dark' ? '#fff' : '#000'}
                                         size={size}
                                     />
                                 )}
+                                labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
                                 label='Contactos'
                                 onPress={ () => navigation.navigate('Contactos')}
                             />
                             <DrawerItem
+                                labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
                                 icon={({ color, size }) => (
                                     <IconsMCI
                                         name='bank-transfer-in'
-                                        color={color}
+                        
+                            color={theme === 'dark' ? '#fff' : '#000'}
                                         size={size}
                                     />
                                 )}
+                                labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
                                 label='Recarga'
                                 onPress={ () => navigation.navigate('Recarga')}
                             />
@@ -114,7 +123,7 @@ function DrawerContent(props) {
                         <Drawer.Section title='Preferencias'>
                             <TouchableRipple onPress={() => { toggleTheme() }}>
                                 <View style={styles.preference}>
-                                    <Text>Tema Oscuro</Text>
+                                    <Text style={{ color:theme === 'dark' ? '#fff' : '#000' }}>Tema Oscuro</Text>
                                     <View pointerEvents="none">
                                         <Switch value={isDarkTheme} />
                                     </View>
@@ -126,10 +135,12 @@ function DrawerContent(props) {
             </DrawerContentScrollView>
             <Drawer.Section style={styles.botomDrawerSection}>
                 <DrawerItem
+                    labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
                     icon={({ color, size }) => (
                         <Icon
                             name='logout'
-                            color={color}
+            
+                            color={theme === 'dark' ? '#fff' : '#000'}
                             size={size}
                         />
                     )}
@@ -143,7 +154,7 @@ function DrawerContent(props) {
 
 const styles = StyleSheet.create({
     drawerContent: {
-        flex: 1,
+        flex: 1
     },
     userInfoSection: {
         paddingLeft: 20,

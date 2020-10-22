@@ -25,9 +25,9 @@ import {
   Input,
   QTLink,
 } from "../../Quantum";
-import { getTransactions } from "../../../redux/actions/transactions";
+import { getTransactions, updateBalance } from "../../../redux/actions/transactions";
 
-const DepositCard = ({ token, close, navigation }) => {
+const DepositCard = ({ token, close, navigation, updateBalance }) => {
   const [form, setForm] = useState({
     amount: "",
     values: {},
@@ -132,7 +132,8 @@ const DepositCard = ({ token, close, navigation }) => {
           },
         }
       )
-      .then(() => {
+      .then((res) => {
+        updateBalance(res.data.balance);
         setShowModal(true);
         getTransactions(token);
       })
@@ -338,7 +339,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    getTransactions: token => dispatch(getTransactions(token))
+    getTransactions: token => dispatch(getTransactions(token)),
+    updateBalance: balance => dispatch(updateBalance(balance))
   }
 }
 

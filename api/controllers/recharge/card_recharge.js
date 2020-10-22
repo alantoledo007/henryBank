@@ -57,5 +57,5 @@ module.exports = async (ctx) => {
 	account.balance = account.balance + amount;
 	await account.save();
 
-	return recharge;
+	return {...recharge, balance: account.balance};
 };
