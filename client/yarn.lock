@@ -1787,10 +1787,10 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-bootnative@^1.1.9:
-  version "1.1.9"
-  resolved "https://registry.yarnpkg.com/bootnative/-/bootnative-1.1.9.tgz#938dd36f383d0df99da555de27f5f9cd280dcd95"
-  integrity sha512-RpPLcFxiiEOkCyMNr52s1tPRwnDkVRTBkBE9iEfA4M4S2iOJqz/ADdN/xVjBtuAPTtVtBcuPdnjI3Yg7fht8vA==
+bootnative@^1.1.12:
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/bootnative/-/bootnative-1.1.12.tgz#3cd85d42e4c15ff7119157dbb1121b845073bb99"
+  integrity sha512-jF8/ZoI+5UgmLyd9lBe06BKdQthFkgw5Eh6bVozwzK4fheWnWH7gY7ppYJ4agDYBnZjXsxc9jXSj44phCxRucA==
   dependencies:
     react-native "^0.63.3"
 

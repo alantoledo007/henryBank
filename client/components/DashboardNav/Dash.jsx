@@ -14,7 +14,7 @@ import SendMoney from './SendMoney';
 import { useHeaderHeight } from '@react-navigation/stack';
 
 // UI
-import { bn, Container, Label } from '../Quantum';
+import { bn, Container, hbn, Label } from '../Quantum';
 
 function Dash({user, navigation}){
     const [showDeposit, setShowDeposit] = useState(false);
@@ -59,10 +59,12 @@ function Dash({user, navigation}){
     },[state.load])
     return (
         <>
-            <Container styles={{height: 'auto'}}>
+            <Container style={bn('h-auto')}>
                 <Label text={`Hola, ${state.user.name}`} />
-                <View style={{ marginBottom:25,...styles.row }}>
-                    <Image style={styles.imgProfile} source={{ uri:state.user.avatar }} />
+                <View style={bn('row')}>
+                    <View style={bn('col-6')}>
+                        <Image style={styles.imgProfile} source={{ uri:state.user.avatar }} />
+                    </View>
                     <View>
                         <Label text='Mi dinero' />
                         <Label style={{fontWeight: 'bold', fontSize:25}} text={user.balance ? `$${user.balance}` : '$0.00'} />

@@ -58,11 +58,34 @@ function Login({ login, navigation }) {
       .catch((err) => {
         setDis(false);
         //Manejo de errores:
-        Toast.show({
+        if(err.response?.data?.code === 401){
+          return Toast.show({
+            type: "error",
+            text1: "Contraseña o email incorrectos",
+            text2: "Verifique los datos ingresados, asegurece de estar registrado"
+          })
+        }
+        if(err.response?.data?.code === 422){
+          return Toast.show({
+            type: "error",
+            text1: "Datos incorrectos",
+            text2: "Uno o más campos no contienen información valida. Por favor verifique e intente nuevamente."
+          })
+        }
+        if(err.response?.data?.code === 500){
+          return Toast.show({
+            type: "error",
+            text1: "Error interno",
+            text2: "Ocurrió un error interno y nuestro equipo ya está trabajando para solucionarlo."
+          })
+        }
+
+        return Toast.show({
           type: "error",
-          text1: "Contraseña o email incorrectos",
-          text2: "Verifique los datos ingresados"
-        })
+          text1: "Error de conexión",
+          text2: "Por favor, verifique su conexión a internet e intente nuevamente, si el problema persiste ponganse en contacto con el equipo técnico"
+        });
+        
       });
   };
 
@@ -72,7 +95,7 @@ function Login({ login, navigation }) {
       <View>
         <Logo />
       </View>
-      <Alert content="Ingrese a su cuenta Quantunm" style={bn("mb-4")} />
+      <Alert content="Ingrese a su cuenta Quantum" style={bn("mb-4")} />
       <ActivityIndicator animating={dis} size="large" color={colors.pink} />
       <View>
         <View style={s.mb(4)}>

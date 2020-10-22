@@ -32,24 +32,33 @@ function Register({ userRegister, navigation}) {
         .catch(err => {
             //Manejo de errores:
             setDis(false);
-            switch(err.response.data.message){
-                case "An user is registered with those email address.":
+            if(err.response?.data?.code === 422){
+                if(err.response.data.type === 'EMAIL_DUPLICATED'){
                     return Toast.show({
                         type: "error",
-                        text1: "La dirección de correo ingresada no está disponible"
-                    })
-                case "The 'password' field length must be greater than or equal to 8 characters long.":
-                    return Toast.show({
-                        type: "error",
-                        text1: "La contraseña debe tener 8 caracteres como mínimo"
-                    })
-                default:
-                    return Toast.show({
-                        type: "error",
-                        text1: "Ups!",
-                        text2: "Hubo un error. Compruebe su conexión a internet"
-                    })
+                        text1: "Ya está registrado",
+                        text2: "El correo electrónico ya está registrado, intenete ingresar, si no recuerda su clave la puede recuperar."
+                    });
+                }
+                return Toast.show({
+                    type: "error",
+                    text1: "Datos incorrectos",
+                    text2: "Uno o más campos no contienen información valida. Por favor verifique e intente nuevamente."
+                });
             }
+            if(err.response?.data?.code === 500){
+                return Toast.show({
+                    type: "error",
+                    text1: "Error interno",
+                    text2: "Ocurrió un error interno y nuestro equipo ya está trabajando para solucionarlo."
+                })
+            }
+      
+            return Toast.show({
+                type: "error",
+                text1: "Error de conexión",
+                text2: "Por favor, verifique su conexión a internet e intente nuevamente, si el problema persiste ponganse en contacto con el equipo técnico"
+            });
         });
     };
     //const onSubmit = data => console.log(data);

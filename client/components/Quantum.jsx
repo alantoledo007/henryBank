@@ -185,7 +185,7 @@ export function Logo({size, style}){
     );
 };
 
-function DefaultButton({label, color, onPress, style, textStyle, editable, outline}){
+function DefaultButton({label, color, onPress, style, textStyle, editable, outline, disabled}){
     const colorScheme = useColorScheme();
 
     const defaultStyles = {
@@ -198,6 +198,7 @@ function DefaultButton({label, color, onPress, style, textStyle, editable, outli
             editable={editable}
             style={{ ...defaultStyles,...style }}
             onPress={onPress}
+            disabled={disabled}
         >
             <Text style={{ ...hbn('bold text-'+(outline ? outline : 'white')+' text-center',colorScheme),textTransform:'uppercase',...textStyle }}>
                 {label}
