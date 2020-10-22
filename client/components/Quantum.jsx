@@ -49,6 +49,8 @@ export const darkColors= {
     labelErrorBg: "rgba(221, 65, 69, .2)",
     labelError:defaultColors.danger,
     link: "rgba(255,255,255, .5)",
+
+    stats: 'rgba(79, 95, 125, 1)',
     
     toastdangerBg: "rgba(0, 0, 0, .9)",
     toastdangerText2: "rgba(255, 255, 255, .5)",
@@ -72,6 +74,8 @@ export const lightColors={
     labelErrorBg: "rgba(221, 65, 69, .2)",
     labelError:defaultColors.danger,
     link: defaultColors.primary,
+
+    stats: "rgba(230, 239, 255, 1)",
 
     toastdangerBg: "rgba(255,255,255, .9)",
     toastdangerText2: "rgba(0,0,0, .5)",
@@ -135,12 +139,12 @@ export const toastConfig =  {
 
 
 
-export function Container({children, styles}){
+export function Container({children, style}){
     const theme = useColorScheme();
     
     return (
         <ScrollView>
-            <View style={{ ...hbn('container p-3 bg-body',theme),height:(Dimensions.get('window').height + statusBar.currentHeight), justifyContent:'center',...styles}}>
+            <View style={{ ...hbn('container p-3 bg-body',theme),height:(Dimensions.get('window').height + statusBar.currentHeight), justifyContent:'center',...style}}>
                 {children}
             </View>
             <StatusBar backgroundColor={theme === 'dark' ? 'rgba(23,22,23, .9)' : 'rgba(255, 255, 255, .9)'} style="auto" />

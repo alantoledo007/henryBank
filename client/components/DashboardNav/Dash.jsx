@@ -22,6 +22,7 @@ import {
   } from '@expo-google-fonts/poppins';
   
 function Dash({user, navigation}){
+    const headerHeight = useHeaderHeight();
     const [showDeposit, setShowDeposit] = useState(false);
     const [showTransfer, setShowTransfer] = useState(false);
 
@@ -68,7 +69,7 @@ function Dash({user, navigation}){
     if(!fontsLoaded) return <AppLoading />
     return (
         <>
-            <Container style={bn('h-auto')}>
+            <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
                 <Label text={`Hola, ${state.user.name}`} />
                 <View style={bn('row')}>
                     <View style={bn('col-6')}>

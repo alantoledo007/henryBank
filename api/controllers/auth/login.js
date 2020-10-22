@@ -18,12 +18,14 @@ module.exports = async (ctx,res) => {
         user.password = undefined;
         let recharge_code = null;
         let cvu = null;
+        let balance = 0;
         if(user.accounts.length){
             let acc = user.accounts[0].toJSON();
             cvu = acc.cvu;
             recharge_code = acc.recharge_code;
+            balance = acc.balance;
         }
-        return {user:{...user.toJSON(), cvu, recharge_code}, token};
+        return {user:{...user.toJSON(), cvu, recharge_code, balance}, token};
     });
     return {data};
 }

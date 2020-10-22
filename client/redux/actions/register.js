@@ -1,3 +1,6 @@
+import Axios from "axios";
+import env from '../../env';
+
 export const STEP_ONE = 'STEP_ONE';
 export const STEP_TWO = 'STEP_TWO';
 export const STEP_THREE = 'STEP_THREE';
@@ -33,9 +36,18 @@ export const resetRegister = () => {
     }
 }
 
-export const loadAuth = (data) => {
-    return {
-        type: REGISTER_CONFIRMATION,
-        payload: data
+export const loadAuth = ({data, token}) => {
+    return dispatch => {
+        return Axios.put(`${env.API_URI}/auth/register_confirmation`,data,{
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+        })
+        .then(res => res.data)
+        .then(async (res) => {
+            await dispatch({type:REGISTER_CONFIRMATION, payload:res.data});
+            return res;
+        });
     }
 }

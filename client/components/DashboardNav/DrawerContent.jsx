@@ -20,6 +20,7 @@ import {
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/AntDesign';
 import IconsMCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import IconsMCI2 from 'react-native-vector-icons/Ionicons';
 import { Label } from '../Quantum';
 import { useState } from 'react';
 
@@ -48,7 +49,7 @@ function DrawerContent(props) {
                         </View>
                     </View>
                     <View style={{ marginTop: 10 }}>
-                        <Drawer.Section title='Secciones'>
+                        <Drawer.Section title='General'>
                             <DrawerItem
                                 icon={({ color, size }) => (
                                     <Icon
@@ -57,10 +58,37 @@ function DrawerContent(props) {
                                         size={size}
                                     />
                                 )}
-                                label='Dashboard'
+                                label='Tablero'
                                 onPress={ () => navigation.navigate('Dashboard')}
                             />
+                            
                             <DrawerItem
+                                icon={({ color, size }) => (
+                                    <IconsMCI
+                                        name='bank-transfer'
+                                        color={color}
+                                        size={size}
+                                    />
+                                )}
+                                label='Transferencia'
+                                onPress={ () => navigation.navigate('Transferencia')}
+                            />
+
+                            <DrawerItem
+                                icon={({ color, size }) => (
+                                    <IconsMCI2
+
+                                        name='ios-stats'
+                                        color={color}
+                                        size={size}
+                                    />
+                                )}
+                                label='Estadísticas'
+                                onPress={ () => navigation.navigate('Estadísticas')}
+                            />
+                        </Drawer.Section>
+                        <Drawer.Section title="Otros">
+                        <DrawerItem
                                 icon={({ color, size }) => (
                                     <Icon
                                         name='team'
@@ -81,17 +109,6 @@ function DrawerContent(props) {
                                 )}
                                 label='Recarga'
                                 onPress={ () => navigation.navigate('Recarga')}
-                            />
-                            <DrawerItem
-                                icon={({ color, size }) => (
-                                    <IconsMCI
-                                        name='bank-transfer'
-                                        color={color}
-                                        size={size}
-                                    />
-                                )}
-                                label='Transferencia'
-                                onPress={ () => navigation.navigate('Transferencia')}
                             />
                         </Drawer.Section>
                         <Drawer.Section title='Preferencias'>

@@ -33,12 +33,10 @@ export default function userReducer(state = initialState, action) {
                 user: action.payload
             };
         case 'REGISTER_CONFIRMATION':
+            console.log(action.payload);
             return {
                 ...state,
-                user: {
-                    ...state.user,
-                    ...action.payload
-                }
+                user: action.payload.user
             };
         case 'LOGOUT':
             return initialState

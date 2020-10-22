@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StatusBar } from "react-native";
+import { View, Text, StatusBar, useColorScheme } from "react-native";
 
 //stack creators
 import {
@@ -24,13 +24,14 @@ import Logout from "./Logout";
 
 
 export const navigationOptionsHeader = ({ title, navigation,  }) => {
+    const theme = useColorScheme();
     return {
         headerShown: true,
         title: title,
         headerTitleAlign: "center",
         headerLeft: () => (
             <Button
-                color='light'
+                color={theme === 'dark' ? '#353535':'#f0f0f0'}
                 textStyle={
                     hbn('text-primary')
                 }
@@ -41,6 +42,10 @@ export const navigationOptionsHeader = ({ title, navigation,  }) => {
                 label={<IonIcon name="ios-menu" style={{ fontSize: 20 }} />}
             />
         ),
+        headerTintColor:theme === 'dark' ? '#fff':'#000',
+        headerStyle: {
+            backgroundColor: theme === 'dark' ? '#454545':'#fff'
+          },
         gestureEnabled: true,
         gestureDirection: "horizontal",
         ...TransitionPresets.SlideFromRightIOS,
@@ -58,8 +63,8 @@ export function Menu() {
             <MenuStack.Screen name="Transferencia" component={SendMoneyRoute} />
             <MenuStack.Screen name="Contactos" component={ContactRoute} />
             <MenuStack.Screen name="Logout" component={Logout} />
-            <MenuStack.Screen name="Estadística" component={Graphics} />
             <MenuStack.Screen name="Transacciones" component={Transactions}/>
+            <MenuStack.Screen name="Estadísticas" component={GraphicsRoute} />
         </MenuStack.Navigator>
     );
 }
@@ -71,11 +76,22 @@ export const DepositRoute = () => {
         </DepositoStackNavigator.Navigator>
     )
 }
+
+export const GraphicsRoute = () => {
+    const GraphicsStackNavigator = createStackNavigator();
+    return (
+        <GraphicsStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
+            <GraphicsStackNavigator.Screen name='Estadísticas' component={Graphics} />
+        </GraphicsStackNavigator.Navigator>
+    )
+}
+
 export const SendMoneyRoute = () => {
     const SendMoneyStackNavigator = createStackNavigator();
     return (
         <SendMoneyStackNavigator.Navigator screenOptions={navigationOptionsHeader}>
             <SendMoneyStackNavigator.Screen name='Transferencia' component={SendMoney} />
+            <SendMoneyStackNavigator.Screen name='Dashboard' component={Dash} />
         </SendMoneyStackNavigator.Navigator>
     )
 }
@@ -95,7 +111,7 @@ export const DashboardRoutes = (props) => {
         <DashStack.Navigator
         screenOptions={navigationOptionsHeader}
         >
-            <DashStack.Screen component={ContactsRoute} name="Panel" />
+            <DashStack.Screen component={Dash} name="Panel" />
             {/* <DashStack.Screen component={Contacts} name="Contactos" /> */}
         </DashStack.Navigator>
     );

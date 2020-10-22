@@ -1,89 +1,80 @@
 import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
 import env from '../../env';
-import { View, TextInput, ScrollView, Text, AppRegistry, processColor,
-    TouchableOpacity, StyleSheet, Modal, TouchableHighlight, Dimensions} from 'react-native';
+import { View, ScrollView, Dimensions, useColorScheme, StatusBar} from 'react-native';
 import { connect } from "react-redux";
 
 //Estilo
-import s from '../style/styleSheet';
-import { LinearGradient } from 'expo-linear-gradient';
 import {
     LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart
   } from "react-native-chart-kit";
-import {Container, Logo, bootnative, QTLink, Button, Alert, Label, Input} from '../Quantum';
-
+import {Container, Logo, bootnative, QTLink, Button, Alert, hbn, Label, Input, bn, defaultColors} from '../Quantum';
+import { useHeaderHeight } from '@react-navigation/stack';
 
 
 const Graphics = (props) => {
+    const headerHeight = useHeaderHeight();
+    const theme = useColorScheme();
 
     const { token } = props;
 
     //const screenWidth = Dimensions.get("window").width;
-    const screenWidth = 350;
     const chartConfig= {
-        backgroundColor: "#e26a00",
-        backgroundGradientFrom: "#E94560",
-        backgroundGradientTo: "#ffa726",
+        backgroundGradientFrom: "#fff",
+        backgroundGradientTo: "#fff",
+        backgroundGradientFromOpacity: 0,
+        backgroundGradientToOpacity: 0,
         decimalPlaces: 2, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 5) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-            borderRadius: 0,
-            justifyContent: 'flex-end',
-            color: 'blue'
-        },
+
         propsForDots: {
-            r: "6",
-            strokeWidth: "2",
-            stroke: "#ffa726"
+            r: "4"
         }
         }
 
 
+    
     const [week, setWeek] = useState(false);
     const [month, setMonth] = useState(false);
-    const [day, setDay] = useState(false);
+    const [day, setDay] = useState(true);
+    const [income, setIncome] = useState(true);
+    const [period, setPeriod] = useState('daily');
+    const [stats, setStats] = useState({
+        daily:{data:[0], labels:[""]},
+        weekly:{data:[0], labels:[""]},
+        monthly:{data:[0], labels:[""]}
+    });
+
+    useEffect(() => {
+        next(period);
+    },[period, income]);
 
     const open = (state, set, period) => {
+        setPeriod(period)
         setWeek(false)
         setMonth(false)
         setDay(false)
-        if(state === false){
         set(true)
-        next(period)} 
-        else{set(false)}
     }
 
 
     //Prueba ----------------------------------------------------
     const data = {
-        labels: ["Jan", "Feb", "Mar", "Abr", "May", "Jun"],
+        labels: [""],
         datasets: [
           {
-            data: [20, 45, 28, 80, 99, 43],
-            color: (opacity = 4) => `rgba(134, 65, 244, ${opacity})`, // optional
-            strokeWidth: 2 // optional
+            data: [0],
+            color: (opacity = 1) => `rgba(233, 69, 96, ${opacity})`, // optional
+            strokeWidth: 3, // optional
           }
-        ],
-        legend: ["Tabla Mensual"] // optional
-      };
-      const dataDos = {
-        labels: ["Ingresos: 40.000", "Egresos: 60:000", "Resumen: -20.000"], // optional
-        data: [0.4, 0.6, 0.2],
-        legend: ["Dia Jueves"] // optional
+        ]
       };
 
     function next(period) {
 
         axios.post(`${env.API_URI}/stats`,
             {
-                period: period
+                period: period,
+                income: income
             },
             {
                 headers: {
@@ -92,8 +83,14 @@ const Graphics = (props) => {
                 }
             })
             .then((response) => {
-               const data = response.data[0]
-               console.log(data.length)
+               const data = response.data
+               console.log(data);
+               setStats((state) => {
+                    return {
+                        ...state,
+                        [period]:data
+                    }
+               });
             })
             .catch((error) => {
                console.log(error)
@@ -103,85 +100,163 @@ const Graphics = (props) => {
 
     return (
 
-        <Container>
-
-                <Text style={{...s.textWhite, ...s.textCenter, ...s.size(6), ...s.my(6)}}>Estadísticas</Text>
-                <View>
-                    <Button 
-                    onPress={() => open(day, setDay, 'daily')}
-                    label='Diaria'
-                    style={{...s.my(1)}}
-                    />
-                    
-                    { day && <ProgressChart
-                                data={dataDos}
-                                width={350}
-                                height={220}
-                                strokeWidth={16}
-                                radius={32}
-                                chartConfig={chartConfig}
-                                hideLegend={false}
-                                color='blue'
-                                style={{
-                                    marginVertical: 20,
-                                    borderRadius: 5,
-                                    alignContent:'flex-start',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    width: '100%',
-                                    color: 'blue'
-                                    
-                                    }}
-                                />
-                    
+        <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+            <Logo />
+            
+            <View style={bn('row mt-5')}>
+                <View style={bn('col-12')}>
+                {/* const data = {
+                    labels: [""],
+                    datasets: [
+                    {
+                        data: [0],
+                        color: (opacity = 4) => `rgba(134, 65, 244, ${opacity})`, // optional
+                        strokeWidth: 2 // optional
                     }
-                </View>
-                <View>
-                    <Button 
-                    onPress={() => open(week, setWeek,  "weekly")}
-                    label='Semanal'
-                    style={{...s.my(1)}}
-                    />
-                    
-                    { week && <LineChart
-                        data={data}
-                        width={360} // from react-native
-                        height={220}
-                        yAxisLabel="$"
-                        yAxisSuffix="k"
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={chartConfig}
-                        bezier
-                        style={{
-                        marginVertical: 30,
-                        borderRadius: 5,
-                        justifyContent:'center', alignItems:'center'
-                        }}
-                    />}
-                </View>
-                <View>
-                    <Button 
-                    onPress={() => open(month, setMonth, "monthly")}
-                    label='Mensual'
-                    style={{...s.my(1)}}
-                    />
-                    
-                    { month && <BarChart
-                        style={{
-                            marginVertical: 30,
-                            borderRadius: 5,
-                            justifyContent:'center', alignItems:'center'
+                    ]
+                }; */}
+                { day &&
+                
+                    <ScrollView horizontal={true} 
+                        style={hbn('bg-stats borderRadius-5',theme)}>
+                        <LineChart
+                            renderDotContent={({x, y, index}) => <Label style={{position: 'absolute', fontSize:12, top: y-25, left: x-10}} text={stats.daily.data[index] > 0? stats.daily.data[index] : ''} />}
+                            data={{ 
+                                labels:stats.daily.labels,
+                                datasets:[{
+                                    ...data.datasets[0],
+                                    data:stats.daily.data
+                                }]
                             }}
-                        data={data}
-                        width={360}
-                        height={270}
-                        yAxisLabel="$"
-                        chartConfig={chartConfig}
-                        verticalLabelRotation={30}
-                        yAxisSuffix='xx'
-                        verticalLabelRotation={90}
-                        />}
-                </View>    
+                            width={1400} // from react-native
+                            height={250}
+                            yAxisLabel="$"
+                            //yAxisSuffix="k"
+                            yAxisInterval={1} // optional, defaults to 1
+                            chartConfig={{...chartConfig,
+                                ...(theme === 'dark' ?{
+                                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        labelColor: (opacity = 5) => `rgba(255, 255, 255, ${opacity})`,
+                                    } : {
+                                        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                        labelColor: (opacity = 5) => `rgba(0, 0, 0, ${opacity})`,
+                                        
+                                    
+                                }) }}
+                        bezier
+                        style={hbn('m-2',theme)}
+                    />
+                    </ScrollView>
+                }
+
+                { week && <ScrollView horizontal={true} 
+                        style={hbn('bg-stats borderRadius-5',theme)}>
+                        <LineChart
+                            renderDotContent={({x, y, index}) => <Label style={{position: 'absolute', fontSize:12, top: y-25, left: x-10}} text={stats.weekly.data[index] > 0? stats.weekly.data[index] : ''} />}
+                            data={{ 
+                                labels:stats.weekly.labels,
+                                datasets:[{
+                                    ...data.datasets[0],
+                                    data:stats.weekly.data
+                                }]
+                            }}
+                            width={700} // from react-native
+                            height={250}
+                            yAxisLabel="$"
+                            //yAxisSuffix="k"
+                            yAxisInterval={1} // optional, defaults to 1
+                            chartConfig={{...chartConfig,
+                                ...(theme === 'dark' ?{
+                                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        labelColor: (opacity = 5) => `rgba(255, 255, 255, ${opacity})`,
+                                    } : {
+                                        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                        labelColor: (opacity = 5) => `rgba(0, 0, 0, ${opacity})`,
+                                        
+                                    
+                                }) }}
+                        bezier
+                        style={hbn('m-2',theme)}
+                    />
+                    </ScrollView>}
+
+                { month && <ScrollView horizontal={true} 
+                        style={hbn('bg-stats borderRadius-5',theme)}>
+                        <LineChart
+                            renderDotContent={({x, y, index}) => <Label style={{position: 'absolute', fontSize:12, top: y-25, left: x-10}} text={stats.monthly.data[index] > 0? stats.monthly.data[index] : ''} />}
+                            data={{ 
+                                labels:stats.monthly.labels,
+                                datasets:[{
+                                    ...data.datasets[0],
+                                    data:stats.monthly.data
+                                }]
+                            }}
+                            width={450} // from react-native
+                            height={250}
+                            yAxisLabel="$"
+                            //yAxisSuffix="k"
+                            yAxisInterval={1} // optional, defaults to 1
+                            chartConfig={{...chartConfig,
+                                ...(theme === 'dark' ?{
+                                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        labelColor: (opacity = 5) => `rgba(255, 255, 255, ${opacity})`,
+                                    } : {
+                                        color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                                        labelColor: (opacity = 5) => `rgba(0, 0, 0, ${opacity})`,
+                                        
+                                    
+                                }) }}
+                        bezier
+                        style={hbn('m-2',theme)}
+                    />
+                    </ScrollView>}
+                </View>
+                
+            </View>
+            <View style={bn('row mt-2')}>
+                
+                <View style={bn('col-4 pr-1')}>
+                    <Button 
+                        {...(!day ? {outline:"primary",color:"transparent"}:{})}
+                        onPress={() => open(day, setDay, 'daily')}
+                    label='30 Días'
+                    />
+                </View>
+                <View style={bn('col-4 px-1')}>
+                <Button 
+                    {...(!week ? {outline:"primary",color:"transparent"}:{})}
+                    onPress={() => open(week, setWeek,  "weekly")}
+                    label='12s'
+                    />
+                </View>
+                <View style={bn('col-4 pl-1')}>
+                    <Button
+                        {...(!month ? {outline:"primary",color:"transparent"}:{})}
+                        onPress={() => open(month, setMonth, "monthly")}
+                        label='6M'
+                        />
+                </View>
+                
+            </View>
+
+            <View style={bn('row mt-2')}>
+                
+                <View style={bn('col-6 pr-1')}>
+                    <Button 
+                        {...(!income ? {outline:"primary",color:"transparent"}:{})}
+                        onPress={() => setIncome(!income)}
+                        label='Ingresos'
+                    />
+                </View>
+                <View style={bn('col-6 pl-1')}>
+                    <Button
+                        {...(income ? {outline:"primary",color:"transparent"}:{})}
+                        onPress={() => setIncome(!income)}
+                        label='Gastos'
+                        />
+                </View>
+                
+            </View>
 
         </Container>
     )
@@ -189,19 +264,16 @@ const Graphics = (props) => {
 
 
 
-
-
-function mapDispatchToProps(state) {
+function mapStateToProps(state) {
     return {
         token: state.auth.token,
+    }
+}
+
+function mapDispatchToProps() {
+    return {
          
     }
 }
 
-function mapStateToProps() {
-    return {
-
-    }
-}
-
-export default connect(mapDispatchToProps, mapStateToProps)(Graphics);
+export default connect(mapStateToProps,mapDispatchToProps)(Graphics);

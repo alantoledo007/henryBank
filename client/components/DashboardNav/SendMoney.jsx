@@ -6,8 +6,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import {
   View,
   TextInput,
-  Button,
-  ScrollView,
   Text,
   TouchableOpacity,
   Picker,
@@ -25,11 +23,11 @@ import { connect } from "react-redux";
 
 //UI
 import s from "../style/styleSheet";
-import { Container, Label, Input } from "../Quantum";
-import colors from "../style/colors";
+import { Container, Label, Input, Alert, toastConfig } from "../Quantum";
+import Toast from 'react-native-toast-message';
 
 const SendMoney = (props) => {
-  const { token, balance, close } = props;
+  const { token, balance, close, navigation } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState("Contactos");
@@ -117,9 +115,12 @@ const SendMoney = (props) => {
           "Content-Type": "application/json",
         },
       })
-      .then((response) => {
-        setTitle(response.data.title);
-        setModalVisible(true);
+      .then(async (response) => {
+        return await Toast.show({
+          type: "success",
+          text1: "Transeferencia completa",
+          text2: response.data.title,
+        });
       })
       .catch((error) => {
         if (error.message.includes("409")) {
@@ -145,18 +146,6 @@ const SendMoney = (props) => {
 
   return (
     <Container>
-      {/* <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
-            /> */}
-
       <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
         {close && (
           <TouchableWithoutFeedback onPress={close}>
@@ -168,10 +157,7 @@ const SendMoney = (props) => {
         )}
       </View>
 
-      <Label
-        style={{ ...s.textCenter, ...s.size(8), ...s.p(2) }}
-        text="Enviar dinero"
-      />
+      <Alert content="Enviar dinero" />
 
       <Label
         style={{ ...s.size(4), ...s.py(2) }}
@@ -213,8 +199,7 @@ const SendMoney = (props) => {
         </View>
       ) : (
         <View>
-          <TextInput
-            style={{ ...s.input }}
+          <Input
             placeholder="Correo electrónico"
             onChangeText={(email) => setSelectedValue(email)}
             keyboardType="email-address"
@@ -293,58 +278,8 @@ const SendMoney = (props) => {
         </TouchableOpacity>
       </View>
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text
-              style={{ ...styles.modalText, color: "#FFBD69", fontSize: 40 }}
-            >
-              {title ? "Transferencia exitosa." : "Transferencia fallida"}
-            </Text>
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: "#221F3B",
-                width: 220,
-                margin: 10,
-              }}
-            />
-            <Text
-              style={{ ...styles.modalText, color: "#221F3B", ...s.size(4) }}
-            >
-              {title ? title : titleError}
-            </Text>
-
-            {invite ? (
-              <TouchableHighlight onPress={close}>
-                <Text
-                  style={{
-                    ...styles.modalText,
-                    color: "#FFBD69",
-                    ...s.size(4),
-                  }}
-                >
-                  ¿Deseas invitarlo a Quantum?
-                </Text>
-              </TouchableHighlight>
-            ) : null}
-
-            <TouchableHighlight
-              style={{ ...styles.openButton, backgroundColor: "#E94560" }}
-              onPress={close}
-            >
-              <Text style={styles.textStyle}>Continuar</Text>
-            </TouchableHighlight>
-          </View>
-        </View>
-      </Modal>
+      
+      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
     </Container>
   );
 };
