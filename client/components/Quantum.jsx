@@ -151,7 +151,7 @@ export function Container({children, styles}){
 export function Label(props){
     const theme = useColorScheme();
 
-    return <Text {...props} style={{ ...s.size(4),...hbn('text-label mb-1',theme),...(props.type==='error' ? {...s.size(2.5),...hbn('border-1-danger-solid-5 mt-1 p-1 text-center bg-labelErrorBg text-labelError',theme) }:{}),...props.style }}>{props.text}</Text>
+    return <Text {...props} style={{ ...s.size(4),...hbn('text-label mb-1',theme),...(props.type==='error' ? {...s.size(2.5),...hbn('border-1-danger-solid-5 mt-1 p-1 text-center bg-labelErrorBg text-labelError',theme) }:{}),...props.style, ...s.font }}>{props.text}</Text>
 }
 
 export function Alert({variant, content, style, textStyle}){
@@ -200,7 +200,7 @@ function DefaultButton({label, color, onPress, style, textStyle, editable, outli
             onPress={onPress}
             disabled={disabled}
         >
-            <Text style={{ ...hbn('bold text-'+(outline ? outline : 'white')+' text-center',colorScheme),textTransform:'uppercase',...textStyle }}>
+            <Text style={{ ...hbn('bold text-'+(outline ? outline : 'white')+' text-center',colorScheme),textTransform:'uppercase',...textStyle, ...s.font }}>
                 {label}
             </Text>
         </TouchableOpacity>

@@ -25,6 +25,7 @@ import {
   Input,
   QTLink,
 } from "../../Quantum";
+import { getTransactions } from "../../../redux/actions/transactions";
 
 const DepositCard = ({ token, close, navigation }) => {
   const [form, setForm] = useState({
@@ -133,6 +134,7 @@ const DepositCard = ({ token, close, navigation }) => {
       )
       .then(() => {
         setShowModal(true);
+        getTransactions(token);
       })
       .catch((err) =>
         console.log("ERROR en DepositCard al recargar dinero con tarjeta", err)
@@ -334,4 +336,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(DepositCard);
+const mapDispatchToProps = dispatch => {
+  return {
+    getTransactions: token => dispatch(getTransactions(token))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DepositCard);
