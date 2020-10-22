@@ -110,6 +110,9 @@ const DepositCard = ({ token, close, navigation }) => {
         }
       }
     }
+    if(form.values.name.split(' ').length === 1){
+      return mostrarError("Nombre en tarjeta inválido.")
+    }
     //Si no hubo ningún error, hago el llamado a API
     const { number, cvc, expiry, name } = form.values;
     axios
@@ -165,7 +168,7 @@ const DepositCard = ({ token, close, navigation }) => {
           labelStyle={{color: "black", fontSize: 13}}
           labels={{
             number: "NÚMERO DE TARJETA",
-            expiry: "VENCIMIENTO",
+            expiry: "VENC.",
             cvc: "CVC",
             name: "NOMBRE",
           }}

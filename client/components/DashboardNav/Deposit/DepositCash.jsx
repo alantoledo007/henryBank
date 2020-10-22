@@ -19,11 +19,10 @@ const DepositCash = ({ recharge_code }) => {
     <View style={styles.container}>
       <Label style={{textAlign: "center"}} text="Este código te permitirá depositar dinero en tu cuenta pagando con efectivo:" />
       <View>
-        <View style={styles.codeWrapper}>
-          <Text style={styles.code}>
-            {splitRechargeCode}
-          </Text>
-        </View>
+        <Button label={splitRechargeCode} disabled={true} style={{alignSelf: "center", width: 300}} textStyle={{fontSize: 50}}/>
+        {/* <View style={styles.codeWrapper}>
+          <Label style={styles.code} text={splitRechargeCode}/>
+        </View> */}
         <Label style={{fontSize: 15, alignSelf: "center"}} text="El monto mínimo es de $100." />
       </View>
       <Label style={{textAlign: "center"}} text="¡Es fácil! Sólo deberás  dirigirte a un Rapipago o Pago Fácil y mostrarle tu código al cajero." />
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
   },
   codeWrapper: {
     ...s.btn(),
-    width: 300,
+    width: 270,
     height: 80,
     alignSelf: "center",
     justifyContent: "center",
@@ -53,7 +52,7 @@ const styles = StyleSheet.create({
   code: {
     ...s.font,
     color: colors.white,
-    fontSize: 50,
+    fontSize: 35,
   },
 });
 

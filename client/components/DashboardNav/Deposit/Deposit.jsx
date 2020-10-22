@@ -2,13 +2,10 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
-  Platform,
   Image,
   TouchableWithoutFeedback,
 } from "react-native";
-import { Link } from "react-router-native";
 
 import { connect } from "react-redux";
 
@@ -104,7 +101,7 @@ const styles = StyleSheet.create({
     height: 30,
     width: 110,
     alignSelf: "center",
-    color: colors.white,
+    color: colors.pink,
     // fontSize: 200000,
     // textAlign: "center",
   },

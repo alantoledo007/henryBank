@@ -95,7 +95,7 @@ function Login({ login, navigation }) {
       <View>
         <Logo />
       </View>
-      <Alert content="Ingrese a su cuenta Quantunm" style={bn("mb-4")} />
+      <Alert content="Ingrese a su cuenta Quantum" style={bn("mb-4")} />
       <ActivityIndicator animating={dis} size="large" color={colors.pink} />
       <View>
         <View style={s.mb(4)}>
