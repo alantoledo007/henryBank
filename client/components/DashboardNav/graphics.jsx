@@ -1,5 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
+import env from '../../env';
 import { View, TextInput, ScrollView, Text, AppRegistry, processColor,
     TouchableOpacity, StyleSheet, Modal, TouchableHighlight, Dimensions} from 'react-native';
 import { connect } from "react-redux";
@@ -19,7 +20,9 @@ import {Container, Logo, bootnative, QTLink, Button, Alert, Label, Input} from '
 
 
 
-const Graphics = () => {
+const Graphics = (props) => {
+
+    const { token } = props;
 
     //const screenWidth = Dimensions.get("window").width;
     const screenWidth = 350;
@@ -47,17 +50,20 @@ const Graphics = () => {
     const [month, setMonth] = useState(false);
     const [day, setDay] = useState(false);
 
-    const open = (state, set) => {
+    const open = (state, set, period) => {
         setWeek(false)
         setMonth(false)
         setDay(false)
-        state === false ? set(true) : set(false)
+        if(state === false){
+        set(true)
+        next(period)} 
+        else{set(false)}
     }
 
 
-//Prueba ----------------------------------------------------
+    //Prueba ----------------------------------------------------
     const data = {
-        labels: ["January", "February", "March", "April", "May", "June"],
+        labels: ["Jan", "Feb", "Mar", "Abr", "May", "Jun"],
         datasets: [
           {
             data: [20, 45, 28, 80, 99, 43],
@@ -73,25 +79,36 @@ const Graphics = () => {
         legend: ["Dia Jueves"] // optional
       };
 
+    function next(period) {
+
+        axios.post(`${env.API_URI}/stats`,
+            {
+                period: period
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then((response) => {
+               const data = response.data[0]
+               console.log(data.length)
+            })
+            .catch((error) => {
+               console.log(error)
+            })
+
+    }
+
     return (
 
         <Container>
-            {/* <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
-            /> */}
-           
+
                 <Text style={{...s.textWhite, ...s.textCenter, ...s.size(6), ...s.my(6)}}>Estadísticas</Text>
                 <View>
                     <Button 
-                    onPress={() => open(day, setDay)}
+                    onPress={() => open(day, setDay, 'daily')}
                     label='Diaria'
                     style={{...s.my(1)}}
                     />
@@ -121,7 +138,7 @@ const Graphics = () => {
                 </View>
                 <View>
                     <Button 
-                    onPress={() => open(week, setWeek)}
+                    onPress={() => open(week, setWeek,  "weekly")}
                     label='Semanal'
                     style={{...s.my(1)}}
                     />
@@ -144,30 +161,28 @@ const Graphics = () => {
                 </View>
                 <View>
                     <Button 
-                    onPress={() => open(month, setMonth)}
+                    onPress={() => open(month, setMonth, "monthly")}
                     label='Mensual'
                     style={{...s.my(1)}}
                     />
                     
-                    { month && <LineChart
-                        data={data}
-                        width={360} // from react-native
-                        height={220}
-                        yAxisLabel="$"
-                        yAxisSuffix="k"
-                        yAxisInterval={1} // optional, defaults to 1
-                        chartConfig={chartConfig}
-                        bezier
+                    { month && <BarChart
                         style={{
-                        marginVertical: 30,
-                        borderRadius: 5,
-                        justifyContent:'center', alignItems:'center'
-                        }}
-                    />}
+                            marginVertical: 30,
+                            borderRadius: 5,
+                            justifyContent:'center', alignItems:'center'
+                            }}
+                        data={data}
+                        width={360}
+                        height={270}
+                        yAxisLabel="$"
+                        chartConfig={chartConfig}
+                        verticalLabelRotation={30}
+                        yAxisSuffix='xx'
+                        verticalLabelRotation={90}
+                        />}
                 </View>    
 
-           
-           
         </Container>
     )
 }
@@ -176,9 +191,10 @@ const Graphics = () => {
 
 
 
-function mapDispatchToProps() {
+function mapDispatchToProps(state) {
     return {
-        
+        token: state.auth.token,
+         
     }
 }
 
