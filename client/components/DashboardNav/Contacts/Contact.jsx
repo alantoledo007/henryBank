@@ -16,7 +16,7 @@ import { useParams } from "react-router-native";
 
 import colors from "../../style/colors";
 import s from "../../style/styleSheet";
-
+import { Container, Label, Button } from "../../Quantum";
 import axios from "axios";
 import env from "../../../env";
 
@@ -63,18 +63,7 @@ function Contact({ contact, token, close, getContacts }) {
   // const { id } = useParams();
 
   return (
-    <View style={{ ...s.container, paddingTop: 0 }}>
-      <LinearGradient
-        // Background Linear Gradient
-        colors={["rgba(0,0,0,0.8)", "transparent"]}
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 0,
-          height: 300,
-        }}
-      />
+    <Container>
       <ScrollView
         style={{
           position: "relative",
@@ -173,7 +162,7 @@ function Contact({ contact, token, close, getContacts }) {
           <Text style={{ ...s.textWhite, ...s.size(4) }}>Enviar dinero</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </Container>
   );
 }
 
