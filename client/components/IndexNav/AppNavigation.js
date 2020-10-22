@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { connect } from 'react-redux';
 
 // import 'react-native-gesture-handler';
@@ -7,27 +7,35 @@ import { Auth, EmailVerify, CompleteUserData } from './Routes';
 import Dash from '../DashboardNav/Index';
 
 //Este componente va a renderizar un Navigator para cada sección, dependiendo del state de redux
-function AppNavigation({ auth }) {
-    //Si no hay token, mandamos al stack de Auth
-    if (!auth.token) {
-        return <Auth />
-    }
-    //Si hay token pero no está verificado el mail, mandamos al stack de EmailVerify
-    if (!auth.user.emailVerifiedAt) {
-        return <EmailVerify />
-    }
-    //Si hay token y está verificado el mail, pero falta llenar los datos del usuario,
-    //mandamos al stack de CompleteUserData
-    if (!auth.user.dataCompletedAt) {
-        return <CompleteUserData />
-    }
-    //Si no falta ningún dato, entonces todo OK y mandamos al usuario al stack del Dashboard
-    return <Dash />
+function AppNavigation({ user,token }) {
+    const [component,setComponent] = useState(<Dash />);
+    useEffect(() => {
+        let mounted = true;
+        console.log(user);
+        //Si no hay token, mandamos al stack de Auth
+        if(!mounted) return;
+        if (!token) {
+            setComponent(<Auth />)
+        }else if (!user.emailVerifiedAt) {
+            setComponent(<EmailVerify />)
+        }else if (!user.dataCompletedAt) {
+            setComponent(<CompleteUserData />)
+        }else{
+            setComponent(<Dash />)
+        }
+        return () => {
+            mounted = false;
+        };
+        //Si no falta ningún dato, entonces todo OK y mandamos al usuario al stack del Dashboard
+    },[user, token]);
+
+    return component;
 }
 
 const mapStateToProps = state => {
     return {
-        auth: state.auth
+        user: state.auth.user,
+        token: state.auth.token
     }
 }
 

@@ -1,21 +1,17 @@
 //general
 import React, { useState} from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, StatusBar, 
-    TextInput, Picker, ProgressBarAndroid, Modal,TouchableHighlight, ScrollView} from 'react-native';
+import { StyleSheet, View, Text, StatusBar} from 'react-native';
 import { connect } from 'react-redux';
 import { loadAuth, resetRegister } from '../redux/actions/register';
-import  axios  from 'axios';
-import env from '../env';
-import colors from "./style/colors";
-import s from "./style/styleSheet"
-import { LinearGradient } from 'expo-linear-gradient';
 
-import { Input, Button, Container, Label, Logo, bn } from "./Quantum";
+import colors from "./style/colors";
+import s from "./style/styleSheet";
+
+import Toast from 'react-native-toast-message';
+
+import { Input, Button, Container, Label, Logo, bn, toastConfig } from "./Quantum";
 
 function RegisterStepThree(props){
-
-    const [modalVisible, setModalVisible] = useState(false);
-
     const { fullState, resetRegister, token, loadAuth, navigation } =props;
 
     const [direccion, setDireccion] = useState(null);
@@ -32,7 +28,7 @@ function RegisterStepThree(props){
       }, 3000);
     };
     
-    function next () {
+    async function next () {
         if(direccion === null || altura === null || barrio === null ||
             ciudad === null || pais === null ){
             return mostrarError('Debe ingresar todos los datos')}
@@ -53,40 +49,55 @@ function RegisterStepThree(props){
             surname: fullState.surname,
             dataCompletedAt: true
         }
-        // loadAuth(payload)
-        axios.put(`${env.API_URI}/auth/register_confirmation`, 
-            payload,
-        {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
+        await loadAuth({data:payload, token})
+        .then(async res => {
+            await Toast.show({
+                type:'success',
+                text1:"¡Bienvenido!",
+                text2:"El proceso de alta se completó correctamente."
+            })
+        })
+        .catch((err) => {
+            //Manejo de errores:
+            if(err.response?.data?.code === 401){
+                return Toast.show({
+                  type: "error",
+                  text1: "La sesión expiró",
+                  text2: "Por favor, inicie sesión nuevamente."
+                })
             }
-        })
-        .then((response) => {
-            setModalVisible(true)
-
-
-        })
-        .catch((error) => {
-            console.log(error.response)
-            mostrarError('Dirección no es valida')
+            if(err.response?.data?.code === 410){
+                return Toast.show({
+                    type: "error",
+                    text1: "Error inesperado",
+                    text2: "Por favor, reinicie la aplicación."
+                });
+            }
+            if(err.response?.data?.code === 422){
+                return Toast.show({
+                type: "error",
+                text1: "Datos incorrectos",
+                text2: "Uno o más campos no contienen información valida. Por favor verifique e intente nuevamente."
+                })
+            }
+            if(err.response?.data?.code === 500){
+                return Toast.show({
+                type: "error",
+                text1: "Error interno",
+                text2: "Ocurrió un error interno y nuestro equipo ya está trabajando para solucionarlo."
+                })
+            }
+    
+            return Toast.show({
+                type: "error",
+                text1: "Error de conexión",
+                text2: "Por favor, verifique su conexión a internet e intente nuevamente, si el problema persiste ponganse en contacto con el equipo técnico"
+            });
         })     
     }
     
     return (
         <Container >
-            {/* <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
-            /> */}
-
             <Logo />
 
             <Label text="Completá tus datos"/>
@@ -151,53 +162,8 @@ function RegisterStepThree(props){
 
             {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-            }}
-            >
-
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        
-                        <Text style={{...styles.modalText, color:'#221F3B', fontSize: 50}}>Bienvenido</Text>
-                        <View style = {{
-                            borderWidth: 1,
-                            borderColor:'#221F3B',
-                            width: 220,
-                            margin: 10
-                        }} />
-                        <Text style={{...styles.modalText, color:'#FFBD69'}}>Registro completo.</Text>
-            
-                        <TouchableHighlight
-                            style={{ ...styles.openButton, backgroundColor: "#E94560" }}
-                            onPress={() => {
-                                const payload = {
-                                    address_street: direccion,
-                                    address_number: altura,
-                                    locality: barrio,
-                                    province: ciudad,
-                                    country: pais,
-                                    doc_type: fullState.doc_type,
-                                    doc_number: fullState.doc_number,
-                                    phone_number: fullState.phone_number,
-                                    birthdate: fullState.birthdate,
-                                    name: fullState.name,
-                                    surname: fullState.surname,
-                                    dataCompletedAt: true
-                                }
-                                loadAuth(payload);
-                            }}
-                        >
-                            <Text style={styles.textStyle}>Continuar</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            </Modal>    
               
+            <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
         </Container>
     )
 }

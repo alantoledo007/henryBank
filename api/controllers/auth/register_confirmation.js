@@ -140,7 +140,7 @@ module.exports = async (ctx) => {
 			}
 
 			if (information.cantidad !== 0) {
-				User.update(
+				await User.update(
 					{
 						doc_type,
 						doc_number,
@@ -169,13 +169,15 @@ module.exports = async (ctx) => {
 	usuario = await User.findOne({ where: { id } });
 
 	const recharge_code = await generateCode();
+	const cvu = Math.floor(Math.random() * 100000000000)+''+Math.floor(Math.random() * 100000000000);
 
 	const account = await Account.create({
 		recharge_code,
+		cvu
 	});
 
 	await usuario.addAccount(account, { through: { selfGranted: true } });
-
+	console.log(usuario);
 	return {
 		data: {
 			user: {
@@ -187,6 +189,8 @@ module.exports = async (ctx) => {
 				emailVerifiedAt: usuario.emailVerifiedAt,
 				dataCompletedAt: usuario.dataCompletedAt,
 				balance: account.balance,
+				recharge_code,
+				cvu
 			},
 		},
 	};
