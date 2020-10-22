@@ -40,6 +40,8 @@ export default function userReducer(state = initialState, action) {
                     ...action.payload
                 }
             };
+        case 'LOGOUT':
+            return initialState
         default:
             return state;
     }
