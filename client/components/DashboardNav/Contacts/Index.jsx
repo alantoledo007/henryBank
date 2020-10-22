@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { getContacts } from '../../../redux/actions/contact';
 
 import List from './List';
+import { Container, Label, bn, Input, Button } from '../../Quantum';
 
 function Index(props) {
     const { token, user, getContacts, contacts, isFetching } = props;
@@ -34,16 +35,16 @@ function Index(props) {
                 'Authorization': `Bearer ${token}`
             }
         })
-        .then(() => getContacts(token))
-        .then(() => {
-            setDis(false);
-            setModalVisible(!modalVisible);
-        })
-        .catch(err => {
-            setDis(false);
-            console.log('error de agregancia')
-            setModalVisible(!modalVisible);
-        })
+            .then(() => getContacts(token))
+            .then(() => {
+                setDis(false);
+                setModalVisible(!modalVisible);
+            })
+            .catch(err => {
+                setDis(false);
+                console.log('error de agregancia')
+                setModalVisible(!modalVisible);
+            })
     }
 
     const filtrarContactos = nombre => {
@@ -55,27 +56,12 @@ function Index(props) {
         getContacts(token);
     }, [])
     return (
-        <View style={{ ...s.container, marginTop: 0 }}>
-            <LinearGradient
-                // Background Linear Gradient
-                colors={['rgba(0,0,0,0.8)', 'transparent']}
-                style={{
-                    position: 'absolute',
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    height: 300,
-                }}
-            />
-            <View>
-                <Text style={{ ...s.textWhite, ...s.size(6), ...s.textCenter, fontWeight: 'bold' }}>Contactos</Text>
-            </View>
-            <View style={{ flexDirection: 'row', alignItems: 'center', ...s.mt(5) }}>
+        <Container>
+            <View style={{ ...bn('pt-5'), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', ...s.mt(5) }}>
                 <Controller
                     control={control}
                     render={({ onChange, onBlur, value }) => (
-                        <TextInput
-                            style={{ ...s.input, ...s.mt(4), ...s.mb(4), ...s.mr(2), flex: 5 }}
+                        <Input
                             // onChangeText={(value) => {
                             //     filtrarContactos(value)
                             //     return onChange(value)
@@ -84,20 +70,23 @@ function Index(props) {
                             value={value}
                             placeholder="Busca un contacto..."
                             autoCapitalize="none"
-                            />
-                            )}
+                        />
+                    )}
                     name="filtrar"
                     rules={{ required: false }}
                     defaultValue=""
                 />
                 {/* Agrege Estilos nuevos par el boton de agregar contacto */}
-                <TouchableOpacity onPress={() => {
-                    setModalVisible(true);
-                }} style={{ flex: 1, width: 50, height: 50, borderRadius: 50, backgroundColor: colors.pink, justifyContent: "center", alignItems: "center" }}>
-                    <Text style={{ color: colors.white, fontSize: 30, borderStyle: 'solid' }}>+</Text>
-                </TouchableOpacity>
-            </View> 
-            <ScrollView style={{ ...s.mt(1) }}>
+                <View>
+                    <TouchableOpacity onPress={() => {
+                        setModalVisible(true);
+                    }} style={{ width: 50, height: 50, borderRadius: 50, backgroundColor: colors.pink, justifyContent: "center", alignItems: "center" }}>
+                        <Text style={{ color: colors.white, fontSize: 30, borderStyle: 'solid' }}>+</Text>
+                    </TouchableOpacity>
+
+                </View>
+            </View>
+            <ScrollView style={{ ...s.mt(5) }}>
                 {/* Contactos */}
                 <View style={{ borderBottomColor: colors.pink, borderBottomWidth: 1, ...s.mb(5) }} />
                 <List
@@ -111,42 +100,21 @@ function Index(props) {
 
             {/* Modal para agregar contactos */}
             <Modal
-                transparent={true}
+                transparent={false}
                 animationType="slide"
                 visible={modalVisible}
                 onRequestClose={() => {
                     setModalVisible(!modalVisible);
                 }}
             >
-                <View style={{ ...s.mt(20), backgroundColor: colors.blue, margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.7 }} >
-                    <LinearGradient
-                        // Background Linear Gradient
-                        colors={['rgba(0,0,0,0.8)', 'transparent']}
-                        style={{
-                            position: 'absolute',
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            height: 300,
-                            borderRadius: 10,
-                        }}
-                    />
-                    {/* <View style={{ ...s.mb(3) }}>
-                        <TouchableOpacity
-                            onPress={() => {
-                                setModalVisible(!modalVisible);
-                            }}
-                        >
-                            <Text style={s.textColor('orange')}>&lt; Volver</Text>
-                        </TouchableOpacity>
-                    </View> */}
-                    <View>
-                        <Text style={{ ...s.textWhite, ...s.size(3) }}>Alias de Contacto *</Text>                        
+                <View style={{ ...s.mt(20), margin: 20, borderRadius: 10, padding: 15, shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.7 }} >
+                    <View >
+                        <Label text='Alias de Contacto *' style={{...s.size(3)}} />
                         <Controller
                             control={control}
                             render={({ onChange, onBlur, value }) => (
-                                <TextInput
-                                    style={{ ...s.input, ...s.mt(4), ...s.mb(4) }}
+                                <Input
+                                    style={{...s.mt(4), ...s.mb(4) }}
                                     onChangeText={(value) => onChange(value)}
                                     onBlur={onBlur}
                                     value={value}
@@ -159,12 +127,12 @@ function Index(props) {
                             rules={{ required: true }}
                             defaultValue=""
                         />
-                        <Text style={{ ...s.textWhite, ...s.size(3) }}>Email *</Text>
+                        <Label text='Email *' style={{...s.size(3)}} />
                         <Controller
                             control={control}
                             render={({ onChange, onBlur, value }) => (
-                                <TextInput
-                                    style={{ ...s.input, ...s.mt(4), ...s.mb(4) }}
+                                <Input
+                                    style={{ ...s.mt(4), ...s.mb(4) }}
                                     onChangeText={(value) => onChange(value)}
                                     onBlur={onBlur}
                                     value={value}
@@ -180,19 +148,18 @@ function Index(props) {
                         />
                         {errors && <Text>{errors.message}</Text>}
                         <ActivityIndicator animating={dis} size="large" color={colors.pink} />
-                        <TouchableOpacity
-                            style={{ ...s.btn(), ...s.mb(5) }}
+                        <Button label='Agregar' 
                             onPress={handleSubmit(onSubmit)}
-                            disabled={dis}
-                        >
-                            <Text style={{ ...s.textCenter, ...s.textColor(colors.white) }}>AGREGAR</Text>
-                        </TouchableOpacity>
-                        <View><Text style={{ ...s.textWhite, ...s.size(3), ...s.pb(4), ...s.textCenter }}>Si el usuario no tiene Quantum se le enviara una invitación</Text></View>
-                        <Text style={{ ...s.textWhite, ...s.size(2) }} >(*Campos obligatorios)</Text>
+                            disabled={dis}/>
+                        <View>
+                            <Label style={s.textCenter} text='Si el usuario no tiene Quantum se le enviara una invitación' />
+                        
+                        <Label text='(*Campos obligatorios)' style={s.size(2.5)} />
+                        </View>
                     </View>
                 </View>
             </Modal>
-        </View>
+        </Container>
     )
 }
 

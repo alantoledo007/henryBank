@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 export const LOGIN = 'LOGIN';
 export const REGISTER = 'REGISTER';
+export const LOGOUT = 'LOGOUT';
 
 export const login = data => {
     //Cargamos estos datos primero a AsyncStorage
@@ -27,5 +28,11 @@ export function register (data){
         .then(res => {
             dispatch({ type: REGISTER, payload: res.data});
         });
+    }
+}
+
+export const logout = () => {
+    return {
+        type: LOGOUT
     }
 }
