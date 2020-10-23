@@ -37,13 +37,11 @@ function Index(props) {
         })
             .then( response => { 
                 getContacts(token)
-                console.log('response', response.data.data)
                 let partialContacts = contactsState;
                 partialContacts.push({ 
                     User: response.data.data.contact, 
                     nickname: response.data.data.nickname,
                 })
-                console.log(partialContacts);
                 setContactsState( partialContacts );
             })
             .then(() => {
@@ -66,7 +64,6 @@ function Index(props) {
 
     useEffect(() => {
         getContacts(token);
-        console.log('CONTACTS STATE',contactsState)
     }, [])
     return (
         <Container>
