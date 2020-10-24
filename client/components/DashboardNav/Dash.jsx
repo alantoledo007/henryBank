@@ -67,10 +67,6 @@ function Dash({user, navigation}){
         })
     },[state.load])
 
-    const showToastSuccess = (toastData) => {
-        Toast.show(toastData);
-    }
-
     // const [fontsLoaded] = useFonts({
     //     Poppins_600SemiBold
     // })
@@ -168,7 +164,7 @@ function Dash({user, navigation}){
                     setShowDeposit(false);
                 }}
             >
-                <Deposit close={() => setShowDeposit(false)} showToastSuccess={showToastSuccess}/>
+                <Deposit closeModal={() => setShowDeposit(false)} />
             </Modal>
 
             {/* MODAL TRANSFERENCIA */}
@@ -180,7 +176,7 @@ function Dash({user, navigation}){
                     setShowTransfer(false);
                 }}
             >
-                <SendMoney close={() => setShowTransfer(false)} showToastSuccess={showToastSuccess}/>
+                <SendMoney closeModal={() => setShowTransfer(false)} />
             </Modal>
             <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)}/>
         </>

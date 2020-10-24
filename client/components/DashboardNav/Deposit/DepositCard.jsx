@@ -7,16 +7,23 @@ import {
   TextInput,
   ScrollView,
   Modal,
+  ActivityIndicator,
 } from "react-native";
+import { CreditCardInput } from "react-native-credit-card-input";
 
+//Redux
 import { connect } from "react-redux";
+import {
+  getTransactions,
+  updateBalance,
+} from "../../../redux/actions/transactions";
+
 import axios from "axios";
 import env from "../../../env";
 
+//UI
 import { styles as s } from "../../style/styleSheet";
 import colors from "../../style/colors";
-
-import { CreditCardInput } from "react-native-credit-card-input";
 import {
   Container,
   Label,
@@ -25,9 +32,10 @@ import {
   Input,
   QTLink,
 } from "../../Quantum";
-import { getTransactions, updateBalance } from "../../../redux/actions/transactions";
+import Toast from "react-native-toast-message";
 
-const DepositCard = ({ token, close, navigation, updateBalance, showToastSuccess }) => {
+const DepositCard = ({ token, close, updateBalance }) => {
+  const [dis, setDis] = useState(false);
   const [form, setForm] = useState({
     amount: "",
     values: {},
@@ -110,10 +118,12 @@ const DepositCard = ({ token, close, navigation, updateBalance, showToastSuccess
         }
       }
     }
-    if(form.values.name.split(' ').length === 1){
-      return mostrarError("Nombre en tarjeta inválido.")
+    if (form.values.name.split(" ").length === 1) {
+      return mostrarError("Nombre en tarjeta inválido.");
     }
     //Si no hubo ningún error, hago el llamado a API
+    setError("")
+    setDis(true);
     const { number, cvc, expiry, name } = form.values;
     axios
       .post(
@@ -132,19 +142,24 @@ const DepositCard = ({ token, close, navigation, updateBalance, showToastSuccess
         }
       )
       .then((res) => {
+        setDis(false);
+        // setForm({});
         updateBalance(res.data.balance);
-        // setShowModal(true);
-        getTransactions(token);
+        // getTransactions(token);
         close();
-        showToastSuccess({
+        Toast.show({
           type: "success",
-          text1: "¡Recarga exitosa!",
-          text2: `Cargaste $${form.amount} a tu cuenta con la tarjeta\n${hiddenInfo().number}\n${hiddenInfo().name}`
-        })
+          text1: `¡Cargaste $${form.amount} a tu cuenta!`,
+          text2: `Información de la tarjeta:
+          \n${hiddenInfo().number}
+          \n${hiddenInfo().name}
+          \nPuede consultar más información en la sección Movimientos.`,
+        });
       })
-      .catch((err) =>
-        console.log("ERROR en DepositCard al recargar dinero con tarjeta", err)
-      );
+      .catch((err) => {
+        setDis(false);
+        console.log("ERROR en DepositCard al recargar dinero con tarjeta", err);
+      });
   };
 
   return (
@@ -173,7 +188,7 @@ const DepositCard = ({ token, close, navigation, updateBalance, showToastSuccess
           requiresName={true}
           onChange={onChange}
           cardScale={0.7}
-          labelStyle={{color: "black", fontSize: 13}}
+          labelStyle={{ color: "black", fontSize: 13 }}
           labels={{
             number: "NÚMERO DE TARJETA",
             expiry: "VENC.",
@@ -184,13 +199,17 @@ const DepositCard = ({ token, close, navigation, updateBalance, showToastSuccess
       </View>
 
       <View style={styles.submitWrapper}>
-        <Label style={styles.error} text={error}/>
+        {dis && (
+          <ActivityIndicator animating={dis} size="large" color={colors.pink} />
+        )}
+        {error ? <Label style={styles.error} text={error} /> : null}
         <Button
           style={{
             width: 200,
             height: 60,
             alignSelf: "center",
             justifyContent: "center",
+            marginTop: 5
           }}
           textStyle={{ fontSize: 25 }}
           onPress={onSubmit}
@@ -249,7 +268,7 @@ const styles = StyleSheet.create({
     fontSize: 25,
     alignSelf: "center",
     textAlign: "center",
-    marginBottom: 20
+    marginBottom: 20,
   },
   centeredView: {
     flex: 1,
@@ -292,11 +311,11 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    getTransactions: token => dispatch(getTransactions(token)),
-    updateBalance: balance => dispatch(updateBalance(balance))
-  }
-}
+    getTransactions: (token) => dispatch(getTransactions(token)),
+    updateBalance: (balance) => dispatch(updateBalance(balance)),
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DepositCard);
