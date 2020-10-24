@@ -146,7 +146,7 @@ export function Container({children, style}){
     
     return (
         <ScrollView>
-            <View style={{ ...hbn('container p-3 bg-body',theme),height:(Dimensions.get('window').height + statusBar.currentHeight), justifyContent:'center',...style}}>
+            <View style={{ ...hbn('container p-3 bg-body',theme),height:(Dimensions.get('window').height), justifyContent:'center',...style}}>
                 {children}
             </View>
             <StatusBar backgroundColor={theme === 'dark' ? 'rgba(23,22,23, .9)' : 'rgba(255, 255, 255, .9)'} style="auto" />
@@ -191,7 +191,7 @@ export function Logo({size, style}){
     );
 };
 
-function DefaultButton({label, color, onPress, style, textStyle, editable, outline, disabled}){
+export function DefaultButton({label, color, onPress, style, textStyle, editable, outline, disabled}){
     const colorScheme = useColorScheme();
 
     const defaultStyles = {
