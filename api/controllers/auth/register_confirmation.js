@@ -169,15 +169,24 @@ module.exports = async (ctx) => {
 	usuario = await User.findOne({ where: { id } });
 
 	const recharge_code = await generateCode();
+	const recharge_codeUSD = await generateCode();
 	const cvu = Math.floor(Math.random() * 100000000000)+''+Math.floor(Math.random() * 100000000000);
+	const cvuUSD = Math.floor(Math.random() * 100000000000)+''+Math.floor(Math.random() * 100000000000);
 
 	const account = await Account.create({
 		recharge_code,
 		cvu
 	});
 
+	const usdAccount = await Account.create({
+		recharge_code:recharge_codeUSD,
+		cvu:cvuUSD,
+		currency:'usd'
+	});
+
 	await usuario.addAccount(account, { through: { selfGranted: true } });
-	console.log(usuario);
+	await usuario.addAccount(usdAccount, { through: { selfGranted: true } });
+
 	return {
 		data: {
 			user: {
