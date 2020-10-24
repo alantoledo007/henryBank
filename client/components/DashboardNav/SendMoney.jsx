@@ -117,7 +117,7 @@ const SendMoney = (props) => {
         },
       })
       .then((response) => {
-        // console.log('TRANSFER SUCCESS',response.data)
+        console.log('TRANSFER SUCCESS',response.data)
         //actualizamos el balance en redux
         updateBalance(response.data.balance);
         //Mostramos el toast de transferencia completa y cerramos el modal:
@@ -125,8 +125,7 @@ const SendMoney = (props) => {
         showToastSuccess({
           type: "success",
           text1: "Transeferencia completa",
-          //Quiza haya que cambiar esto, cuando se arregle la respuesta del back, por ahora llega sólo el balance.
-          text2: response.data.title,
+          text2: response.data.transaccion.title,
         });
       })
       .catch((error) => {
