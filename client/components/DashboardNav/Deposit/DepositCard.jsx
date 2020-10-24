@@ -211,6 +211,7 @@ const DepositCard = ({ token, close, updateBalance }) => {
             justifyContent: "center",
             marginTop: 5
           }}
+          disabled={dis}
           textStyle={{ fontSize: 25 }}
           onPress={onSubmit}
           label="Confirmar"
