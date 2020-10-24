@@ -21,10 +21,10 @@ function Index(props) {
     const { token, user, getContacts, contacts, isFetching } = props;
 
     // const [ allContacts, setAllContacts ] = useState(null);
-    // const [ contacts, setContacts ] = useState(null);
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalError, setModalError] = useState(null)
-    const [dis, setDis] = useState(false);
+    const [ contactsState, setContactsState ] = useState( contacts );
+    const [ modalVisible, setModalVisible ] = useState(false);
+    const [ modalError, setModalError ] = useState(null)
+    const [ dis, setDis ] = useState(false);
     const { control, errors, handleSubmit } = useForm();
 
     const onSubmit = data => {
@@ -35,10 +35,19 @@ function Index(props) {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then(() => getContacts(token))
+            .then( response => { 
+                getContacts(token)
+                let partialContacts = contactsState;
+                partialContacts.push({ 
+                    User: response.data.data.contact, 
+                    nickname: response.data.data.nickname,
+                })
+                setContactsState( partialContacts );
+            })
             .then(() => {
                 setDis(false);
                 setModalVisible(!modalVisible);
+                setContactsState
             })
             .catch(err => {
                 setDis(false);
@@ -49,8 +58,9 @@ function Index(props) {
 
     const filtrarContactos = nombre => {
         nombre = nombre.toLowerCase()
-        setContacts(allContacts.filter(contact => (contact.nickname.toLowerCase().includes(nombre.toLowerCase()))))
+        setContactsState(contacts.filter(contact => (contact.nickname.toLowerCase().includes(nombre.toLowerCase()))))
     }
+    
 
     useEffect(() => {
         getContacts(token);
@@ -62,10 +72,10 @@ function Index(props) {
                     control={control}
                     render={({ onChange, onBlur, value }) => (
                         <Input
-                            // onChangeText={(value) => {
-                            //     filtrarContactos(value)
-                            //     return onChange(value)
-                            // }}
+                            onChangeText={(value) => {
+                                filtrarContactos(value)
+                                return onChange(value)
+                            }}
                             onBlur={onBlur}
                             value={value}
                             placeholder="Busca un contacto..."
@@ -89,12 +99,12 @@ function Index(props) {
             <ScrollView style={{ ...s.mt(5) }}>
                 {/* Contactos */}
                 <View style={{ borderBottomColor: colors.pink, borderBottomWidth: 1, ...s.mb(5) }} />
-                <List
-                    contacts={contacts}
+                {contactsState && <List
+                    contacts={contactsState}
                     isFetching={isFetching}
                     token={token}
                     getContacts={getContacts}
-                />
+                />}
 
             </ScrollView>
 
