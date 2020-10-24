@@ -21,7 +21,7 @@ export function register (data){
     // AsyncStorage.setItem('auth', JSON.stringify(data), err => {
     //     if (err) console.log('ERROR en AsyncStorage.setItem en redux/actions/auth, en register', err);
     // });
-    console.log(data);
+    // console.log(data);
     return dispatch => {
         return Axios.post(env.API_URI + '/auth/register',data,{headers:{'accept':'application/json','content-type':'application/json'}})
         .then(res => res.data)

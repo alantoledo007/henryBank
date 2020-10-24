@@ -21,7 +21,7 @@ import DepositCash from "./DepositCash";
 import DepositCard from "./DepositCard";
 import { Container, Label, Button, QTLink } from "../../Quantum";
 
-const Deposit = ({ close, navigation }) => {
+const Deposit = ({ close, navigation, showToastSuccess }) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
 
   return (
@@ -66,7 +66,7 @@ const Deposit = ({ close, navigation }) => {
       </View>
       {/* Según el state paymentMethod, renderizamos un componente u otro: */}
       {paymentMethod === "cash" && <DepositCash />}
-      {paymentMethod === "card" && <DepositCard close={close} navigation={navigation} />}
+      {paymentMethod === "card" && <DepositCard close={close} navigation={navigation} showToastSuccess={showToastSuccess} />}
 
       {/* {navigation ? 
         <QTLink label="¿Necesitás ayuda?" {...{ navigation }} to="Dash" />

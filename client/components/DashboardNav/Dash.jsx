@@ -15,7 +15,9 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { AppLoading } from 'expo'
 
 // UI
-import { bn, Container, hbn, Label, QTLink } from '../Quantum';
+import { bn, Container, hbn, Label, QTLink, toastConfig } from '../Quantum';
+import Toast from 'react-native-toast-message';
+
   
 function Dash({user, navigation}){
     const headerHeight = useHeaderHeight();
@@ -41,7 +43,7 @@ function Dash({user, navigation}){
 
     useEffect(() => {
         if(!user) return;
-        console.log(user)
+        // console.log(user)
         let data = user;
         data.avatar = user.avatar ? user.avatar : urlAvatar(user.name, user.surname);
         setState(state => {
@@ -64,6 +66,10 @@ function Dash({user, navigation}){
             }
         })
     },[state.load])
+
+    const showToastSuccess = (toastData) => {
+        Toast.show(toastData);
+    }
 
     // const [fontsLoaded] = useFonts({
     //     Poppins_600SemiBold
@@ -162,7 +168,7 @@ function Dash({user, navigation}){
                     setShowDeposit(false);
                 }}
             >
-                <Deposit close={() => setShowDeposit(false)}/>
+                <Deposit close={() => setShowDeposit(false)} showToastSuccess={showToastSuccess}/>
             </Modal>
 
             {/* MODAL TRANSFERENCIA */}
@@ -174,8 +180,9 @@ function Dash({user, navigation}){
                     setShowTransfer(false);
                 }}
             >
-                <SendMoney close={() => setShowTransfer(false)}/>
+                <SendMoney close={() => setShowTransfer(false)} showToastSuccess={showToastSuccess}/>
             </Modal>
+            <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)}/>
         </>
     );
 }

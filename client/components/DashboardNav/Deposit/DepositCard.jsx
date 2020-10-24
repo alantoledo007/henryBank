@@ -27,7 +27,7 @@ import {
 } from "../../Quantum";
 import { getTransactions, updateBalance } from "../../../redux/actions/transactions";
 
-const DepositCard = ({ token, close, navigation, updateBalance }) => {
+const DepositCard = ({ token, close, navigation, updateBalance, showToastSuccess }) => {
   const [form, setForm] = useState({
     amount: "",
     values: {},
@@ -41,7 +41,6 @@ const DepositCard = ({ token, close, navigation, updateBalance }) => {
     },
   });
 
-  const [showModal, setShowModal] = useState(false);
   const hiddenInfo = () => {
     const splitName = form.values.name
       ? form.values.name.toUpperCase().split(" ")
@@ -134,8 +133,14 @@ const DepositCard = ({ token, close, navigation, updateBalance }) => {
       )
       .then((res) => {
         updateBalance(res.data.balance);
-        setShowModal(true);
+        // setShowModal(true);
         getTransactions(token);
+        close();
+        showToastSuccess({
+          type: "success",
+          text1: "¡Recarga exitosa!",
+          text2: `Cargaste $${form.amount} a tu cuenta con la tarjeta\n${hiddenInfo().number}\n${hiddenInfo().name}`
+        })
       })
       .catch((err) =>
         console.log("ERROR en DepositCard al recargar dinero con tarjeta", err)
@@ -192,56 +197,6 @@ const DepositCard = ({ token, close, navigation, updateBalance }) => {
           label="Confirmar"
         />
       </View>
-      {/* MODAL DE RECARGA CON ÉXITO */}
-      <Modal animationType="slide" transparent={true} visible={showModal}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text
-              style={{ ...styles.text, ...styles.successText, fontSize: 30 }}
-            >
-              ¡Recarga exitosa!
-            </Text>
-            <Text style={{ ...styles.text, ...styles.successText }}>
-              Cargaste{" "}
-              <Text
-                style={{
-                  ...styles.text,
-                  ...styles.successText,
-                  color: colors.orange,
-                }}
-              >
-                ${form.amount}
-              </Text>{" "}
-              a tu cuenta.
-            </Text>
-            <Text style={{ ...styles.text, ...styles.successText }}>
-              Información de la tarjeta:{"\n"}
-              <Text
-                style={{
-                  ...styles.text,
-                  ...styles.successText,
-                  color: colors.orange,
-                }}
-              >
-                {/* Número de tarjeta parcialmente oculto */}
-                {hiddenInfo().number}
-              </Text>
-              {"\n"}
-              <Text
-                style={{
-                  ...styles.text,
-                  ...styles.successText,
-                  color: colors.orange,
-                }}
-              >
-                {hiddenInfo().name}
-              </Text>
-            </Text>
-            <Button label="Listo" onPress={navigation ? ()=>navigation.navigate("Dashboard") : close}/>
-
-          </View>
-        </View>
-      </Modal>
     </View>
   );
 };

@@ -28,7 +28,7 @@ import { Container, Label, Input, Alert, toastConfig } from "../Quantum";
 import Toast from 'react-native-toast-message';
 
 const SendMoney = (props) => {
-  const { token, balance, close, navigation, updateBalance } = props;
+  const { token, balance, close, navigation, updateBalance, showToastSuccess } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState("Contactos");
@@ -116,11 +116,16 @@ const SendMoney = (props) => {
           "Content-Type": "application/json",
         },
       })
-      .then(async (response) => {
+      .then((response) => {
+        // console.log('TRANSFER SUCCESS',response.data)
+        //actualizamos el balance en redux
         updateBalance(response.data.balance);
-        return await Toast.show({
+        //Mostramos el toast de transferencia completa y cerramos el modal:
+        close();
+        showToastSuccess({
           type: "success",
           text1: "Transeferencia completa",
+          //Quiza haya que cambiar esto, cuando se arregle la respuesta del back, por ahora llega sólo el balance.
           text2: response.data.title,
         });
       })
