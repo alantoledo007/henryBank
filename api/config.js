@@ -7,8 +7,8 @@ module.exports = {
 	actions_protected: [
 		//todas las acciones incorporadas dentro de este array requerirán autenticación jwt
 		"auth.register_confirmation",
-		"transactions.transaction",
 
+		"transactions.transaction",
 		"transactions.transaction_get",
 
 		"stats.stats",
@@ -20,5 +20,8 @@ module.exports = {
 		"contacts.create",
 		"contacts.update",
 		"contacts.delete",
+
+		"dollars.buy",
+		"dollars.sell"
 	],
 };
