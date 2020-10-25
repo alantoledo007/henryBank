@@ -72,6 +72,7 @@ export function Menu() {
 }
 export const DepositRoute = () => {
     const DepositoStackNavigator = createStackNavigator();
+    const theme = useColorScheme();
     return (
         <DepositoStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
             <DepositoStackNavigator.Screen name='Recarga' component={Deposit} />

@@ -28,7 +28,7 @@ import { Container, Label, Input, Alert, toastConfig } from "../Quantum";
 import Toast from 'react-native-toast-message';
 
 const SendMoney = (props) => {
-  const { token, balance, close, navigation, updateBalance } = props;
+  const { token, balance, closeModal, navigation, updateBalance } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState("Contactos");
@@ -41,6 +41,17 @@ const SendMoney = (props) => {
   const [flag, setFlag] = useState(false);
   const [find, setFind] = useState(false);
   const [invite, setInvite] = useState("");
+
+  //armé esta función por si se puede llegar a este componente desde el modal en Dash Y otra manera que involucre react navigation
+  //Maneja los dos casos para salir del componente
+  const close = () => {
+    //Si hay navigation, es decir, si se navegó a este componente mediante el menú, usamos navigate
+    if(navigation){
+      return navigation.navigate("Dashboard")
+    }
+    //Si no, es decir, si se está viendo el componente a través de modal, cerramos el modal
+    closeModal();
+  }
 
   const contancts = () => {
     axios
@@ -116,13 +127,22 @@ const SendMoney = (props) => {
           "Content-Type": "application/json",
         },
       })
-      .then(async (response) => {
+      .then((response) => {
+        console.log('TRANSFER SUCCESS',response.data)
+        //actualizamos el balance en redux
         updateBalance(response.data.balance);
-        return await Toast.show({
+        //Mostramos el toast de transferencia completa y cerramos el modal:
+        closeModal();
+        Toast.show({
           type: "success",
           text1: "Transeferencia completa",
-          text2: response.data.title,
-        });
+          text2: response.data.transaccion.title,
+        })
+        // showToastSuccess({
+        //   type: "success",
+        //   text1: "Transeferencia completa",
+        //   text2: response.data.transaccion.title,
+        // });
       })
       .catch((error) => {
         if (error.message.includes("409")) {
@@ -149,7 +169,7 @@ const SendMoney = (props) => {
   return (
     <Container>
       <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
-        {close && (
+        {closeModal && (
           <TouchableWithoutFeedback onPress={close}>
             <Image
               style={{ height: 15 }}
