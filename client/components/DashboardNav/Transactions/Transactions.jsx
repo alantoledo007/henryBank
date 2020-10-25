@@ -55,14 +55,13 @@ export function Transactions({
   }, []);
   return (
     <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
-      <Alert content="Mis movimientos" />
+       {transactions.length ? <Alert content="Mis movimientos" /> : <Alert content="Sin movimientos" />} 
 
 
       <ScrollView style={bn('my-2')}>
         <List transactions={transactions} select={select} isFetching={isFetching} />
       </ScrollView>
 
-      <Button outline="primary" color="transparent" style={{width:120,alignSelf: "center",...bn('my-1')}} onPress={()=>getTransactions(token)} label="Actualizar"/>
       <Modal
         visible={show}
         animationType="slide"

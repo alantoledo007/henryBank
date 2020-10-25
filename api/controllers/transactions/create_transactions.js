@@ -44,7 +44,8 @@ module.exports = async (ctx)=>{
 
     const transaccion = Transaction.create({
         title:`Enviaste $${amount} a ${usuario_receptor.name} ${usuario_receptor.surname}`,
-        description:description,
+        description:'Transferencia',
+        message: description,
         amount: 0-amount,
         account_id:usuario_emisor.accounts[0].id
     }).then( async (res)=>{
@@ -55,7 +56,8 @@ module.exports = async (ctx)=>{
 
         Transaction.create({
             title:`Recibiste $${amount} de ${usuario_emisor.name} ${usuario_emisor.surname}`,
-            description:description,
+            description:'Transferencia',
+            message: description,
             amount,
             account_id:usuario_receptor.accounts[0].id
         }).then( async ()=>{

@@ -71,7 +71,7 @@ function DrawerContent(props) {
                                         size={size}
                                     />
                                 )}
-                                label='Transferencias'
+                                label='Movimientos'
                                 labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
                                 onPress={ () => navigation.navigate('Transferencias')}
                             />
