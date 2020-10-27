@@ -9,6 +9,6 @@ module.exports = async (ctx)=>{
 
     const profile = await User.findOne({where:{id},attributes:['name','surname','avatar','doc_type','doc_number','phone_number','email','address_street','address_number','locality','province','createdAt']})
     
-    return {data:profile}
+    return {profile}
     
 }
