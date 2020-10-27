@@ -31,16 +31,17 @@ export default function Transaction({ data, close }) {
     <View style={{...styles.container }}>
       <View style={{
           ...styles.modal,
-          ...theme === 'dark' ? hbn('bg-stats','dark') : hbn('bg-stats'),
+          ...theme === 'dark' ? hbn('bg-light2','dark') : hbn('bg-light2'),
           ...bn('borderRadius-5')
         }}>
-          
+        
           <Button onPress={close}
             style={{...bn('w-100 py-1 bg-red px-1 w-30'),position:'absolute', top:-5,right:-5 }}
             textStyle={{ color:'#fff' }}
             label="x"
             />
 
+                  <View style={{backgroundColor:'#F8F9FA'}}>
         <Label style={bn('h3 text-center py-2')} text={`${format(amount)}`} />
         
         <View>
@@ -55,6 +56,7 @@ export default function Transaction({ data, close }) {
         </DataTable>
         </View>
 
+      </View>
       </View>
     </View>
   );
