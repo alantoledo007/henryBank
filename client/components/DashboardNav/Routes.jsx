@@ -16,6 +16,7 @@ import Contacts from "./Contacts/Index";
 import DrawerContent from "./DrawerContent";
 import Graphics from "./graphics";
 import Transactions from './Transactions/Transactions';
+import Profile from './Profile/Index';
 
 // UI
 import { Button, hbn, darkColors, lightColors, defaultColors} from '../Quantum';
@@ -132,6 +133,7 @@ export const DashboardRoutes = (props) => {
             <DashStack.Screen component={Graphics} name="Estadísticas" />
             <DashStack.Screen component={Transactions} name="Transacciones" />
             <DashStack.Screen component={Contacts} name="Contactos" />
+            <DashStack.Screen component={Profile} name="Mi Perfil"/>
         </DashStack.Navigator>
     );
 };
