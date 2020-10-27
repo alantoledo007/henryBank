@@ -25,7 +25,9 @@ export default function List({ contacts, isFetching, token, getContacts }) {
       email: ""
     }
   });
-
+  const urlAvatar = (name,surname) => {
+    return 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000'
+}
   const handleContactPress = (contact) => {
     console.log(contact);
     setContactData(contact);
@@ -41,7 +43,7 @@ export default function List({ contacts, isFetching, token, getContacts }) {
             <TouchableOpacity onPress={() => handleContactPress(contact)}>
               <View style={{ ...s.mb(4), flexDirection: "row" }}>
                 <Image
-                  source={{ uri: contact.User.avatar }}
+                  source={{ uri: contact.User.avatar ? contact.User.avatar : urlAvatar(contact.User.name, contact.User.surname) }}
                   style={{
                     width: 50,
                     height: 50,
@@ -50,7 +52,7 @@ export default function List({ contacts, isFetching, token, getContacts }) {
                   }}
                 ></Image>
                 <View>
-                    <Label text={` ${contact.nickname.toLowerCase()}`} />
+                    <Label text={`${contact.nickname.toLowerCase()}`} />
                   <Text
                     style={{
                       ...s.textColor('black'),

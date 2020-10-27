@@ -42,7 +42,7 @@ module.exports = async (ctx)=>{
         where: { id: usuario_emisor.accounts[0].id },
     });
 
-    const transaccion = Transaction.create({
+    const transaccion = await Transaction.create({
         title:`Enviaste $${amount} a ${usuario_receptor.name} ${usuario_receptor.surname}`,
         description:'Transferencia',
         message: description,

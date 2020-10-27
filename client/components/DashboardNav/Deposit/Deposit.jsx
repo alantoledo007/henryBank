@@ -21,8 +21,19 @@ import DepositCash from "./DepositCash";
 import DepositCard from "./DepositCard";
 import { Container, Label, Button, QTLink } from "../../Quantum";
 
-const Deposit = ({ close, navigation }) => {
+const Deposit = ({ closeModal, navigation }) => {
   const [paymentMethod, setPaymentMethod] = useState("cash");
+
+  //armé esta función por si se puede llegar a este componente desde el modal en Dash Y otra manera que involucre react navigation
+  //Maneja los dos casos para salir del componente
+  const close = () => {
+    //Si hay navigation, es decir, si se navegó a este componente mediante el menú, usamos navigate
+    if(navigation){
+      return navigation.navigate("Dashboard")
+    }
+    //Si no, es decir, si se está viendo el componente a través de modal, cerramos el modal
+    closeModal();
+  }
 
   return (
     <Container style={styles.container}>
@@ -39,7 +50,7 @@ const Deposit = ({ close, navigation }) => {
       /> */}
 
       <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
-        {close && (
+        {closeModal && (
           <TouchableWithoutFeedback onPress={close}>
             <Image
               style={{ height: 15 }}

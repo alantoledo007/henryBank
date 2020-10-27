@@ -11,7 +11,7 @@ function AppNavigation({ user,token }) {
     const [component,setComponent] = useState(<Dash />);
     useEffect(() => {
         let mounted = true;
-        console.log(user);
+        // console.log(user);
         //Si no hay token, mandamos al stack de Auth
         if(!mounted) return;
         if (!token) {
