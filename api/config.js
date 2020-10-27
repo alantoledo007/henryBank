@@ -22,6 +22,8 @@ module.exports = {
 		"contacts.delete",
 
 		"dollars.buy",
-		"dollars.sell"
+		"dollars.sell",
+		"me.myprofile",
+		"me.updateprofile",
 	],
 };
