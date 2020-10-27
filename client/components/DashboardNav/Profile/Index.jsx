@@ -1,17 +1,23 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
-import axios from "axios";
 
+//api
+import axios from "axios";
+import env from "../../../env";
+
+//ui
+import colors from "../../style/colors";
 //sub-components
 import { Container, Input, Button, Label, QTLink } from "../../Quantum";
 import ViewProfile from "./ViewProfile";
 import Edit from "./Edit";
 
 function Profile({ token, user, navigation }) {
+  const [dis, setDis] = useState(false);
   const [userData, setUserData] = useState({
-    name: "",
-    surname: "",
+    name: user.name,
+    surname: user.surname,
     email: "",
     avatar: "",
     createdAt: "",
@@ -24,35 +30,46 @@ function Profile({ token, user, navigation }) {
     doc_number: "",
   });
   const [editMode, setEditMode] = useState(false);
-  const dataExample = {
-    name: user.name,
-    surname: user.surname,
-    email: user.email,
-    avatar: user.avatar,
-    createdAt: "2020-10-26",
-    phone_number: "1534834999",
-    address_street: "Avenida Pueyrredon",
-    address_number: 895,
-    locality: "Ciudad Autónoma de Buenos Aires",
-    province: "Ciudad Autónoma de Buenos Aires",
-    doc_type: "dni",
-    doc_number: "42011806",
+
+
+  // const submitChanges = form => {
+  //   axios.put('blablabla', {})
+  // }
+
+  const getUserData = (token) => {
+    setDis(true);
+    axios
+      .get(`${env.API_URI}/me/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        setUserData(response.data.profile);
+        setDis(false);
+      })
+      // .then(()=>console.log(userData))
+      .catch((err) => {
+        setDis(false);
+        console.log("ERROR AL TRAER INFO DE PERFIL", err);
+      });
   };
 
-  const submitChanges = form => {
-    axios.put('blablabla', {})
-  }
+  useEffect(() => {
+    getUserData(token);
+  }, []);
 
   return (
     <Container style={styles.container}>
+      <ActivityIndicator animating={dis} size="large" color={colors.pink} />
       {editMode ? (
         <Edit
-          data={dataExample}
+          data={userData}
           token={token}
           exitEditMode={() => setEditMode(false)}
         />
       ) : (
-        <ViewProfile data={dataExample} editMode={() => setEditMode(true)} />
+        <ViewProfile data={userData} editMode={() => setEditMode(true)} />
       )}
     </Container>
   );

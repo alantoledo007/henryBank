@@ -27,7 +27,7 @@ export default function ViewProfile({ data, editMode }) {
   const pickImage = async () => {
     
     ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
@@ -39,6 +39,7 @@ export default function ViewProfile({ data, editMode }) {
   };
 
   useEffect(() => {
+    //Pedimos permiso para acceder a la galería
     (async () => {
       if (Platform.OS !== 'web') {
         const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -128,6 +129,6 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   data: {
-    fontSize: 30,
+    // fontSize: 20,
   },
 });
