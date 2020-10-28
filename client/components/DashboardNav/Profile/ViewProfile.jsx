@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet, Image, ScrollView, Platform } from "react-native";
 
 import { Container, Input, Button, Label, QTLink } from "../../Quantum";
+import Toast from "react-native-toast-message";
 
-import * as ImagePicker from 'expo-image-picker';
-//INSTALAR CON --SAVE, SI SIGUE ACA ESTE COMENTARIO ES PORQUE ME OLVIDÉ CUACKARARARA
+import * as ImagePicker from "expo-image-picker";
 
-export default function ViewProfile({ data, editMode }) {
+export default function ViewProfile({ data, editMode, updateAvatar }) {
   // console.log(ImagePicker)
-  const [avatarImage, setAvatarImage] = useState(data.avatar);
   const {
     name,
     surname,
     email,
-    // avatar,
+    avatar,
     createdAt,
     phone_number,
     address_street,
@@ -25,26 +24,28 @@ export default function ViewProfile({ data, editMode }) {
   } = data;
 
   const pickImage = async () => {
-    
     ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
-      // base64: true
-    }).then(result => {
-      console.log(result)
-      setAvatarImage(result.uri)
-    })
+      base64: true,
+    }).then((result) => updateAvatar(result.base64));
   };
 
   useEffect(() => {
     //Pedimos permiso para acceder a la galería
     (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Perdón, necesitamos permisos de la galería para poder modificar tu foto de perfil!');
+      if (Platform.OS !== "web") {
+        const {
+          status,
+        } = await ImagePicker.requestCameraRollPermissionsAsync();
+        if (status !== "granted") {
+          Toast.show({
+            type: "error",
+            text1:
+              "Si deseas modificar tu foto de perfil, deberás darnos permiso para acceder a tu galería de fotos.",
+          });
         }
       }
     })();
@@ -53,30 +54,36 @@ export default function ViewProfile({ data, editMode }) {
     <>
       <View style={styles.titleWrapper}>
         <View style={styles.imgWrapper}>
-          <Image style={styles.img} source={{ uri: avatarImage }} />
+          <Image style={styles.img} source={{ uri: avatar }} />
         </View>
         <Button
           onPress={pickImage}
           label="Cambiar foto"
-          style={{ height: 10, justifyContent: "center" }}
+          style={{ height: 10, justifyContent: "center", marginTop: 3 }}
         />
         <Label style={styles.nameTitle} text={name} />
       </View>
 
       <View style={styles.section}>
-        <Label style={styles.subtitle} text="Nombre completo" />
+        <Label style={styles.subtitle} text="Nombre completo:" />
         <Label style={styles.data} text={name + " " + surname} />
       </View>
-      <View style={styles.section}>
-        <Label style={styles.subtitle} text="Dirección de correo electrónico" />
-        <Label style={styles.data} text={email} />
+      <View style={styles.email}>
+        <View style={styles.section}>
+          <Label
+            style={styles.subtitle}
+            text="Dirección de correo electrónico:"
+          />
+          <Label style={styles.data} text={email} />
+        </View>
+        <Button style={{height: 10, justifyContent: "center"}}label="Cambiar email"/>
       </View>
       <View style={styles.section}>
-        <Label style={styles.subtitle} text="Número de teléfono" />
+        <Label style={styles.subtitle} text="Número de teléfono:" />
         <Label style={styles.data} text={phone_number} />
       </View>
       <View style={styles.section}>
-        <Label style={styles.subtitle} text="Dirección" />
+        <Label style={styles.subtitle} text="Domicilio:" />
         <Label
           style={styles.data}
           text={`${address_street} ${address_number}, ${
@@ -93,10 +100,14 @@ export default function ViewProfile({ data, editMode }) {
       </View>
       <View style={styles.section}>
         <Label style={styles.subtitle} text={"Fecha de registro:"} />
-        <Label style={styles.data} text={createdAt} />
+        <Label style={styles.data} text={createdAt.slice(0, 10)} />
       </View>
 
-      <Button onPress={editMode} label="Editar información" />
+      <Button
+        textStyle={{ fontSize: 25 }}
+        onPress={editMode}
+        label="Actualizar información"
+      />
     </>
   );
 }
@@ -126,9 +137,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   subtitle: {
-    fontSize: 15,
+    fontSize: 13,
   },
   data: {
     // fontSize: 20,
   },
+  email: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }
 });

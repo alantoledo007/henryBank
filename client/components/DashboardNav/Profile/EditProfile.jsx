@@ -5,7 +5,7 @@ import { View, Text, Image, StyleSheet } from "react-native";
 import { Container, Input, Button, Label, QTLink } from "../../Quantum";
 import Toast from "react-native-toast-message";
 
-export default function EditProfile({ token, data, exitEditMode }) {
+export default function EditProfile({ data, exitEditMode, onSubmit }) {
   const { control, handleSubmit, errors } = useForm();
   const [dis, setDis] = useState(false);
 
@@ -24,23 +24,33 @@ export default function EditProfile({ token, data, exitEditMode }) {
     doc_number,
   } = data;
 
-  const onSubmit = data => {
-    setDis(false);
-
-  }
-
   return (
     <>
+    <Label style={{fontSize: 45, alignSelf: "center"}} text="Editar perfil"/>
       <View style={styles.titleWrapper}>
         <View style={styles.imgWrapper}>
           <Image style={styles.img} source={{ uri: avatar }} />
         </View>
         <Label style={styles.nameTitle} text={name} />
       </View>
-      <QTLink
+      {/* <QTLink
         style={{ marginVertical: 5, fontSize: 20 }}
         label="Cambiar dirección de correo electrónico"
-      />
+      /> */}
+      {/* <Label text="Cambiar dirección de correo electrónico" />
+      <Controller
+        control={control}
+        render={({ onChange, value }) => (
+          <Input
+            onChangeText={(value) => onChange(value)}
+            value={value}
+            editable={!dis}
+          />
+        )}
+        name="email"
+        defaultValue={email}
+      /> */}
+      {errors.email && <Label type="error" text={errors.email.message}/>}
       <View style={styles.streetInputs}>
         <View>
           <Label text="Calle" />
@@ -51,10 +61,12 @@ export default function EditProfile({ token, data, exitEditMode }) {
                 onChangeText={(value) => onChange(value)}
                 value={value}
                 editable={!dis}
+                // placeholder={address_street}
               />
             )}
             name="address_street"
-            defaultValue={address_street}
+            rules={{required: "Ingrese su calle"}}
+            defaultValue={""}
           />
           {errors.address_street && (
             <Label type="error" text={errors.address_street.message} />
@@ -69,10 +81,15 @@ export default function EditProfile({ token, data, exitEditMode }) {
                 onChangeText={(value) => onChange(value)}
                 value={value}
                 editable={!dis}
+                keyboardType="number-pad"
+                // placeholder={address_number}
               />
             )}
             name="address_number"
-            defaultValue={`${address_number}`}
+            defaultValue={""}
+            rules={{required: "Ingrese la altura"}}
+
+            placeholder={address_number}
           />
           {errors.address_number && (
             <Label type="error" text={errors.address_number.message} />
@@ -91,7 +108,8 @@ export default function EditProfile({ token, data, exitEditMode }) {
           />
         )}
         name="locality"
-        defaultValue={locality}
+        rules={{required: "Ingrese su localidad de residencia"}}
+        defaultValue={""}
       />
       {errors.locality && <Label type="error" text={errors.locality.message} />}
 
@@ -106,7 +124,8 @@ export default function EditProfile({ token, data, exitEditMode }) {
           />
         )}
         name="province"
-        defaultValue={province}
+        rules={{required: "Ingrese su provincia de residencia"}}
+        defaultValue={""}
       />
       {errors.province && <Label type="error" text={errors.province.message} />}
 
@@ -118,6 +137,7 @@ export default function EditProfile({ token, data, exitEditMode }) {
             onChangeText={(value) => onChange(value)}
             value={value}
             editable={!dis}
+            keyboardType="number-pad"
           />
         )}
         name="phone_number"
@@ -131,11 +151,11 @@ export default function EditProfile({ token, data, exitEditMode }) {
         style={{
           flexDirection: "row",
           justifyContent: "space-evenly",
-          marginTop: 5,
+          marginTop: 15,
         }}
       >
         <Button onPress={exitEditMode} label="Cancelar" />
-        <Button onPress={() => {}} label="Guardar" />
+        <Button onPress={handleSubmit(onSubmit)} label="Guardar" />
       </View>
     </>
   );

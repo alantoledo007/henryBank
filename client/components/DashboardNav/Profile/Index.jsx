@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
 
 //api
@@ -8,18 +8,24 @@ import env from "../../../env";
 
 //ui
 import colors from "../../style/colors";
+import Toast from "react-native-toast-message";
+
 //sub-components
-import { Container, Input, Button, Label, QTLink } from "../../Quantum";
+import {
+  Container,
+  toastConfig,
+} from "../../Quantum";
 import ViewProfile from "./ViewProfile";
-import Edit from "./Edit";
+import EditProfile from "./EditProfile";
 
 function Profile({ token, user, navigation }) {
   const [dis, setDis] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState({
     name: user.name,
     surname: user.surname,
     email: "",
-    avatar: "",
+    avatar: null,
     createdAt: "",
     phone_number: "",
     address_street: "",
@@ -29,14 +35,80 @@ function Profile({ token, user, navigation }) {
     doc_type: "",
     doc_number: "",
   });
-  const [editMode, setEditMode] = useState(false);
 
+  //esta función se va a ejecutar luego de que el usuario elija una imagen de su galería
+  const updateAvatar = (base64) => {
+    setDis(true);
+    //La subimos a imgur
+    return axios
+      .post(
+        "https://api.imgur.com/3/image",
+        { image: base64, type: "base64" },
+        {
+          headers: {
+            //Este client-id se podría modificar para que esté en env, si quieren
+            Authorization: `Client-ID f397c1f7f39e224`,
+          },
+        }
+      )
+      .then((response) => {
+        // console.log(response.data.data.link);
+        const data = {
+          avatar: response.data.data.link,
+        };
+        //Mandamos el link de imgur resultante a nuestro servidor
+        return axios
+          .put(`${env.API_URI}/me/updateAvatar`, JSON.stringify(data), {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            // console.log(response.data);
+            //Recibimos como respuesta el perfil actualizado y lo mandamos a nuestro estado para mostrar la nueva imagen
+            setUserData(response.data.profile);
+            setDis(false);
+          });
+      })
+      .catch((err) => {
+        setDis(false);
+        console.log("ERROR AL ACTUALIZAR AVATAR", err);
+      });
+  };
 
-  // const submitChanges = form => {
-  //   axios.put('blablabla', {})
-  // }
+  const onSubmit = (data) => {
+    axios
+      .put(`${env.API_URI}/me/update`, JSON.stringify(data), {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "content-type": "application/json",
+        },
+      })
+      .then((response) => {
+        // console.log("FUNCIONO", response.data.userUpdated);
+        setUserData(response.data.userUpdated);
+      })
+      .then(() => {
+        setDis(false);
+        setEditMode(false);
+        Toast.show({
+          type: "success",
+          text1: "Has actualizado tu domicilio/número de teléfono.",
+        });
+      })
+      .catch((err) => {
+        console.log("ERROR AL MODIFICAR DATOS DE PERFIL", err);
+        setDis(false);
+        Toast.show({
+          type: "error",
+          text1: "Uno o más datos ingresados no son válidos.",
+          text2: "Por favor, revisa los datos y vuelve a intentarlo.",
+        });
+      });
+  };
 
-  const getUserData = (token) => {
+  const getProfile = () => {
     setDis(true);
     axios
       .get(`${env.API_URI}/me/`, {
@@ -51,26 +123,43 @@ function Profile({ token, user, navigation }) {
       // .then(()=>console.log(userData))
       .catch((err) => {
         setDis(false);
+        Toast.show({
+          type: "error",
+          text1: "Hubo un error al traer tus datos de nuestro servidor...",
+          text2: "Por favor inténtalo nuevamente.",
+        });
         console.log("ERROR AL TRAER INFO DE PERFIL", err);
       });
   };
 
   useEffect(() => {
-    getUserData(token);
+    getProfile();
   }, []);
-
+  if (dis)
+    return (
+      <ActivityIndicator
+        style={{ marginTop: 150 }}
+        animating={dis}
+        size="large"
+        color={colors.pink}
+      />
+    );
   return (
     <Container style={styles.container}>
-      <ActivityIndicator animating={dis} size="large" color={colors.pink} />
       {editMode ? (
-        <Edit
+        <EditProfile
           data={userData}
-          token={token}
           exitEditMode={() => setEditMode(false)}
+          onSubmit={onSubmit}
         />
       ) : (
-        <ViewProfile data={userData} editMode={() => setEditMode(true)} />
+        <ViewProfile
+          data={userData}
+          editMode={() => setEditMode(true)}
+          updateAvatar={updateAvatar}
+        />
       )}
+      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
     </Container>
   );
 }

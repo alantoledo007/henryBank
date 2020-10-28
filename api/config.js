@@ -25,5 +25,6 @@ module.exports = {
 		"dollars.sell",
 		"me.myprofile",
 		"me.updateprofile",
+		"me.updateAvatar"
 	],
 };

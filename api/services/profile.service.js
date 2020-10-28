@@ -49,15 +49,23 @@ module.exports = {
 				path:"/update",
 			},
 			params:{
-				avatar:"string",
-				email:"string",
-				phone_number:"number",
+				phone_number:"string",
 				address_street:"string",
 				address_number:"string",
 				locality:"string",
 				province:"string",
 			},
 			handler: controller.updateprofile
+		},
+		updateAvatar:{
+			rest:{
+				method: "PUT",
+				path: "/updateAvatar"
+			},
+			params:{
+				avatar: "string"
+			},
+			handler: controller.updateAvatar
 		}
 	},
 
