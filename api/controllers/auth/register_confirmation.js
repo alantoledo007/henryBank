@@ -177,7 +177,7 @@ module.exports = async (ctx) => {
 		recharge_code,
 		cvu
 	});
-
+	
 	const usdAccount = await Account.create({
 		recharge_code:recharge_codeUSD,
 		cvu:cvuUSD,

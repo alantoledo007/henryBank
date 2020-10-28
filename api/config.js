@@ -22,6 +22,7 @@ module.exports = {
 		"contacts.delete",
 
 		"dollars.buy",
-		"dollars.sell"
+		"dollars.sell",
+		"accounts.accounts_get"
 	],
 };
