@@ -17,6 +17,7 @@ import DrawerContent from "./DrawerContent";
 import Graphics from "./graphics";
 import Transactions from './Transactions/Transactions';
 import Profile from './Profile/Index';
+import ChangeEmail from './ChangeEmail/Index'
 
 // UI
 import { Button, hbn, darkColors, lightColors, defaultColors} from '../Quantum';
@@ -134,6 +135,7 @@ export const DashboardRoutes = (props) => {
             <DashStack.Screen component={Transactions} name="Transacciones" />
             <DashStack.Screen component={Contacts} name="Contactos" />
             <DashStack.Screen component={Profile} name="Mi Perfil"/>
+            <DashStack.Screen component={ChangeEmail} name="Cambiar Email"/>
         </DashStack.Navigator>
     );
 };

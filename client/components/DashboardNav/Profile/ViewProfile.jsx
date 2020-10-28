@@ -6,7 +6,7 @@ import Toast from "react-native-toast-message";
 
 import * as ImagePicker from "expo-image-picker";
 
-export default function ViewProfile({ data, editMode, updateAvatar }) {
+export default function ViewProfile({ data, editMode, updateAvatar, navigation }) {
   // console.log(ImagePicker)
   const {
     name,
@@ -76,7 +76,7 @@ export default function ViewProfile({ data, editMode, updateAvatar }) {
           />
           <Label style={styles.data} text={email} />
         </View>
-        <Button style={{height: 10, justifyContent: "center"}}label="Cambiar email"/>
+        <Button onPress={()=>navigation.navigate("Cambiar Email")} style={{height: 10, justifyContent: "center"}}label="Cambiar email"/>
       </View>
       <View style={styles.section}>
         <Label style={styles.subtitle} text="Número de teléfono:" />

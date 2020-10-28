@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
+
+//redux
 import { connect } from "react-redux";
+import { updateUserInfo } from '../../../redux/actions/auth';
 
 //api
 import axios from "axios";
@@ -18,7 +21,7 @@ import {
 import ViewProfile from "./ViewProfile";
 import EditProfile from "./EditProfile";
 
-function Profile({ token, user, navigation }) {
+function Profile({ token, user, navigation, updateUserInfo }) {
   const [dis, setDis] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [userData, setUserData] = useState({
@@ -68,6 +71,10 @@ function Profile({ token, user, navigation }) {
             // console.log(response.data);
             //Recibimos como respuesta el perfil actualizado y lo mandamos a nuestro estado para mostrar la nueva imagen
             setUserData(response.data.profile);
+            //También mandamos el nuevo avatar al state de redux, para que se actualice en toda la app.
+            updateUserInfo({
+              avatar: response.data.profile.avatar
+            });
             setDis(false);
           });
       })
@@ -157,6 +164,7 @@ function Profile({ token, user, navigation }) {
           data={userData}
           editMode={() => setEditMode(true)}
           updateAvatar={updateAvatar}
+          navigation={navigation}
         />
       )}
       <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
@@ -172,7 +180,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    updateUserInfo: data => dispatch(updateUserInfo(data))
+  };
 };
 
 const styles = StyleSheet.create({
