@@ -14,6 +14,9 @@ module.exports = (sequelize) => {
 			type: DataTypes.STRING(255),
 			allowNull: false,
 		},
+		message: {
+			type: DataTypes.STRING(255),
+		},
 		amount: {
 			type: DataTypes.FLOAT(12, 2),
 			allowNull: false, 

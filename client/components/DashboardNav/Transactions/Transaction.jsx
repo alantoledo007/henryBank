@@ -7,25 +7,31 @@ import {
   StyleSheet,
 } from "react-native";
 import { useColorScheme } from "react-native-appearance";
-import { Container, Label, Alert, bn, hbn, defaultColors, Button } from "../../Quantum";
+import { Container, Label, Alert, bn, hbn, Button } from "../../Quantum";
 import colors from "../../style/colors";
+import moment from 'moment';
+import { DataTable,} from 'react-native-paper';
+
 export default function Transaction({ data, close }) {
   const theme = useColorScheme();
-  console.log(data);
-  const { title, description, amount, createdAt } = data;
+  const { title, description, amount, createdAt, message } = data;
 
-  const fechaHora = `${createdAt.slice(0, 10)} a las ${createdAt.slice(
-    11,
-    16
-  )}`;
+  const fecha = `${createdAt.slice(0, 10)}`;
+  const hora = `${createdAt.slice(11,16)}`;
 
   const income = title.split(" ")[0] === "Recargaste";
+
+  const format = (amount) => {
+    return Number(amount)
+      .toFixed(2)
+      .replace(/\d(?=(\d{3})+\.)/g, "$&,");
+  };
 
   return (
     <View style={{...styles.container }}>
       <View style={{
           ...styles.modal,
-          ...theme === 'dark' ? hbn('bg-stats','dark') : hbn('bg-stats'),
+          ...theme === 'dark' ? hbn('bg-light2','dark') : hbn('bg-light2'),
           ...bn('borderRadius-5')
         }}>
         
@@ -34,17 +40,23 @@ export default function Transaction({ data, close }) {
             textStyle={{ color:'#fff' }}
             label="x"
             />
-        <Label style={bn('h3')} text={title} />
+
+                  <View style={{backgroundColor:'#F8F9FA'}}>
+        <Label style={bn('h3 text-center py-2')} text={`${format(amount)}`} />
+        
         <View>
-          {description.length > 0 && <Label
-            style={bn('h6')}
-            text={(income ? "Descripción:" : "Mensaje:") +' '+ description}
-          />}
+        <DataTable>
+          <DataTable.Row><DataTable.Cell> <Label style={bn('h6')} text={title} /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Descripción:  " + description} /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Fecha:  " + moment(fecha).format('DD/MM/YYYY')} /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Hora:  " + hora} /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Referencia:  "} /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Moneda:  " } /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell>{ message ? <Label style={bn('h6')} text={"Mensaje:  " + message} /> : <Label style={bn('h6')} text={""} />}</DataTable.Cell></DataTable.Row>
+        </DataTable>
         </View>
-        <View>
-          <Label style={bn('h5')} text="Fecha:" />
-          <Label style={bn('h6')} text={fechaHora} />
-        </View>
+
+      </View>
       </View>
     </View>
   );
@@ -61,7 +73,8 @@ const styles = StyleSheet.create({
   },
   modal: {
     padding: 25,
-    height: 275,
+    height: 450,
+    width: '80%',
     backgroundColor: colors.white,
     position: "absolute",
     borderRadius: 15,

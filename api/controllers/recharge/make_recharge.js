@@ -56,7 +56,7 @@ module.exports = async (ctx) => {
 	}
 
 	const recharge = await Transaction.create({
-		title: `Recargaste ${amount}`,
+		title: `Recargaste $ ${amount}`,
 		description: "Recarga de saldo",
 		amount,
 		account_id: client.accounts[0].id,
