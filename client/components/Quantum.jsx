@@ -13,6 +13,7 @@ import {
 import useBootnative from 'bootnative';
 import s from './style/styleSheet';
 import { StatusBar } from 'expo-status-bar';
+import { useHeaderHeight } from '@react-navigation/stack';
 
 
 export const bootnative = useBootnative; //este no
@@ -141,12 +142,16 @@ export const toastConfig =  {
 
 
 
-export function Container({children, style}){
+export function Container({children, style, wihtHeader=false}){
     const theme = useColorScheme();
+    const headerHeight = useHeaderHeight() || null;
     
     return (
         <ScrollView>
-            <View style={{ ...hbn('container p-3 bg-body',theme),height:(Dimensions.get('window').height), justifyContent:'center',...style}}>
+            <View style={{ ...hbn('container p-3 bg-body',theme),
+            height: wihtHeader ? Dimensions.get('window').height - headerHeight : (Dimensions.get('window').height), 
+            justifyContent:'center',...style
+            }}>
                 {children}
             </View>
             <StatusBar backgroundColor={theme === 'dark' ? 'rgba(23,22,23, .9)' : 'rgba(255, 255, 255, .9)'} style="auto" />

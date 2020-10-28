@@ -98,7 +98,7 @@ const Graphics = (props) => {
 
     return (
 
-        <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+        <Container wihtHeader={true}>
             <Logo />
             
             <View style={bn('row mt-5')}>

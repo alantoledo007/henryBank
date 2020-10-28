@@ -74,7 +74,7 @@ function Dash({user, navigation}){
     //if(!fontsLoaded) return <AppLoading />
     return (
         <>
-            <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+            <Container wihtHeader={true}>
                 <Label text={`Hola, ${state.user.name}`} />
                 <View style={bn('row')}>
                     <View style={bn('col-6')}>

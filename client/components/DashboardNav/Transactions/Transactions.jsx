@@ -105,7 +105,7 @@ export function Transactions (props) {
     });
   }, []);
   return (
-    <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+    <Container wihtHeader={true}>
        {transactions.length ? <Alert content="Mis movimientos" /> : <Alert content="Sin movimientos" />} 
 
       <View>
