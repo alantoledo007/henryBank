@@ -66,7 +66,7 @@ function Index(props) {
         getContacts(token);
     }, [])
     return (
-        <Container>
+        <Container wihtHeader={true}>
             <View style={{ ...bn('pt-5'), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', ...s.mt(5) }}>
                 <Controller
                     control={control}

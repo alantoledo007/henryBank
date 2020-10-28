@@ -54,7 +54,7 @@ export function Transactions({
     });
   }, []);
   return (
-    <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+    <Container wihtHeader={true}>
       <Alert content="Mis movimientos" />
 
 
