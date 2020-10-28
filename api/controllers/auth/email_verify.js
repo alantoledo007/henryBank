@@ -13,6 +13,7 @@ async function email_verify(ctx) {
 		where: { email, emailVerifiedAt: { [Op.is]: null } },
 		attributes: ["id", "email", "emailVerifiedAt", "dataCompletedAt"],
 	});
+	
 	if (!user) {
 		//si retornamos un 404 o si indicamos que el correo ya está verificado... estaríamos dando información de más.
 		throw new MoleculerError(
@@ -22,6 +23,7 @@ async function email_verify(ctx) {
 			{ nodeID: ctx.nodeID, action: ctx.action.name }
 		);
 	}
+
 	const localStorage = new LocalStorage("./email_validation_storage");
 	const limitTime = 3600000; //una hora en milisegundos
 	let codeData = JSON.parse(await localStorage.getItem(user.id));
