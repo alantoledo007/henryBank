@@ -144,7 +144,7 @@ export const toastConfig =  {
 
 export function Container({children, style, wihtHeader=false}){
     const theme = useColorScheme();
-    const headerHeight = useHeaderHeight();
+    const headerHeight = useHeaderHeight() || null;
     
     return (
         <ScrollView>

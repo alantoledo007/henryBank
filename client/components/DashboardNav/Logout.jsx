@@ -8,7 +8,7 @@ import { logout } from '../../redux/actions/auth';
 export default function Logout({ navigation }) {
     const dispatch = useDispatch();
     return (
-        <Container>
+        <Container wihtHeader={true}>
             <View style={{ position: 'relative', top: -90}}>
                 <Logo size='lg' />
             </View>

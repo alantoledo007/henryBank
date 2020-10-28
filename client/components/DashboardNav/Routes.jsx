@@ -64,11 +64,20 @@ export function Menu() {
             <MenuStack.Screen name="Recarga" component={DepositRoute} />
             <MenuStack.Screen name="Transferencia" component={SendMoneyRoute} />
             <MenuStack.Screen name="Contactos" component={ContactRoute} />
-            <MenuStack.Screen name="Logout" component={Logout} />
+            <MenuStack.Screen name="Logout" component={LogoutRoutes} />
             <MenuStack.Screen name="Transferencias" component={TransactionsRoute}/>
             <MenuStack.Screen name="Estadísticas" component={GraphicsRoute} />
         </MenuStack.Navigator>
     );
+}
+const LogoutRoutes = () => {
+    const LogoutStackNavigator = createStackNavigator();
+    const theme = useColorScheme();
+    return (
+        <LogoutStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
+            <LogoutStackNavigator.Screen name='Recarga' component={Logout} />
+        </LogoutStackNavigator.Navigator>
+    )
 }
 export const DepositRoute = () => {
     const DepositoStackNavigator = createStackNavigator();
