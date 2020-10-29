@@ -25,6 +25,8 @@ export function Transactions (props) {
     },
     transactions: [],
   });
+
+  console.log(transactions)
   
   const [date, setDate] = useState(new Date(2020, 9, 1));
   const [mode, setMode] = useState('date');
