@@ -51,6 +51,7 @@ export const darkColors= {
     link: "rgba(255,255,255, .5)",
 
     stats: 'rgba(79, 95, 125, 1)',
+    accounts: 'rgb(233, 69, 96)',
     sidebar: '#516375',
     cardbg: 'red',
     
@@ -79,6 +80,7 @@ export const lightColors={
 
     stats: "rgba(230, 239, 255, 1)",
     sidebar: 'light',
+    accounts: 'rgb(248, 242, 252)',
 
     toastdangerBg: "rgba(255,255,255, .9)",
     toastdangerText2: "rgba(0,0,0, .5)",

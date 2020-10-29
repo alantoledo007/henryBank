@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, Text, Clipboard, TouchableOpacity, useColorScheme } from 'react-native';
+import { Clipboard, useColorScheme } from 'react-native';
 import { connect } from 'react-redux';
-import { Container, Label, Button } from '../Quantum';
+import { Container, Label, hbn} from '../Quantum';
 import { Card } from 'react-native-elements';
 import s from '../style/styleSheet';
 import { useState } from 'react';
-import IconsMCI2 from 'react-native-vector-icons/Ionicons';
+import { Icon } from 'react-native-elements'
 
 const Cuentas = (props) => {
 
@@ -17,10 +17,8 @@ const Cuentas = (props) => {
     const copyToClipboard = () => {
         Clipboard.setString(`${arg.cvu}`)
     }
-
-    const fetchCopiedText = async () => {
-        const text = await Clipboard.getString()
-        setCopiedText(text)
+    const copyToClipboard2 = () => {
+        Clipboard.setString(`${usd.cvu}`)
     }
 
     const format = (amount) => {
@@ -30,38 +28,38 @@ const Cuentas = (props) => {
       };
 
     return (
-        <Container>
-            <Card >
-                <Card.Title>Cuenta ARS</Card.Title>
-                <Card.Divider />
-                <Label text='Balance'/>
+        <Container wihtHeader={true}>
+            <Card containerStyle={hbn('borderRadius-6 borderColor-accounts',theme)}>
+            <Label text='Cuenta ARS' style={hbn('text-label text-center mb-2',theme)} />
+                <Card.Divider style={{borderColor:'#E94560', borderWidth:0.6}}/>
+                <Label text='Balance :' style={{...s.size(3)}}/>
                 <Label text={`$${format(arg.balance)}`} />
-                <Label text='Cvu' />
+                <Label text='CVU :' style={{...s.size(3)}}/>
                 <Label text={arg.cvu}/>    
+                <Icon
+                    raised
+                    name='content-copy'
+                    type='MaterialCommunityIcons'
+                    onPress={() => copyToClipboard()} 
+                    containerStyle={{alignSelf:'center'}}/>
             </Card>
-            <Card>
-                <Card.Title>Cuenta USD</Card.Title>
-                <Card.Divider/>
-                <Label text='Balance'/>
+            <Card containerStyle={hbn('borderRadius-6 borderColor-accounts',theme)}>
+                <Label text='Cuenta USD' style={hbn('text-label text-center mb-2',theme)} />
+                <Card.Divider  style={{borderColor:'#E94560', borderWidth:0.6}}/>
+                <Label text='Balance :' style={{...s.size(3)}} />
                 <Label text={`U$${format(usd.balance)}`}/>    
-                <Label text='Cvu' />
-                <Label text={usd.cvu}/>
-                <TouchableOpacity onPress={() => copyToClipboard()}>
-          <Text>Click here to copy to Clipboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => fetchCopiedText()}>
-          <Text>View copied text</Text>
-        </TouchableOpacity>  
-        <View> 
-        <IconsMCI2
-                                        name='clipboard'
-                                        color={theme === 'dark' ? '#fff' : '#000'}
-                                     
-                                    />
- </View>         
-  </Card>
-
-        </Container>
+                <Label text='CVU :' style={{...s.size(3)}} />
+                <Label text={usd.cvu}/>       
+                <Icon
+                    raised
+                    name='content-copy'
+                    type='MaterialCommunityIcons'
+                    onPress={() => copyToClipboard2()} 
+                    containerStyle={{alignSelf:'center'}}/>
+                    
+                
+            </Card>
+     </Container>
 
     )
 }
