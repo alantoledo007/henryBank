@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 // Redux
 import { connect } from 'react-redux';
 
@@ -38,15 +38,17 @@ function DrawerContent(props) {
             <DrawerContentScrollView {...props}>
                 <View style={styles.drawerContent}>
                     <View style={styles.userInfoSection}>
-                        <View style={{ flexDirection: 'row', marginTop: 15 }}>
-                            <Avatar.Image
-                                source={{ uri: user.avatar }}
-                            />
-                            <View style={{ marginLeft: 15, flexDirection: "column" }}>
-                                <Title>{user.name} {user.surname}</Title>
-                                <Caption>{user.email}</Caption>
+                        <TouchableWithoutFeedback onPress={()=>navigation.navigate("Mi Perfil")}>
+                            <View style={{ flexDirection: 'row', marginTop: 15 }}>
+                                <Avatar.Image
+                                    source={{ uri: user.avatar }}
+                                />
+                                <View style={{ marginLeft: 15, flexDirection: "column" }}>
+                                    <Title>{user.name} {user.surname}</Title>
+                                    <Caption>{user.email}</Caption>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableWithoutFeedback>
                     </View>
                     <View style={{ marginTop: 10 }}>
                         <Drawer.Section title='General'>

@@ -74,7 +74,7 @@ function Dash({user, navigation}){
     //if(!fontsLoaded) return <AppLoading />
     return (
         <>
-            <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+            <Container wihtHeader={true}>
                 <Label text={`Hola, ${state.user.name}`} />
                 <View style={bn('row')}>
                     <View style={bn('col-6')}>
@@ -126,7 +126,7 @@ function Dash({user, navigation}){
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/transactions.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Movimientos</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.panelButton} onPress={()=>null}>
+                    <TouchableOpacity style={styles.panelButton} onPress={()=>navigation.navigate("Mi Perfil")}>
                         <Image style={{ width:32, height:32,marginTop:10,alignSelf:'center' }} source={require('../../assets/account.png')} />
                         <Text style={{ textAlign:'center', fontSize:12, marginBottom:10 }}>Mis datos</Text>
                     </TouchableOpacity>

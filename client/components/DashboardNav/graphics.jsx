@@ -31,8 +31,6 @@ const Graphics = (props) => {
             r: "4"
         }
         }
-
-
     
     const [week, setWeek] = useState(false);
     const [month, setMonth] = useState(false);
@@ -85,7 +83,6 @@ const Graphics = (props) => {
             })
             .then((response) => {
                const data = response.data
-               console.log(data);
                setStats((state) => {
                     return {
                         ...state,
@@ -101,21 +98,11 @@ const Graphics = (props) => {
 
     return (
 
-        <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+        <Container wihtHeader={true}>
             <Logo />
             
             <View style={bn('row mt-5')}>
                 <View style={bn('col-12')}>
-                {/* const data = {
-                    labels: [""],
-                    datasets: [
-                    {
-                        data: [0],
-                        color: (opacity = 4) => `rgba(134, 65, 244, ${opacity})`, // optional
-                        strokeWidth: 2 // optional
-                    }
-                    ]
-                }; */}
                 { day &&
                 
                     <ScrollView horizontal={true} 

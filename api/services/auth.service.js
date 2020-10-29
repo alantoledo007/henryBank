@@ -123,6 +123,28 @@ module.exports = {
 				code: 'string|length:6'
 			},
 			handler: controller.email_verify
+		},
+
+		send_code_email_reset:{
+			rest: {
+				method:"POST",
+				path: "/email-reset"
+			},
+			params: {
+				email: 'email'
+			},
+			handler: controller.send_code_email_reset
+		},
+
+		email_reset_verify:{
+			rest: {
+				method: "PUT",
+				path: "email-reset"
+			},
+			params: {
+				code: 'string|length:6'
+			},
+			handler: controller.email_reset_verify
 		}
 	},
 

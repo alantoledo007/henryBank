@@ -49,6 +49,14 @@ export default function userReducer(state = initialState, action) {
             };
         case 'LOGOUT':
             return initialState
+        case 'UPDATE_USER_INFO':
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    ...action.payload
+                }
+            }
         default:
             return state;
     }

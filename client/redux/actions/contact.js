@@ -1,9 +1,46 @@
 import axios from 'axios';
+import { createDispatchHook } from 'react-redux';
 
 import env from '../../env';
 
 export const REQUEST_CONTACTS = "REQUEST_CONTACTS";
 export const RECEIVE_CONTACTS = "RECEIVE_CONTACTS";
+const ADD_CONTACT = "ADD_CONTACT";
+const DELETE_CONTACT = "DELETE_CONTACT";
+
+export function deleteContact(id, token) {
+    return dispatch => {
+        return axios.delete(env.API_URI + "/contacts/" + id, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(()=>{
+        dispatch({type: DELETE_CONTACT})
+    })
+    .catch(err=>console.log(err));
+    }
+}
+
+export function addContact(data, token) {
+    return dispatch => {
+        return axios.post(env.API_URI + '/contacts', JSON.stringify(data), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(() => {
+                dispatch({type: ADD_CONTACT})
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+}
+
+
 
 export const requestContacts = () => {
     return {
@@ -30,7 +67,6 @@ export const getContacts = token => {
         })
         .then(response => {
             const { data } = response.data
-            // console.log('RESPUESTA EXITOSA:', data);
             dispatch(receiveContacts(data))
         })
         .catch(err => console.log(err));

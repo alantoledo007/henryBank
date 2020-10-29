@@ -40,6 +40,10 @@ module.exports = {
 				method:"GET",
 				path:"/mytransactions"
 			},
+			params:{
+				startDate:'string',
+				endDate:'string'
+			},
 			handler: controller.get_transactions
 		},
 

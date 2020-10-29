@@ -13,6 +13,7 @@ import {
 import useBootnative from 'bootnative';
 import s from './style/styleSheet';
 import { StatusBar } from 'expo-status-bar';
+import { useHeaderHeight } from '@react-navigation/stack';
 
 
 export const bootnative = useBootnative; //este no
@@ -131,7 +132,7 @@ export const toastConfig =  {
         return <QTToast {...internalState} type="danger" />
     },
     success:(internalState) => {
-        return <QTToast {...internalState} />
+        return <QTToast {...internalState} type="success" />
     },
     info:(internalState) => {
         return <QTToast {...internalState} />
@@ -139,14 +140,36 @@ export const toastConfig =  {
 }
 
 
-
-
-export function Container({children, style}){
+export function NoScrollContainer({children, style}){
     const theme = useColorScheme();
     
     return (
+                   <View style={{...hbn('p-3 bg-body',theme), ...style}}>
+                {children}
+            </View>
+    );
+}
+
+export function Scroll({children, style}){
+    const theme = useColorScheme();
+    
+    return (
+                   <ScrollView style={{...hbn('px-3 bg-body',theme), ...style}}>
+                {children}
+            </ScrollView>
+    );
+}
+
+export function Container({children, style, wihtHeader=false}){
+    const theme = useColorScheme();
+    const headerHeight = useHeaderHeight() || null;
+    
+    return (
         <ScrollView>
-            <View style={{ ...hbn('container p-3 bg-body',theme),height:(Dimensions.get('window').height), justifyContent:'center',...style}}>
+            <View style={{ ...hbn('container p-3 bg-body',theme),
+            height: wihtHeader ? Dimensions.get('window').height - headerHeight : (Dimensions.get('window').height), 
+            justifyContent:'center',...style
+            }}>
                 {children}
             </View>
             <StatusBar backgroundColor={theme === 'dark' ? 'rgba(23,22,23, .9)' : 'rgba(255, 255, 255, .9)'} style="auto" />
@@ -270,7 +293,7 @@ export function Input({placeholder, style,secureTextEntry, onFocus ,onChangeText
                 placeholder={placeholder}
                 style={{
                         ...hbn('p-3 border-1-inputBorder-solid-5 bg-inputBg text-inputColor', theme),
-                        ...(focused ? {...hbn('borderColor-inputBorderFocus bg-inputBg',theme),...focusStyles} :{}),
+                        ...(focused ? {...hbn('borderColor-inputBorderFocus bg-inputBg',theme)} :{}),
                         ...iconRight ? {paddingRight:45} : {},
                         ...s.size(3.5),
                         ...style

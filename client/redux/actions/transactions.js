@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from 'axios';
 import env from '../../env';
 
 const RECEIVE_TRANSACTIONS = 'RECEIVE_TRANSACTIONS';
@@ -12,15 +12,18 @@ export const updateBalance = (balace) => {
     }
 }
 
-export const getTransactions = token => {
+export const getTransactions = (token, payload) => {
     return dispatch => {
         dispatch({type: REQUEST_TRANSACTIONS})
-        return Axios.get(env.API_URI + '/transactions/mytransactions',  {
+        return axios({
+            method: 'get',
+            url: `${env.API_URI}/transactions/mytransactions`,
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            params: payload,
+          })
             .then(response => {
                 dispatch({ type: RECEIVE_TRANSACTIONS, payload: response.data })
             })
