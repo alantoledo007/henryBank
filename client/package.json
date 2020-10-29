@@ -23,6 +23,7 @@
     "email-validator": "^2.0.4",
     "expo": "~39.0.2",
     "expo-font": "^8.3.0",
+    "expo-image-picker": "^9.1.1",
     "expo-status-bar": "~1.0.2",
     "moment": "^2.29.1",
     "react": "16.13.1",

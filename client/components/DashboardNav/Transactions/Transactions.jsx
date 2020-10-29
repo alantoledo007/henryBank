@@ -9,14 +9,11 @@ import List from "./List";
 import { useHeaderHeight } from '@react-navigation/stack';
 import DateTimePicker from "@react-native-community/datetimepicker";
 import s from '../../style/styleSheet'
+import moment from 'moment';
 
-export function Transactions({
-  user,
-  token,
-  getTransactions,
-  isFetching,
-  transactions,
-}) {
+export function Transactions (props) {
+
+  const { user, token, getTransactions, isFetching, transactions } = props;
   const headerHeight = useHeaderHeight();
   const { id, name, surname, avatar } = user;
   const [state, setState] = useState({
@@ -28,15 +25,20 @@ export function Transactions({
     },
     transactions: [],
   });
-
-  const [date, setDate] = useState(new Date(1598051730000));
+  
+  const [date, setDate] = useState(new Date(2020, 9, 1));
   const [mode, setMode] = useState('date');
   const [showw, setShoww] = useState(false);
+ 
+  const payload = {
+      startDate: "",
+      endDate: ""
+  };
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShoww(Platform.OS === 'ios');
-    setDate(currentDate);
+    setDate(currentDate);   
   };
 
   const showMode = (currentMode) => {
@@ -48,6 +50,34 @@ export function Transactions({
     showMode('date');
   };
 
+  const [date2, setDate2] = useState(new Date(2020, 9, 30));
+  const [mode2, setMode2] = useState('date2');
+  const [show2, setShow2] = useState(false);
+
+  const onChange2 = (event, selectedDate) => {
+    const currentDate = selectedDate || date2;
+    setShow2(Platform.OS === 'ios');
+    setDate2(currentDate);
+    filterDate(date, currentDate);    
+  };
+
+  const filterDate = async (start, end) => {
+    const startAndEnd = {
+    startDate: start.toISOString().substring(0, 10),
+    endDate: end.toISOString().substring(0, 10),
+    };
+    await getTransactions(token, startAndEnd);
+  }
+
+  const showMode2 = (currentMode) => {
+    setShow2(true);
+    setMode2(currentMode);
+  };
+
+  const showDatepicker2 = () => {
+    showMode2('date2');
+  };  
+  
   const [show, setShow] = useState(false);
   const [transactionData, setTransactionData] = useState({});
 
@@ -57,7 +87,7 @@ export function Transactions({
   };
 
   useEffect(() => {
-    getTransactions(token);
+    getTransactions(token, payload);
     setState({
       ...state,
       transactions,
@@ -75,31 +105,49 @@ export function Transactions({
     });
   }, []);
   return (
-    <Container style={{height:Dimensions.get('window').height - headerHeight + StatusBar.currentHeight}}>
+    <Container wihtHeader={true}>
        {transactions.length ? <Alert content="Mis movimientos" /> : <Alert content="Sin movimientos" />} 
 
-       <View>
+      <View>
 
-       <Label text='Filtra por fecha:' style={hbn('mt-3')} />
-     
-      
-            <TouchableOpacity style={{...s.btn(), ...s.my(2), ...s.py(2)}} onPress={showDatepicker}>
-            <Label text={date.toDateString()} />
+          <Label text='Filtra por fecha:' style={hbn('mt-3')} />
+
+          <View style={{...s.row, justifyContent:'space-between'}}>  
+            <TouchableOpacity style={{...s.btn(), ...s.my(2), ...s.py(2), ...s.col(6.4)}} onPress={showDatepicker}>
+                <Label text={`Desde  ${moment(date).format('DD/MM/YY').slice(0,5)}`} />
             </TouchableOpacity>
 
-   
-      
-      {showw && (
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={date}
-          mode={mode}
-          is24Hour={true}
-          display="default"
-          onChange={onChange}
-        />
-      )}
-    </View>
+            <TouchableOpacity style={{...s.btn(), ...s.my(2), ...s.py(2), ...s.col(6.4)}} onPress={showDatepicker2}>
+                <Label text={`Hasta  ${moment(date2).format('DD/MM/YY').slice(0,5)}`} />
+            </TouchableOpacity>
+      </View>
+          
+          {show2 && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date2}
+                mode={mode2}
+                is24Hour={true}
+                display="default"
+                onChange={onChange2}
+                minimumDate={new Date(2015, 0, 1)}
+                maximumDate={new Date(2020, 12, 30)}
+              />
+            )}
+          
+          {showw && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="default"
+                onChange={onChange}
+                minimumDate={new Date(2015, 0, 1)}
+                maximumDate={new Date(2020, 12, 30)}
+              />
+            )}
+      </View>
 
 
       <ScrollView style={bn('my-2')}>
@@ -129,7 +177,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getTransactions: (token) => dispatch(getTransactions(token)),
+    getTransactions: (token, payload) => dispatch(getTransactions(token, payload)),
   };
 }
 

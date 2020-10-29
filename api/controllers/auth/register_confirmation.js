@@ -167,6 +167,14 @@ module.exports = async (ctx) => {
 		});
 
 	usuario = await User.findOne({ where: { id } });
+	
+	//provisorio
+	if(usuario){
+		if(!usuario.avatar){
+			usuario.avatar = 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000';
+			await usuario.save();
+		}
+	}
 
 	const recharge_code = await generateCode();
 	const recharge_codeUSD = await generateCode();

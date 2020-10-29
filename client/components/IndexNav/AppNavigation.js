@@ -8,7 +8,7 @@ import Dash from '../DashboardNav/Index';
 
 //Este componente va a renderizar un Navigator para cada sección, dependiendo del state de redux
 function AppNavigation({ user,token }) {
-    const [component,setComponent] = useState(<Dash />);
+    const [component,setComponent] = useState(null);
     useEffect(() => {
         let mounted = true;
         // console.log(user);

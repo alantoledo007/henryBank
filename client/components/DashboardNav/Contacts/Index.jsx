@@ -75,6 +75,7 @@ function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
                 </View>
             </NoScrollContainer>
             <Scroll>
+
                 <View>
                     <List
                         contacts={state.filteredContacts.length || search ? state.filteredContacts : contacts}

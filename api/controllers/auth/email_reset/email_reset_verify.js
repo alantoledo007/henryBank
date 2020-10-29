@@ -1,19 +1,20 @@
 require("dotenv").config();
-const { User } = require("../../db");
+const { User } = require("../../../db");
 const jwt = require("jsonwebtoken");
-const sender = require("../../emails/sender");
+const sender = require("../../../emails/sender");
 const { MoleculerError } = require("moleculer").Errors;
 const { Op } = require("sequelize");
 const LocalStorage = require("node-localstorage").LocalStorage; //localStorage backend-side
 
-async function email_verify(ctx) {
-	const { email, code } = ctx.params;
+async function email_reset_verify(ctx) {
+	const { id } = ctx.meta.user
+	const { code } = ctx.params;
 
 	const user = await User.findOne({
-		where: { email, emailVerifiedAt: { [Op.is]: null } },
-		attributes: ["id", "email", "emailVerifiedAt", "dataCompletedAt"],
+		where: { id },
+		attributes: ["id", "email", "emailVerifiedAt", "dataCompletedAt", "name", "surname", "avatar"],
 	});
-	
+
 	if (!user) {
 		//si retornamos un 404 o si indicamos que el correo ya está verificado... estaríamos dando información de más.
 		throw new MoleculerError(
@@ -24,10 +25,11 @@ async function email_verify(ctx) {
 		);
 	}
 
-	const localStorage = new LocalStorage("./email_validation_storage");
+	const localStorage = new LocalStorage("./email_reset_storage");
 	const limitTime = 3600000; //una hora en milisegundos
 	let codeData = JSON.parse(await localStorage.getItem(user.id));
 
+	//Si el código expiró o no es igual al que teníamos guardado en localStorage, devolvemos 401
 	if (
 		codeData.expired === true ||
 		codeData.code !== code ||
@@ -39,18 +41,15 @@ async function email_verify(ctx) {
 		});
 	}
 
+	user.email = codeData.email;
 	user.emailVerifiedAt = Date.now();
 	await user.save();
 
 	codeData.expired = true;
 	await localStorage.setItem(user.id, JSON.stringify(codeData));
 
-	const payload = { id: user.id };
-	const token = await jwt.sign(payload, process.env.JWT_SECRET, {
-		expiresIn: "1d",
-	});
-
-	return { data: { user, token } };
+	//Devolvemos mensaje satisfactorio. Mandamos los datos del usuario
+	return { status: 200, message: 'Dirección de e-mail actualizada exitosamente.', user};
 }
 
-module.exports = email_verify;
+module.exports = email_reset_verify;
