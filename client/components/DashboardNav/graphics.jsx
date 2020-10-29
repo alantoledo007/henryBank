@@ -1,8 +1,9 @@
 import React, { useState, useEffect  } from 'react';
 import axios from 'axios';
 import env from '../../env';
-import { View, ScrollView, Dimensions, useColorScheme, StatusBar} from 'react-native';
+import { View, ScrollView, Dimensions, useColorScheme, StatusBar, Picker} from 'react-native';
 import { connect } from "react-redux";
+import s from '../style/styleSheet'
 
 //Estilo
 import {
@@ -43,11 +44,19 @@ const Graphics = (props) => {
         monthly:{data:[0], labels:[""]}
     });
 
+    const [filterDay, setFilterDay] = useState(false);
+    
+    const filter = (value) => {
+        value > 7 && value < 32 ?
+        next(period, income, value) : {}
+    }
+
     useEffect(() => {
         next(period);
     },[period, income]);
 
-    const open = (state, set, period) => {
+    const open = (state, set, period, days) => {
+        days ? setFilterDay(true) : setFilterDay(false);
         setPeriod(period)
         setWeek(false)
         setMonth(false)
@@ -68,12 +77,13 @@ const Graphics = (props) => {
         ]
       };
 
-    function next(period) {
+    function next(period, income, value) {
 
         axios.post(`${env.API_URI}/stats`,
             {
                 period: period,
-                income: income
+                income: income,
+                days: value
             },
             {
                 headers: {
@@ -206,8 +216,8 @@ const Graphics = (props) => {
                 <View style={bn('col-4 pr-1')}>
                     <Button 
                         {...(!day ? {outline:"primary",color:"transparent"}:{})}
-                        onPress={() => open(day, setDay, 'daily')}
-                    label='30 Días'
+                        onPress={() => open(day, setDay, 'daily', 'days')}
+                        label='10 Días'
                     />
                 </View>
                 <View style={bn('col-4 px-1')}>
@@ -226,6 +236,19 @@ const Graphics = (props) => {
                 </View>
                 
             </View>
+
+            { filterDay &&  
+                            <View style={{...hbn(' my-1 row')}}>
+                                <View style={bn('col-12 pr-1 ')}>
+                                <Input style={hbn('border-1-primary-solid borderRadius-5 py-2')}
+                                        placeholder='También podés filtrar por días '
+                                        onChangeText={(value) => filter(parseInt(value))}
+                                keyboardType="numeric"/>
+                                </View>
+                                
+
+                            </View>
+            }
 
             <View style={bn('row mt-2')}>
                 

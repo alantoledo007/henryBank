@@ -7,7 +7,7 @@ module.exports = async (ctx) => {
 
 	const { period, income } = ctx.params;
 
-	const days = ctx.params.days || 30;
+	const days = ctx.params.days || 10;
 
 	const client = await User.findOne({
 		where: { id: client_id },
@@ -50,8 +50,6 @@ module.exports = async (ctx) => {
 				},
 				group: ["date"],
 			});
-
-			console.log(transactions);
 
 			let dbdatakeys = {};
 			transactions.forEach((item) => {
