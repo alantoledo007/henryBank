@@ -1,18 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Image,
   ActivityIndicator,
-  TextInput,
   Modal
 } from "react-native";
 import { connect } from "react-redux";
 import IonIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import colors from "../../style/colors";
 import { bn, Scroll, Label, DefaultButton, NoScrollContainer, Input } from "../../Quantum";
-import { deleteContact, updateContact } from '../../../redux/actions/contact';
+import { deleteContact, updateContact, getContactTransactions } from '../../../redux/actions/contact';
 
-function Contact({ contact, token, close, onClose, deleteContact, updateContact }) {
+function Contact({ contact, token, close, onClose, deleteContact, updateContact, getContactTransactions }) {
   const { name, surname, email, avatar } = contact.User;
   const { nickname, id } = contact;
 
@@ -50,6 +49,10 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact 
     }, 1000)
   }
 
+  useEffect(() => {
+    const contactId = id;
+    getContactTransactions(contactId, token);
+  }, [])
   const testLastTransactions = [
     {
       date: "14/08/20",
@@ -202,7 +205,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     deleteContact: (id, token) => dispatch(deleteContact(id, token)),
-    updateContact: (data, token) => dispatch(updateContact(data, token))
+    updateContact: (data, token) => dispatch(updateContact(data, token)),
+    getContactTransactions: (contactId, token) => dispatch(getContactTransactions(contactId, token))
   };
 }
 

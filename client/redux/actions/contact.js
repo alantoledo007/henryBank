@@ -8,6 +8,26 @@ export const RECEIVE_CONTACTS = "RECEIVE_CONTACTS";
 const ADD_CONTACT = "ADD_CONTACT";
 const DELETE_CONTACT = "DELETE_CONTACT";
 const UPDATE_CONTACT = "UPDATE_CONTACT";
+const GET_CONTACT_TRANSACTIONS = "GET_CONTACT_TRANSACTIONS";
+
+export function getContactTransactions(contactId, token) {
+    console.log(contactId, token)
+    return dispatch => {
+        return axios.post(env.API_URI + "/transactions/contact_transactions", {contactId}, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(res => {
+            dispatch({type: GET_CONTACT_TRANSACTIONS, payload: res})
+            console.log("===================>" + res);
+        })
+        .catch(err => {
+            console.log("error ==================>" + err);
+        })
+    }
+}
 
 export function updateContact(data, token) {
     const {id} = data;
