@@ -14,9 +14,10 @@ import Loading from './components/Loading'
 
 //Kitten UI
 import * as eva from '@eva-design/eva';
-import { ApplicationProvider } from '@ui-kitten/components';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
 import { useColorScheme } from 'react-native';
 import { default as evaTheme } from './theme.json';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
 
 export default function App() {
   const theme = useColorScheme();
@@ -33,6 +34,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
+      <IconRegistry icons={EvaIconsPack} />
       <ApplicationProvider {...eva} theme={{...eva[theme],...evaTheme}}>
           <NavigationContainer>
             {/* AppNavigation contiene la lógica de navegación */}

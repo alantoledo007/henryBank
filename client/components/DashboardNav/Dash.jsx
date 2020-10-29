@@ -1,6 +1,6 @@
 //general
 import React,{useEffect, useState} from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, StatusBar, Modal, ScrollView, ActivityIndicator} from 'react-native';
+import { StyleSheet, Image, View, Text, TouchableOpacity, StatusBar, ScrollView, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import {Dimensions } from "react-native";
 // import { Rect } from 'react-native-svg';
@@ -16,7 +16,7 @@ import { useHeaderHeight } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { bn, Container, hbn, Label, QTLink, toastConfig } from '../Quantum';
 import Toast from 'react-native-toast-message';
-import { TabBar, TabView, Tab, Layout, Text as KText, Button } from '@ui-kitten/components';
+import { TabBar, TabView, Tab, Modal, Input, Card, Icon, Layout, Text as KText, Button } from '@ui-kitten/components';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { SvgXml } from "react-native-svg";
 
@@ -29,14 +29,15 @@ function SvgComponent(props){
     return <SvgImage />;
 }
 
-function Dash({user, navigation}){ 
-    const headerHeight = useHeaderHeight();
-    const [showDeposit, setShowDeposit] = useState(false);
-    const [showTransfer, setShowTransfer] = useState(false);
+function Dash({user, navigation}){
+
+    const [showModal, setShowModal] = useState(false);
 
     const urlAvatar = (name,surname) => {
         return 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000'
     }
+
+    console.log(user)
 
     const initialState = {
         user:{
@@ -87,9 +88,81 @@ function Dash({user, navigation}){
             <Layout>
                 <SvgComponent height="200px" width="200px" style={bn('ml-auto mr-auto my-5')} />
             </Layout>
-            <View style={bn('container')}>
-                <TabNavigator />    
-            </View>   
+            <TabNavigator />
+            <Layout style={{flex:1}}>
+                <Button status="info"
+                    style={bn('mt-10 mr-auto ml-auto borderRadius-40 h-80 w-80')}
+                    size="large"
+                    appearance="outline"
+                    onPress={() => setShowModal(true)}
+                >
+                    MÁS
+                </Button>
+            </Layout>
+
+
+            <Modal visible={showModal}
+                backdropStyle={bn('bg-rgba(0,0,0,.5)')}
+                style={bn('container px-1')}>
+                <Card tyle={{...bn('row')}}>
+                    <KText category="h6" style={bn('text-center mb-4')}>MÁS OPCIONES</KText>
+
+
+                    <View style={bn('row')}>
+                        <View style={bn('col-6 p-1 h-80')}>
+                            <Button
+                                appearance="outline"
+                                status="info"
+                                style={bn('h-70 my-1')}
+                                size="small"
+                                onPress={()=>{setShowModal(false); navigation.navigate('Contactos')}}
+                            >
+                                Contactos
+                            </Button>
+                        </View>
+                        <View style={bn('col-6 p-1 h-80')}>
+                            <Button
+                                appearance="outline"
+                                status="info"
+                                style={bn('h-70 my-1')}
+                                size="small"
+                                onPress={()=>{setShowModal(false); navigation.navigate('Estadísticas')}}
+                            >
+                                Estadísticas
+                            </Button>
+                        </View>
+                        <View style={bn('col-6 p-1 h-80')}>
+                            <Button
+                                appearance="outline"
+                                status="info"
+                                style={bn('h-70 my-1')}
+                                size="small"
+                                onPress={()=>{setShowModal(false); navigation.navigate('Recarga')}}
+                            >
+                                Recarga
+                            </Button>
+                        </View>
+                        <View style={bn('col-6 p-1 h-80')}>
+                            <Button
+                                appearance="outline"
+                                status="info"
+                                style={bn('h-70 my-1')}
+                                size="small"
+                                onPress={()=>{setShowModal(false); navigation.navigate('Cuentas')}}
+                            >
+                                Cuentas
+                            </Button>
+                        </View>
+                    </View>
+
+                    <View style={bn('col-12 mt-4')}>
+                        <Button appearance="ghost" status="basic" onPress={() => setShowModal(false)}>
+                            CERRAR
+                        </Button>
+                    </View>
+                </Card>
+            </Modal>
+
             <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)}/>
         </>
     );
@@ -97,14 +170,32 @@ function Dash({user, navigation}){
 
 const TabNavigator = ({navigation}) => (
     <Navigator tabBar={props => <TopTabBar {...props} indicatorStyle={bn('text-red')} />}>
-        <Screen name='Pesos' component={PesosScreen}/>
-        <Screen name='Dollars' component={OrdersScreen}/>
+        <Screen name='Pesos' component={PesosScreenConn}/>
+        <Screen name='Dollars' component={UsdScreenConn}/>
     </Navigator>
 );
 
-const PesosScreen = ({navigation}) => (
-    <Layout style={{flex:1,...bn('py-6 px-6')}}>
-        <KText category='h2' style={bn('mb-4 text-center')}>ARS {0}</KText>
+const PesosScreen = ({accounts, navigation}) => {
+
+    const [state,setState] = useState({
+        balance: 0
+    })
+
+
+
+    useEffect(()=>{
+        console.log(accounts)
+        if(!accounts) return;
+        setState(state => {
+            return {
+                ...state,
+                balance: accounts[0].balance
+            }
+        })
+    },[accounts])
+
+    return (<Layout style={{flex:1,...bn('py-6 px-6')}}>
+        <KText category='h2' style={bn('mb-4 text-center')}>ARS {state.balance}</KText>
         <View style={bn('row')}>
             <View style={bn('col-6 pr-2')}>
                 <Button size="small" onPress={() => navigation.navigate('Transferencia')}>
@@ -117,26 +208,74 @@ const PesosScreen = ({navigation}) => (
                 </Button>
             </View>
         </View>
-    </Layout>
-);
+    </Layout>);
+};
   
-const OrdersScreen = () => (
-    <Layout style={{flex:1,...bn('py-6 px-6')}}>
-        <KText category='h2' style={bn('mb-4 text-center')}>USD 50</KText>
+const UsdScreen = ({accounts, navigation}) => {
+
+    const [state,setState] = useState({
+        balance: 0
+    })
+
+    const [visible,setVisible] = useState(false);
+
+    const handleBuy = () => {
+        setVisible(true);
+    }
+
+    useEffect(()=>{
+        console.log(accounts)
+        if(!accounts) return;
+        setState(state => {
+            return {
+                ...state,
+                balance: accounts[1].balance
+            }
+        })
+    },[accounts])
+    return (<Layout style={{flex:1,...bn('py-6 px-6')}}>
+        <KText category='h2' style={bn('mb-4 text-center')}>USD {state.balance}</KText>
         <View style={bn('row')}>
             <View style={bn('col-6 pr-2')}>
-                <Button size="small" onPress={() => setCounter(counter + 1)}>
+                <Button size="small" onPress={() => handleBuy()}>
                     COMPRAR
                 </Button>
             </View>
             <View style={bn('col-6 pl-2')}>
-                <Button size="small" appearance="outline" onPress={() => setCounter(counter + 1)}>
+                <Button size="small" appearance="outline" onPress={() => handleBuy()}>
                     VENDER
                 </Button>
             </View>
         </View>
-    </Layout>
-);
+
+        <Modal visible={visible}
+            backdropStyle={bn('bg-rgba(0,0,0,.5)')}
+            style={bn('container px-6')}>
+            <Card tyle={{...bn('row')}}>
+                <KText category="h2" style={bn('mb-4')}>Comprar USD</KText>
+                <View style={bn('col-12 mb-4')}>
+
+                    <Input
+                        label="Ingrese un monto"
+                        placeholder='0.00'
+                        onChangeText={nextValue => setValue(nextValue)}
+                    />
+                </View>
+                <View style={bn('col-12')}>
+                    <Button style="w-100%" onPress={() => setVisible(false)}>
+                        COMPRAR
+                    </Button>
+                </View>
+                <View style={bn('col-12')}>
+                    <Button appearance="ghost" onPress={() => setVisible(false)}>
+                        CANCELAR
+                    </Button>
+                </View>
+            </Card>
+        </Modal>
+
+    </Layout>);
+};
 
 const TopTabBar = ({ navigation, state }) => (
     <Layout style={bn('px-6')}>
@@ -153,7 +292,7 @@ const TopTabBar = ({ navigation, state }) => (
 function mapStateToProps(state) {
     return {
         user: state.auth.user,
-        accounts: state.auth.accounts
+        accounts: state.auth.user.accounts
     }
 }
 
@@ -162,62 +301,17 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        paddingLeft:30,
-        paddingRight:30,
-        paddingTop: 30, 
-        backgroundColor: '#221F3B',
-        // marginTop: StatusBar.currentHeight
-      },
-      buttonTransaction:{
-        width: ((Dimensions.get('window').width -60) / 2) - 10,
-        backgroundColor: '#E94560',
-        borderRadius:5
-      },
-      panelButton: {
-        backgroundColor:'white',
-        width: ((Dimensions.get('window').width -60) / 3) - 10,
-        borderRadius: 5
-      },
-      buttonStats:{
-        backgroundColor:'#E94560',
-        borderRadius: 20
-      },
-      textRight:{
-          textAlign: 'right',
-      },
-      textWhite:{
-          color:"#EBEBEB"
-      },
+const PesosScreenConn = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PesosScreen);
 
-      nameMessage: {
-          fontSize: 14
-      },
-      imgProfile: {
-        width: 64,
-        height: 64,
-        borderRadius:5
-      },
-      row: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-      },
-      card: {
-          backgroundColor: '#fff',
-          borderRadius:5,
-          marginBottom: 25
-      }
-});
+const UsdScreenConn = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(UsdScreen);
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Dash);
-
-connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(PesosScreen);
