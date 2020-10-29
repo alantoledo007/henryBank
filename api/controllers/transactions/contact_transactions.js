@@ -6,9 +6,9 @@ module.exports = async (ctx) => {
 	const { contactId } = ctx.params;
 
 	const contact = await Contact.findOne({
-		where: { contact_id: contactId },
-	});
-
+		where: { id: contactId },
+	}
+	);
 	const contact_user = await User.findOne({
 		where: { id: contact.user_id },
 		include: Account,
