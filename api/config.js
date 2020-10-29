@@ -25,8 +25,11 @@ module.exports = {
 
 		"dollars.buy",
 		"dollars.sell",
+
+		"accounts.accounts_get"
 		"me.myprofile",
 		"me.updateprofile",
 		"me.updateAvatar"
+
 	],
 };

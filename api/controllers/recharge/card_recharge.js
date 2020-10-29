@@ -47,7 +47,7 @@ module.exports = async (ctx) => {
 		title: `Recargaste $ ${amount}`,
 		description: "Recarga de saldo",
 		amount,
-		account_id: client.accounts[0].id,
+		account_id: client.accounts[1].id,
 	});
 
 	const account = await Account.findOne({

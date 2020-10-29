@@ -13,14 +13,4 @@ export default function Index() {
       </MenuStack.Navigator>
   );
 }
-// export function Menu() {
-//   const MenuStack = createDrawerNavigator();
-//   return (
-//     <MenuStack.Navigator>
-//       <MenuStack.Screen name="Dashboard" component={DashboardRoutes} />
-//       <MenuStack.Screen name="Recarga" component={Deposit} />
-//       <MenuStack.Screen name="Transferencia" component={SendMoney} />
-//       <MenuStack.Screen name="Contactos" component={Contacts} />
-//     </MenuStack.Navigator>
-//   );
-// }
+
