@@ -207,7 +207,8 @@ module.exports = async (ctx) => {
 				dataCompletedAt: usuario.dataCompletedAt,
 				balance: account.balance,
 				recharge_code,
-				cvu
+				cvu,
+				accounts: [usdAccount, account]
 			},
 		},
 	};

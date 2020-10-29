@@ -56,7 +56,7 @@ module.exports = async (ctx) => {
 	}
 
 	//Verificacion de balance
-	if (usuario_emisor.accounts[1].balance < amount) {
+	if (usuario_emisor.accounts[0].balance < amount) {
 		throw new MoleculerError("Sos pobre", 409, "NOTENOUGH_BALANCE", {
 			nodeID: ctx.nodeID,
 			action: ctx.action.name,
@@ -66,7 +66,7 @@ module.exports = async (ctx) => {
 	const reference_code = await codeGenerator();
 
 	const emisor_account = await Account.findOne({
-		where: { id: usuario_emisor.accounts[1].id },
+		where: { id: usuario_emisor.accounts[0].id },
 	});
 
 	const transaccion = await Transaction.create({
@@ -74,7 +74,7 @@ module.exports = async (ctx) => {
 		description: "Transferencia",
 		message: description,
 		amount: 0 - amount,
-		account_id: usuario_emisor.accounts[1].id,
+		account_id: usuario_emisor.accounts[0].id,
 		reference: reference_code,
 	}).then(async (res) => {
 		emisor_account.balance = emisor_account.balance - amount;
@@ -85,11 +85,11 @@ module.exports = async (ctx) => {
 			description: "Transferencia",
 			message: description,
 			amount,
-			account_id: usuario_receptor.accounts[1].id,
+			account_id: usuario_receptor.accounts[0].id,
 			reference: reference_code,
 		}).then(async () => {
 			const receptor_account = await Account.findOne({
-				where: { id: usuario_receptor.accounts[1].id },
+				where: { id: usuario_receptor.accounts[0].id },
 			});
 
 			receptor_account.balance = receptor_account.balance + amount;
