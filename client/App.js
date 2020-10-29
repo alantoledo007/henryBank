@@ -12,7 +12,15 @@ import AppNavigation from './components/IndexNav/AppNavigation';
 import { NavigationContainer } from '@react-navigation/native';
 import Loading from './components/Loading'
 
+//Kitten UI
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components';
+import { useColorScheme } from 'react-native';
+import { default as evaTheme } from './theme.json';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
 export default function App() {
+  const theme = useColorScheme();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -25,14 +33,15 @@ export default function App() {
   if (isLoading) return <Loading />
 
   return (
-    <>
-      <Provider store={store}>
-        <NavigationContainer>
-          {/* AppNavigation contiene la lógica de navegación */}
-          <AppNavigation />
-        </NavigationContainer>
-      </Provider>
-      <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
-    </>
+    <Provider store={store}>
+      <IconRegistry icons={EvaIconsPack} />
+      <ApplicationProvider {...eva} theme={{...eva[theme],...evaTheme}}>
+          <NavigationContainer>
+            {/* AppNavigation contiene la lógica de navegación */}
+            <AppNavigation />
+          </NavigationContainer>
+        <Toast config={toastConfig} ref={(ref) => Toast.setRef(ref)} />
+      </ApplicationProvider>
+    </Provider>
   );
 }

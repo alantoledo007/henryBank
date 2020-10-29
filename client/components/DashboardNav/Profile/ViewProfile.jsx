@@ -1,12 +1,25 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Image, ScrollView, Platform } from "react-native";
+import { View, StyleSheet, Image, ScrollView, Platform, TouchableHighlight } from "react-native";
 
 import { Container, Input, Button, Label, QTLink } from "../../Quantum";
 import Toast from "react-native-toast-message";
 
 import * as ImagePicker from "expo-image-picker";
+import {
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
+import colors from "../../style/colors";
+import s from "../../style/styleSheet";
+import Icon from "react-native-vector-icons/Feather";
+// import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-export default function ViewProfile({ data, editMode, updateAvatar, navigation }) {
+export default function ViewProfile({
+  data,
+  editMode,
+  updateAvatar,
+  navigation,
+}) {
   // console.log(ImagePicker)
   const {
     name,
@@ -52,18 +65,33 @@ export default function ViewProfile({ data, editMode, updateAvatar, navigation }
   }, []);
   return (
     <>
-      <View style={styles.titleWrapper}>
-        <View style={styles.imgWrapper}>
-          <Image style={styles.img} source={{ uri: avatar }} />
-        </View>
-        <Button
-          onPress={pickImage}
-          label="Cambiar foto"
-          style={{ height: 10, justifyContent: "center", marginTop: 3 }}
-        />
-        <Label style={styles.nameTitle} text={name} />
+      <View style={{alignItems: "center"}}>
+        <TouchableOpacity onPress={pickImage}>
+          <View style={styles.imgWrapper}>
+            <Image style={styles.img} source={{ uri: avatar }} />
+          </View>
+          <View
+            style={{
+              width: 35,
+              height: 35,
+              borderRadius: 25,
+              backgroundColor: colors.pink,
+              alignSelf: "flex-end",
+              bottom: 25,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <Icon 
+              name="image"
+              size={20}
+              color={colors.white}
+            />
+          </View>
+        </TouchableOpacity>
       </View>
 
+      
       <View style={styles.section}>
         <Label style={styles.subtitle} text="Nombre completo:" />
         <Label style={styles.data} text={name + " " + surname} />
@@ -76,7 +104,24 @@ export default function ViewProfile({ data, editMode, updateAvatar, navigation }
           />
           <Label style={styles.data} text={email} />
         </View>
-        <Button onPress={()=>navigation.navigate("Cambiar Email")} style={{height: 10, justifyContent: "center"}}label="Cambiar email"/>
+        <TouchableOpacity
+          style={{
+            width: 35,
+            height: 35,
+            borderRadius: 25,
+            backgroundColor: colors.pink,
+            marginRight: 25,
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+          onPress={() => navigation.navigate("Cambiar Email")}
+        >
+          <Icon 
+            name="chevron-right"
+            size={25}
+            color={colors.white}
+          />
+        </TouchableOpacity>
       </View>
       <View style={styles.section}>
         <Label style={styles.subtitle} text="Número de teléfono:" />
@@ -103,20 +148,13 @@ export default function ViewProfile({ data, editMode, updateAvatar, navigation }
         <Label style={styles.data} text={createdAt.slice(0, 10)} />
       </View>
 
-      <Button
-        textStyle={{ fontSize: 25 }}
-        onPress={editMode}
-        label="Actualizar información"
-      />
+          <Button onPress={editMode} label="editar"/>
+
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  titleWrapper: {
-    alignItems: "center",
-    // paddingTop: 25
-  },
   imgWrapper: {
     // backgroundColor: "blue",
     height: 100,
@@ -145,6 +183,6 @@ const styles = StyleSheet.create({
   email: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
-  }
+    alignItems: "center",
+  },
 });
