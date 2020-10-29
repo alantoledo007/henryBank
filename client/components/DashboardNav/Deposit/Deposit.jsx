@@ -36,7 +36,7 @@ const Deposit = ({ closeModal, navigation }) => {
   }
 
   return (
-    <Container style={styles.container}  wihtHeader={true}>
+    <Container style={styles.container}  >
       {/* <LinearGradient
         // Background Linear Gradient
         colors={["rgba(0,0,0,0.8)", "#6b538a"]}
