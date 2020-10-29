@@ -195,6 +195,7 @@ const DepositCard = ({ token, close, updateBalance }) => {
             cvc: "CVC",
             name: "NOMBRE",
           }}
+          // inputContainerStyle={{flexDirection: "column"}}
         />
       </View>
 
@@ -224,6 +225,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "space-evenly",
     alignItems: "center",
+    paddingBottom: 20
     // backgroundColor: "red"
   },
   text: {
@@ -266,7 +268,7 @@ const styles = StyleSheet.create({
   error: {
     color: colors.pink,
     ...s.font,
-    fontSize: 25,
+    fontSize: 20,
     alignSelf: "center",
     textAlign: "center",
     marginBottom: 20,

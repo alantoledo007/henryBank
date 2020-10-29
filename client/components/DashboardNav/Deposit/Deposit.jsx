@@ -22,21 +22,21 @@ import DepositCard from "./DepositCard";
 import { Container, Label, Button, QTLink } from "../../Quantum";
 
 const Deposit = ({ closeModal, navigation }) => {
-  const [paymentMethod, setPaymentMethod] = useState("cash");
+  const [paymentMethod, setPaymentMethod] = useState("QRCode");
 
   //armé esta función por si se puede llegar a este componente desde el modal en Dash Y otra manera que involucre react navigation
   //Maneja los dos casos para salir del componente
   const close = () => {
     //Si hay navigation, es decir, si se navegó a este componente mediante el menú, usamos navigate
-    if(navigation){
-      return navigation.navigate("Dashboard")
+    if (navigation) {
+      return navigation.navigate("Dashboard");
     }
     //Si no, es decir, si se está viendo el componente a través de modal, cerramos el modal
     closeModal();
-  }
+  };
 
   return (
-    <Container style={styles.container}  wihtHeader={true}>
+    <Container style={styles.container} >
       {/* <LinearGradient
         // Background Linear Gradient
         colors={["rgba(0,0,0,0.8)", "#6b538a"]}
@@ -64,20 +64,24 @@ const Deposit = ({ closeModal, navigation }) => {
           text="Recargar dinero"
           style={{ fontSize: 40, alignSelf: "center" }}
         />
-        <Picker
-          style={styles.picker}
-          // itemStyle={{ ...styles.text, color: "green" }}
-          selectedValue={paymentMethod}
-          onValueChange={(value) => setPaymentMethod(value)}
-          mode="dropdown"
-        >
-          <Picker.Item label="Efectivo" value="cash"></Picker.Item>
-          <Picker.Item label="Tarjeta" value="card"></Picker.Item>
-        </Picker>
+        <View style={{ ...s.input, justifyContent: "center", width: 200, alignSelf: "center" }}>
+          <Picker
+            style={styles.picker}
+            // itemStyle={{ ...styles.text, color: "green" }}
+            selectedValue={paymentMethod}
+            onValueChange={(value) => setPaymentMethod(value)}
+            mode="dropdown"
+          >
+            <Picker.Item label="Código QR" value="QRCode"></Picker.Item>
+            <Picker.Item label="Tarjeta" value="card"></Picker.Item>
+          </Picker>
+        </View>
       </View>
       {/* Según el state paymentMethod, renderizamos un componente u otro: */}
-      {paymentMethod === "cash" && <DepositCash />}
-      {paymentMethod === "card" && <DepositCard close={close} navigation={navigation} />}
+      {paymentMethod === "QRCode" && <DepositCash />}
+      {paymentMethod === "card" && (
+        <DepositCard close={close} navigation={navigation} />
+      )}
 
       {/* {navigation ? 
         <QTLink label="¿Necesitás ayuda?" {...{ navigation }} to="Dash" />
@@ -90,7 +94,7 @@ const Deposit = ({ closeModal, navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: "space-between"
+    // justifyContent: "space-between",
   },
   text: {
     ...s.font,
@@ -110,9 +114,9 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 30,
-    width: 110,
+    width: 200,
     alignSelf: "center",
-    color: colors.pink,
+    color: "black",
     // fontSize: 200000,
     // textAlign: "center",
   },

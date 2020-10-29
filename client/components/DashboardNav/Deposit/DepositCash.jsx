@@ -1,7 +1,13 @@
-import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  StyleSheet,
+} from "react-native";
 
 import { connect } from "react-redux";
+
+// import QRCode from "qrcode.react";
+import QRCode from "react-qr-code";
 
 import { styles as s } from "../../style/styleSheet";
 import colors from "../../style/colors";
@@ -9,23 +15,58 @@ import colors from "../../style/colors";
 import { Container, Label, Button, QTLink } from "../../Quantum";
 
 const DepositCash = ({ recharge_code }) => {
-  //Ya que el código de recarga es un poquito largo, lo separo a la mitad levemente para que sea un poco mas facil de leer
-  const splitRechargeCode = recharge_code
-    ? recharge_code.toString().substring(0, 5) +
-      "  " +
-      recharge_code.toString().substring(5)
-    : "00000 00000";
+  const [state, setState] = useState({
+    value: "http://picturesofpeoplescanningqrcodes.tumblr.com/",
+    size: 128,
+    fgColor: "#000000",
+    bgColor: "#ffffff",
+    level: "L",
+    renderAs: "svg",
+    includeMargin: false,
+    includeImage: true,
+    imageH: 24,
+    imageW: 24,
+    imageX: 0,
+    imageY: 0,
+    imageSrc: "https://static.zpao.com/favicon.png",
+    imageExcavate: true,
+    centerImage: true,
+  });
   return (
-    <View style={styles.container}>
-      <Label style={{textAlign: "center"}} text="Este código te permitirá depositar dinero en tu cuenta pagando con efectivo:" />
+   <View style={{paddingTop: 15}}>
+      <Label
+        style={{ textAlign: "center" }}
+        text="Este código te permitirá depositar dinero en tu cuenta pagando con efectivo:"
+      />
       <View>
-        <Button label={splitRechargeCode} disabled={true} style={{alignSelf: "center", width: 300}} textStyle={{fontSize: 50}}/>
-        {/* <View style={styles.codeWrapper}>
-          <Label style={styles.code} text={splitRechargeCode}/>
-        </View> */}
-        <Label style={{fontSize: 15, alignSelf: "center"}} text="El monto mínimo es de $100." />
+        {/* <Button label={splitRechargeCode} disabled={true} style={{alignSelf: "center", width: 300}} textStyle={{fontSize: 50}}/> */}
+        <View
+          style={{
+            alignSelf: "center",
+            width: 290,
+            height: 290,
+            paddingVertical: 15,
+            backgroundColor: colors.pink,
+            borderRadius: 15,
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <QRCode
+            value={JSON.stringify({
+              recharge_code,
+            })}
+          />
+        </View>
+        <Label
+          style={{ fontSize: 15, alignSelf: "center" }}
+          text="El monto mínimo es de $100."
+        />
       </View>
-      <Label style={{textAlign: "center"}} text="¡Es fácil! Sólo deberás  dirigirte a un Rapipago o Pago Fácil y mostrarle tu código al cajero." />
+      <Label
+        style={{ textAlign: "center" }}
+        text="¡Es fácil! Sólo deberás  dirigirte a un Rapipago o Pago Fácil y mostrarle tu código al cajero."
+      />
     </View>
   );
 };
