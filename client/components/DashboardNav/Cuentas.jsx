@@ -11,9 +11,7 @@ const Cuentas = (props) => {
 
     const theme = useColorScheme();
 
-    const { usd, arg, cuentas} = props;
-
-    console.log(cuentas)
+    const { usd, arg } = props;
     
    const [copiedText, setCopiedText] = useState('')
     const copyToClipboard = () => {
@@ -70,8 +68,7 @@ const mapStateToProps = (state) => {
     return {
         
         usd: state.auth.user.accounts[0],
-        arg: state.auth.user.accounts[1],
-        cuentas: state.auth.user.accounts
+        arg: state.auth.user.accounts[1]
 
     }
 }
