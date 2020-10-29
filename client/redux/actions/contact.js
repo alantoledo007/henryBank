@@ -11,7 +11,6 @@ const UPDATE_CONTACT = "UPDATE_CONTACT";
 const GET_CONTACT_TRANSACTIONS = "GET_CONTACT_TRANSACTIONS";
 
 export function getContactTransactions(contactId, token) {
-    console.log(contactId, token)
     return dispatch => {
         return axios.post(env.API_URI + "/transactions/contact_transactions", {contactId}, {
             headers: {
@@ -20,11 +19,11 @@ export function getContactTransactions(contactId, token) {
             }
         })
         .then(res => {
-            dispatch({type: GET_CONTACT_TRANSACTIONS, payload: res})
-            console.log("===================>" + res);
+            const data = res.data
+            dispatch({type: GET_CONTACT_TRANSACTIONS, payload: data})
         })
         .catch(err => {
-            console.log("error ==================>" + err);
+            console.log(err);
         })
     }
 }

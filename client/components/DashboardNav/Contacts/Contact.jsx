@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import moment from 'moment';
 import {
   View,
   Image,
@@ -11,7 +12,7 @@ import colors from "../../style/colors";
 import { bn, Scroll, Label, DefaultButton, NoScrollContainer, Input } from "../../Quantum";
 import { deleteContact, updateContact, getContactTransactions } from '../../../redux/actions/contact';
 
-function Contact({ contact, token, close, onClose, deleteContact, updateContact, getContactTransactions }) {
+function Contact({ contact, token, close, onClose, deleteContact, updateContact, getContactTransactions, transactions }) {
   const { name, surname, email, avatar } = contact.User;
   const { nickname, id } = contact;
 
@@ -53,23 +54,7 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
     const contactId = id;
     getContactTransactions(contactId, token);
   }, [])
-  const testLastTransactions = [
-    {
-      date: "14/08/20",
-      profilePic:
-        "https://media.istockphoto.com/photos/smiling-man-picture-id580109640?k=6&m=580109640&s=612x612&w=0&h=5pUh9Mano2tmYyrUoU6Nyz0RqUm3P45Os_KK9JkttIM=",
-      description: "Pago de deuda (cuota 01/03)",
-      amount: 763.47,
-    },
-    {
-      date: "06/03/20",
-      profilePic:
-        "https://elpersonalista.com/wp-content/uploads/2020/03/papada-hombre-perfil-barba.jpg",
-      description: "Pago por servicio de Hosting",
-      amount: -1500.0,
-    },
 
-  ];
   const [dis, setDis] = useState(false);
   // const { id } = useParams();
 
@@ -163,8 +148,8 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
       </NoScrollContainer>
       <Scroll>
         <View>
-          {testLastTransactions && testLastTransactions.length ?
-            testLastTransactions.map((transaction, index) => (
+          {transactions && transactions.length ?
+            transactions.map((transaction, index) => (              
               <View key={index} style={{ ...bn("row mb-3") }}>
                 <View style={{ ...bn("row"), width: "70%" }}>
                   <IonIcon
@@ -179,9 +164,9 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
                   </View>
                 </View>
                 <View style={{ width: "30%", alignItems: "flex-end" }}>
-                  <Label text={transaction.date} style={bn("h6")} />
+                  <Label text={moment(transaction.createdAt).format("dd/MM/YYYY")} style={bn("h6")} />
                 </View>
-                {index < testLastTransactions.length - 1 &&
+                {index < transactions.length - 1 &&
                   <View style={bn("borderBottom-1-lightgray")} />
                 }
               </View>
@@ -199,6 +184,7 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
 
 function mapStateToProps(state) {
   return {
+  transactions: state.contacts.transactions
   };
 }
 
