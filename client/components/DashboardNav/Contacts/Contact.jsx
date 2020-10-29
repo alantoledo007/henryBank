@@ -53,7 +53,6 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
     const contactId = id;
     getContactTransactions(contactId, token);
   }, [])
-
   const testLastTransactions = [
     {
       date: "14/08/20",
