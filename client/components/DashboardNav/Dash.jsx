@@ -1,12 +1,13 @@
 //general
 import React,{useEffect, useState} from 'react';
-import { StyleSheet, Image, View, Text, TouchableOpacity, StatusBar, ScrollView, ActivityIndicator} from 'react-native';
+import { View, ActivityIndicator} from 'react-native';
 import { connect } from 'react-redux';
 import {Dimensions } from "react-native";
 // import { Rect } from 'react-native-svg';
 
-//actions
-
+import axios from 'axios';
+import { updateUserInfo } from '../../redux/actions/auth';
+import env from '../../env';
 //components
 import Deposit from './Deposit/Deposit';
 import SendMoney from './SendMoney';
@@ -30,6 +31,7 @@ function SvgComponent(props){
 }
 
 function Dash({user, navigation}){
+    const [ dis, setDis ] = useState(false);
 
     const [showModal, setShowModal] = useState(false);
 
@@ -37,7 +39,7 @@ function Dash({user, navigation}){
         return 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000'
     }
 
-    console.log(user)
+    // console.log(user)
 
     const initialState = {
         user:{
@@ -88,7 +90,7 @@ function Dash({user, navigation}){
             <Layout>
                 <SvgComponent height="200px" width="200px" style={bn('ml-auto mr-auto my-5')} />
             </Layout>
-            <TabNavigator />
+            <TabNavigator dis={dis} setDis={setDis} />
             <Layout style={{flex:1}}>
                 <Button status="info"
                     style={bn('mt-10 mr-auto ml-auto borderRadius-40 h-80 w-80')}
@@ -184,18 +186,18 @@ const PesosScreen = ({accounts, navigation}) => {
 
 
     useEffect(()=>{
-        console.log(accounts)
+        // console.log(accounts)
         if(!accounts) return;
         setState(state => {
             return {
                 ...state,
-                balance: accounts[0].balance
+                balance: accounts[1].balance
             }
         })
     },[accounts])
 
     return (<Layout style={{flex:1,...bn('py-6 px-6')}}>
-        <KText category='h2' style={bn('mb-4 text-center')}>ARS {state.balance}</KText>
+        <KText category='h2' style={bn('mb-4 text-center')}>ARS {state.balance.toFixed(2)}</KText>
         <View style={bn('row')}>
             <View style={bn('col-6 pr-2')}>
                 <Button size="small" onPress={() => navigation.navigate('Transferencia')}>
@@ -211,43 +213,118 @@ const PesosScreen = ({accounts, navigation}) => {
     </Layout>);
 };
   
-const UsdScreen = ({accounts, navigation}) => {
-
+const UsdScreen = ({token, accounts, navigation, updateUserInfo}) => {
     const [state,setState] = useState({
-        balance: 0
+        balance: 0,
+        usdAmount: 0,
+        usdToArs: 0
     })
 
+    const [ dis, setDis ] = useState(false);
+
     const [visible,setVisible] = useState(false);
+    const [visibleSell, setVisibleSell] = useState(false);
+
+    const handleSell = () => {
+        const amount = parseInt(state.usdAmount);
+        setDis(true);
+        axios.post(`${env.API_URI}/dollars/sell`, JSON.stringify({amount}), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res=>res.data)
+        .then((res)=>{
+            console.log('RESPUESTA VENTA DOLARES',res)
+            updateUserInfo(res);
+            setDis(false);
+            setVisibleSell(false);
+            Toast.show({
+                type: "success",
+                text1: "¡Venta de dólares realizada!",
+                text2: `Te acreditamos ARS ${state.usdToArs}`
+            })
+            setState({
+                ...state,
+                usdAmount: 0,
+                usdToArs: 0
+            })
+        })
+        .catch(err=>console.log(err))
+    }
 
     const handleBuy = () => {
-        setVisible(true);
+        const amount = parseInt(state.usdAmount)
+        // if(amount == 0 || amount > 200){
+        //     return;
+        // }
+        axios.post(`${env.API_URI}/dollars/buy`, JSON.stringify({amount}), {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res=>res.data)
+        .then((res)=>{
+            console.log(res);
+            updateUserInfo(res);
+            setVisible(false);
+            Toast.show({
+                type: "success",
+                text1: "¡Compra de dólares realizada!",
+                text2: `Has comprado USD ${state.usdAmount}.`
+            })
+            setState({
+                ...state,
+                usdAmount: 0,
+                usdToArs: 0
+            })
+        })
+        .catch(err=>{
+            console.log(err.response.data)
+            if(err.response.data.code == 403){
+                setVisible(false);
+                Toast.show({
+                    type: "error",
+                    text1: "Saldo insuficiente."
+                })
+            }
+        })
     }
 
     useEffect(()=>{
-        console.log(accounts)
+        setState({
+            ...state,
+            usdToArs: ((state.usdAmount * 78.30) * 1.35) * 1.30 
+        })
+    }, [state.usdAmount])
+
+    useEffect(()=>{
+        // console.log(accounts)
         if(!accounts) return;
         setState(state => {
             return {
                 ...state,
-                balance: accounts[1].balance
+                balance: accounts[0].balance
             }
         })
     },[accounts])
     return (<Layout style={{flex:1,...bn('py-6 px-6')}}>
-        <KText category='h2' style={bn('mb-4 text-center')}>USD {state.balance}</KText>
+        <KText category='h2' style={bn('mb-4 text-center')}>USD {state.balance.toFixed(2)}</KText>
         <View style={bn('row')}>
             <View style={bn('col-6 pr-2')}>
-                <Button size="small" onPress={() => handleBuy()}>
+                <Button size="small" onPress={() => setVisible(true)}>
                     COMPRAR
                 </Button>
             </View>
             <View style={bn('col-6 pl-2')}>
-                <Button size="small" appearance="outline" onPress={() => handleBuy()}>
+                <Button size="small" appearance="outline" onPress={() => setVisibleSell(true)}>
                     VENDER
                 </Button>
             </View>
         </View>
-
+        {/* MODAL COMPRA DOLARES */}
         <Modal visible={visible}
             backdropStyle={bn('bg-rgba(0,0,0,.5)')}
             style={bn('container px-6')}>
@@ -258,16 +335,52 @@ const UsdScreen = ({accounts, navigation}) => {
                     <Input
                         label="Ingrese un monto"
                         placeholder='0.00'
-                        onChangeText={nextValue => setValue(nextValue)}
+                        onChangeText={value => setState({
+                            ...state,
+                            usdAmount: value
+                        })}
+                        keyboardType="number-pad"
                     />
+                    <Label style={{textAlign: "center"}} text={`Se le cobrarán ARS ${state.usdToArs.toFixed(2)}`}/>
                 </View>
                 <View style={bn('col-12')}>
-                    <Button style="w-100%" onPress={() => setVisible(false)}>
+                    <Button style="w-100%" onPress={handleBuy}>
                         COMPRAR
                     </Button>
                 </View>
                 <View style={bn('col-12')}>
                     <Button appearance="ghost" onPress={() => setVisible(false)}>
+                        CANCELAR
+                    </Button>
+                </View>
+            </Card>
+        </Modal>
+        {/* MODAL VENTA DOLARES */}
+        <Modal visible={visibleSell}
+            backdropStyle={bn('bg-rgba(0,0,0,.5)')}
+            style={bn('container px-6')}>
+            <Card tyle={{...bn('row')}}>
+                <KText category="h2" style={bn('mb-4')}>Vender USD</KText>
+                <View style={bn('col-12 mb-4')}>
+
+                    <Input
+                        label="Ingrese un monto"
+                        placeholder='0.00'
+                        onChangeText={value => setState({
+                            ...state,
+                            usdAmount: value
+                        })}
+                        keyboardType="number-pad"
+                    />
+                    <Label style={{textAlign: "center"}} text={`Se le acreditarán ARS ${state.usdToArs.toFixed(2)}`}/>
+                </View>
+                <View style={bn('col-12')}>
+                    <Button style="w-100%" onPress={handleSell}>
+                        VENDER
+                    </Button>
+                </View>
+                <View style={bn('col-12')}>
+                    <Button appearance="ghost" onPress={() => setVisibleSell(false)}>
                         CANCELAR
                     </Button>
                 </View>
@@ -292,12 +405,14 @@ const TopTabBar = ({ navigation, state }) => (
 function mapStateToProps(state) {
     return {
         user: state.auth.user,
+        token: state.auth.token,
         accounts: state.auth.user.accounts
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
+        updateUserInfo: data => dispatch(updateUserInfo(data))
     }
 }
 
