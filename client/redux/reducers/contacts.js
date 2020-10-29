@@ -1,4 +1,4 @@
-import { DELETE_CONTACT, RECEIVE_CONTACTS, REQUEST_CONTACTS, ADD_CONTACT } from "../actions/contact";
+import { DELETE_CONTACT, RECEIVE_CONTACTS, REQUEST_CONTACTS, ADD_CONTACT, UPDATE_CONTACT } from "../actions/contact";
 
 const initialState = {
     isFetching: false,
@@ -27,6 +27,10 @@ export default (state = initialState, action) => {
                 return {
                     ...state
             }
+            case UPDATE_CONTACT:
+                return {
+                    ...state
+                }
     }
     return state;
 }
