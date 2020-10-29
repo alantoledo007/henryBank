@@ -18,6 +18,7 @@ import {
 import CheckBox from "@react-native-community/checkbox";
 import validator from "email-validator";
 import {updateBalance} from '../../redux/actions/transactions';
+import { getContacts } from '../../redux/actions/contact';
 
 //redux
 import { connect } from "react-redux";
@@ -28,7 +29,7 @@ import { Container, Label, Input, Alert, toastConfig } from "../Quantum";
 import Toast from 'react-native-toast-message';
 
 const SendMoney = (props) => {
-  const { token, balance, closeModal, navigation, updateBalance } = props;
+  const { token, balance, closeModal, navigation, updateBalance, getContacts, list } = props;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState("Contactos");
@@ -54,24 +55,25 @@ const SendMoney = (props) => {
   }
 
   const contancts = () => {
-    axios
-      .get(`${env.API_URI}/contacts`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      })
-      .then((response) => {
-        if (response.data.data.length === 0) {
-          setSelectedValue("Sin contactos");
-          setFlag(true);
-        }
-        setFriends(response.data.data);
-        setFlag(true);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    getContacts()
+    // axios
+    //   .get(`${env.API_URI}/contacts`, {
+    //     headers: {
+    //       Authorization: `Bearer ${token}`,
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //   .then((response) => {
+    //     if (response.data.data.length === 0) {
+    //       setSelectedValue("Sin contactos");
+    //       setFlag(true);
+    //     }
+    //     setFriends(response.data.data);
+    //     setFlag(true);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
   };
 
   const format = (amount) => {
@@ -159,7 +161,8 @@ const SendMoney = (props) => {
       });
   }
   useEffect(() => {
-    flag === false ? contancts() : {};
+    getContacts()
+    contancts()
   });
 
   const back = () => {
@@ -209,8 +212,8 @@ const SendMoney = (props) => {
               key="Buscar..."
             />
 
-            {friends &&
-              friends.map((x) => (
+            {list &&
+              list.map((x) => (
                 <Picker.Item
                   label={x.nickname}
                   value={x.contact_id}
@@ -360,12 +363,15 @@ function mapStateToProps(state) {
   return {
     token: state.auth.token,
     balance: state.auth.user.accounts[1].balance,
+    list: state.contacts.list
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    updateBalance: balance => dispatch(updateBalance(balance))
+    updateBalance: balance => dispatch(updateBalance(balance)),
+    getContacts: () => dispatch(getContacts())
+    
   };
 }
 
