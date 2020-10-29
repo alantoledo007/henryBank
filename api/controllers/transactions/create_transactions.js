@@ -1,14 +1,12 @@
 require("dotenv").config();
 const { User, Transaction, Account } = require("../../db");
-const jwt = require("jsonwebtoken");
-const { transaction } = require("../authController");
 const { MoleculerError } = require("moleculer").Errors;
 
 const codeGenerator = async () => {
 	let code = Math.floor(Math.random() * 100000000);
 
 	const transaction = await Transaction.findOne({
-		where: { relation_code: code },
+		where: { reference: code },
 	});
 	if (!transaction) {
 		return code;
@@ -58,17 +56,17 @@ module.exports = async (ctx) => {
 	}
 
 	//Verificacion de balance
-	if (usuario_emisor.accounts[0].balance < amount) {
+	if (usuario_emisor.accounts[1].balance < amount) {
 		throw new MoleculerError("Sos pobre", 409, "NOTENOUGH_BALANCE", {
 			nodeID: ctx.nodeID,
 			action: ctx.action.name,
 		});
 	}
 
-	const relation_code = await codeGenerator();
+	const reference_code = await codeGenerator();
 
 	const emisor_account = await Account.findOne({
-		where: { id: usuario_emisor.accounts[0].id },
+		where: { id: usuario_emisor.accounts[1].id },
 	});
 
 	const transaccion = await Transaction.create({
@@ -76,8 +74,8 @@ module.exports = async (ctx) => {
 		description: "Transferencia",
 		message: description,
 		amount: 0 - amount,
-		account_id: usuario_emisor.accounts[0].id,
-		relation_code,
+		account_id: usuario_emisor.accounts[1].id,
+		reference: reference_code,
 	}).then(async (res) => {
 		emisor_account.balance = emisor_account.balance - amount;
 		await emisor_account.save();
@@ -87,11 +85,11 @@ module.exports = async (ctx) => {
 			description: "Transferencia",
 			message: description,
 			amount,
-			account_id: usuario_receptor.accounts[0].id,
-			relation_code,
+			account_id: usuario_receptor.accounts[1].id,
+			reference: reference_code,
 		}).then(async () => {
 			const receptor_account = await Account.findOne({
-				where: { id: usuario_receptor.accounts[0].id },
+				where: { id: usuario_receptor.accounts[1].id },
 			});
 
 			receptor_account.balance = receptor_account.balance + amount;

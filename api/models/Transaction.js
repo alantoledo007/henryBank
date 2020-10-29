@@ -21,7 +21,7 @@ module.exports = (sequelize) => {
 			type: DataTypes.FLOAT(12, 2),
 			allowNull: false,
 		},
-		relation_code: {
+		reference: {
 			type: DataTypes.STRING(8),
 		},
 	});
