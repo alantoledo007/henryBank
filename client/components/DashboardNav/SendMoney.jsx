@@ -132,7 +132,7 @@ const SendMoney = (props) => {
         //actualizamos el balance en redux
         updateBalance(response.data.balance);
         //Mostramos el toast de transferencia completa y cerramos el modal:
-        closeModal();
+        navigation.navigate("Dashboard")
         Toast.show({
           type: "success",
           text1: "Transeferencia completa",
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     token: state.auth.token,
-    balance: state.auth.user.balance,
+    balance: state.auth.user.accounts[1].balance,
   };
 }
 

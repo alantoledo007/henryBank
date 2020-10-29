@@ -26,6 +26,18 @@ export default function userReducer(state = initialState, action) {
           accounts: [state.user.accounts[0], acc],
         },
       };
+    case "UPDATE_BALANCES":
+      let accUSD = state.user.accounts[0];
+      let accARS = state.user.accounts[1];
+      accUSD.balance = action.payload.usdBalance;
+      accARS.balance = action.payload.arsBalance;
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          accounts: [accUSD, accARS]
+        }
+      }
     case "LOGIN":
       return {
         ...state,

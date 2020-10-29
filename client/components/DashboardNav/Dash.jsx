@@ -6,7 +6,7 @@ import {Dimensions } from "react-native";
 // import { Rect } from 'react-native-svg';
 
 import axios from 'axios';
-import { updateUserInfo } from '../../redux/actions/auth';
+import { updateUserInfo, updateBalances } from '../../redux/actions/auth';
 import env from '../../env';
 //components
 import Deposit from './Deposit/Deposit';
@@ -213,7 +213,7 @@ const PesosScreen = ({accounts, navigation}) => {
     </Layout>);
 };
   
-const UsdScreen = ({token, accounts, navigation, updateUserInfo}) => {
+const UsdScreen = ({token, accounts, navigation, updateUserInfo, updateBalances}) => {
     const [state,setState] = useState({
         balance: 0,
         usdAmount: 0,
@@ -237,7 +237,7 @@ const UsdScreen = ({token, accounts, navigation, updateUserInfo}) => {
         .then(res=>res.data)
         .then((res)=>{
             console.log('RESPUESTA VENTA DOLARES',res)
-            updateUserInfo(res);
+            updateBalances(res);
             setDis(false);
             setVisibleSell(false);
             Toast.show({
@@ -412,7 +412,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        updateUserInfo: data => dispatch(updateUserInfo(data))
+        updateUserInfo: data => dispatch(updateUserInfo(data)),
+        updateBalances: data => dispatch(updateBalances(data))
     }
 }
 
