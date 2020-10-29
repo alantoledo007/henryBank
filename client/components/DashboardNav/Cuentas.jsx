@@ -12,8 +12,8 @@ const Cuentas = (props) => {
     const theme = useColorScheme();
 
     const { usd, arg } = props;
-
-    const [copiedText, setCopiedText] = useState('')
+    
+   const [copiedText, setCopiedText] = useState('')
     const copyToClipboard = () => {
         Clipboard.setString(`${arg.cvu}`)
     }

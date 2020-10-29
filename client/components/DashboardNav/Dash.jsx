@@ -39,7 +39,6 @@ function Dash({user, navigation}){
         return 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000'
     }
 
-    // console.log(user)
 
     const initialState = {
         user:{
@@ -294,14 +293,6 @@ const UsdScreen = ({token, accounts, navigation, updateUserInfo}) => {
     }
 
     useEffect(()=>{
-        setState({
-            ...state,
-            usdToArs: ((state.usdAmount * 78.30) * 1.35) * 1.30 
-        })
-    }, [state.usdAmount])
-
-    useEffect(()=>{
-        // console.log(accounts)
         if(!accounts) return;
         setState(state => {
             return {
