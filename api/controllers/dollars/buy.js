@@ -62,5 +62,5 @@ module.exports = async (ctx) => {
     await account_usd.save();
 
     
-    return {accounts:[account_usd,account_ars]};
+    return {usdBalance: account_usd.balance, arsBalance: account_ars.balance};
 }
