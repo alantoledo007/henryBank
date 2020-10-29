@@ -11,9 +11,11 @@ import {
 import s from "../../style/styleSheet";
 import colors from "../../style/colors";
 import IonIcon from "react-native-vector-icons/Ionicons";
-
+import bootnative from 'bootnative';
 import Contact from "./Contact";
 import { Label } from "../../Quantum";
+
+const bn = bootnative();
 
 export default function List({ contacts, isFetching, token, getContacts }) {
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,45 +27,31 @@ export default function List({ contacts, isFetching, token, getContacts }) {
       email: ""
     }
   });
-  const urlAvatar = (name,surname) => {
-    return 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000'
-}
+
   const handleContactPress = (contact) => {
-    console.log(contact);
     setContactData(contact);
     setModalVisible(true);
   };
 
-  if (isFetching) return <ActivityIndicator style={{}} />;
-  if (contacts) {
-    return (
-      <>
-        {contacts.map((contact, index) => (
-          <ScrollView key={index}>
+  isFetching && <ActivityIndicator style={{}} />;
+  return (
+    <ScrollView>
+        {contacts && contacts.length ? contacts.map((contact, index) => (
+    <View key={index}>
             <TouchableOpacity onPress={() => handleContactPress(contact)}>
-              <View style={{ ...s.mb(4), flexDirection: "row" }}>
-                <Image
-                  source={{ uri: contact.User.avatar ? contact.User.avatar : urlAvatar(contact.User.name, contact.User.surname) }}
+              <View style={bn("my-3 row")}>
+                  <Image
+                  source={{ uri: "https://ui-avatars.com/api/?name=Nacho+Caldumbide&background=FFBD69&color=000" }}
                   style={{
-                    width: 50,
-                    height: 50,
-                    alignSelf: "flex-start",
-                    borderRadius: 10,
+                    width: 45,
+                    height: 45,
+                    borderRadius: 90,
+                    marginRight: 20
                   }}
-                ></Image>
-                <View>
-                    <Label text={`${contact.nickname.toLowerCase()}`} />
-                  <Text
-                    style={{
-                      ...s.textColor('black'),
-                      ...s.size(2),
-                      ...s.ml(1),
-                    }}
-                  >
-                    <IonIcon name="ios-mail" />
-                    <Label style={{...s.size(2.5)}}  text={`${contact.User.email}`} />
-                  </Text>
-                </View>
+                />
+                <View style={{display: "flex", justifyContent: "center", marginTop: -5}}>
+                                    <Text style={{...bn("text-dark"), fontSize: 23}}>{contact.nickname}</Text>
+                                    </View>
                 <IonIcon
                   style={{
                     position: "absolute",
@@ -72,19 +60,19 @@ export default function List({ contacts, isFetching, token, getContacts }) {
                   }}
                   name="ios-arrow-forward"
                   size={30}
-                  color={'black'}
+                  color={colors.pink}
                 />
               </View>
             </TouchableOpacity>
-            <View
-              style={{
-                borderBottomColor: colors.pink,
-                borderBottomWidth: 1,
-                ...s.mb(5),
-              }}
-            />
-          </ScrollView>
-        ))}
+            {index < contacts.length - 1 && 
+              <View style={bn("borderBottom-1-lightgray")} />
+            }
+              </View>
+        )) : 
+        <View>
+          <Label text="No hay contactos disponibles" style={bn("text-center")}/>
+        </View>
+        }
         <Modal
           transparent={true}
           animationType="slide"
@@ -92,10 +80,9 @@ export default function List({ contacts, isFetching, token, getContacts }) {
           onRequestClose={() => {
             setModalVisible(!modalVisible);
           }}
-        >
+          >
           <Contact getContacts={getContacts} contact={contactData} token={token} close={()=>setModalVisible(false)}/>
         </Modal>
-      </>
+          </ScrollView>
     );
-  }
 }

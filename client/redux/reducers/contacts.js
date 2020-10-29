@@ -1,4 +1,4 @@
-import { RECEIVE_CONTACTS, REQUEST_CONTACTS } from "../actions/contact";
+import { DELETE_CONTACT, RECEIVE_CONTACTS, REQUEST_CONTACTS, ADD_CONTACT } from "../actions/contact";
 
 const initialState = {
     isFetching: false,
@@ -17,6 +17,15 @@ export default (state = initialState, action) => {
                 ...state,
                 isFetching: false,
                 list: action.payload
+            }
+            case ADD_CONTACT:
+                return {
+                    ...state,
+                    isFetching: true
+                }
+            case DELETE_CONTACT:
+                return {
+                    ...state
             }
     }
     return state;

@@ -132,7 +132,7 @@ export const toastConfig =  {
         return <QTToast {...internalState} type="danger" />
     },
     success:(internalState) => {
-        return <QTToast {...internalState} />
+        return <QTToast {...internalState} type="success" />
     },
     info:(internalState) => {
         return <QTToast {...internalState} />
@@ -140,7 +140,25 @@ export const toastConfig =  {
 }
 
 
+export function NoScrollContainer({children, style}){
+    const theme = useColorScheme();
+    
+    return (
+                   <View style={{...hbn('p-3 bg-body',theme), ...style}}>
+                {children}
+            </View>
+    );
+}
 
+export function Scroll({children, style}){
+    const theme = useColorScheme();
+    
+    return (
+                   <ScrollView style={{...hbn('px-3 bg-body',theme), ...style}}>
+                {children}
+            </ScrollView>
+    );
+}
 
 export function Container({children, style, wihtHeader=false}){
     const theme = useColorScheme();
@@ -275,7 +293,7 @@ export function Input({placeholder, style,secureTextEntry, onFocus ,onChangeText
                 placeholder={placeholder}
                 style={{
                         ...hbn('p-3 border-1-inputBorder-solid-5 bg-inputBg text-inputColor', theme),
-                        ...(focused ? {...hbn('borderColor-inputBorderFocus bg-inputBg',theme),...focusStyles} :{}),
+                        ...(focused ? {...hbn('borderColor-inputBorderFocus bg-inputBg',theme)} :{}),
                         ...iconRight ? {paddingRight:45} : {},
                         ...s.size(3.5),
                         ...style
