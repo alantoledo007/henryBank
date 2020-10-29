@@ -10,6 +10,7 @@ import { bn, NoScrollContainer, Scroll, Container, Label, Input, Button } from '
 
 function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
     const { control, errors, handleSubmit } = useForm();
+    const [reload, setReload] = useState(false);
     const [state, setState] = useState({
         filteredContacts: [],
         modalVisible: false,
@@ -23,6 +24,7 @@ function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
             display: true
         })
         addContact(data, token);
+        setReload(true);
         setTimeout(() => {
             setState({
                 ...state,
@@ -30,7 +32,7 @@ function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
                 modalVisible: false,
                 display: false
             })
-        }, 1000)
+        }, 1000);
     }
 
     const filterContact = (value) => {
@@ -43,7 +45,8 @@ function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
 
     useEffect(() => {
         getContacts(token);
-    }, []);
+        setReload(false);
+    }, [reload]);
 
     return (
         <>
@@ -82,6 +85,7 @@ function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
                         isFetching={isFetching}
                         token={token}
                         getContacts={getContacts}
+                        onClose={() => setReload(true)}
                     />
                 </View>
             </Scroll>

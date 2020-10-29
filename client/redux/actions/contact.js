@@ -7,6 +7,25 @@ export const REQUEST_CONTACTS = "REQUEST_CONTACTS";
 export const RECEIVE_CONTACTS = "RECEIVE_CONTACTS";
 const ADD_CONTACT = "ADD_CONTACT";
 const DELETE_CONTACT = "DELETE_CONTACT";
+const UPDATE_CONTACT = "UPDATE_CONTACT";
+
+export function updateContact(data, token) {
+    const {id} = data;
+    return dispatch => {
+        return axios.put(env.API_URI + "/contacts/" + id, JSON.stringify(data), {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        })
+        .then(() => {
+            dispatch({type: UPDATE_CONTACT})
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
+}
 
 export function deleteContact(id, token) {
     return dispatch => {

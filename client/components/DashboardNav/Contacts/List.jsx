@@ -17,7 +17,7 @@ import { Label } from "../../Quantum";
 
 const bn = bootnative();
 
-export default function List({ contacts, isFetching, token, getContacts }) {
+export default function List({ contacts, isFetching, token, getContacts, onClose }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [contactData, setContactData] = useState({
     nickname: "",
@@ -32,7 +32,6 @@ export default function List({ contacts, isFetching, token, getContacts }) {
     setContactData(contact);
     setModalVisible(true);
   };
-
   isFetching && <ActivityIndicator style={{}} />;
   return (
     <ScrollView>
@@ -41,7 +40,7 @@ export default function List({ contacts, isFetching, token, getContacts }) {
             <TouchableOpacity onPress={() => handleContactPress(contact)}>
               <View style={bn("my-3 row")}>
                   <Image
-                  source={{ uri: "https://ui-avatars.com/api/?name=Nacho+Caldumbide&background=FFBD69&color=000" }}
+                  source={{ uri: contact.User.avatar }}
                   style={{
                     width: 45,
                     height: 45,
@@ -70,7 +69,7 @@ export default function List({ contacts, isFetching, token, getContacts }) {
               </View>
         )) : 
         <View>
-          <Label text="No hay contactos disponibles" style={bn("text-center")}/>
+          <Label text="No hay contactos disponibles" style={bn("text-center mt-5")}/>
         </View>
         }
         <Modal
@@ -78,10 +77,10 @@ export default function List({ contacts, isFetching, token, getContacts }) {
           animationType="slide"
           visible={modalVisible}
           onRequestClose={() => {
-            setModalVisible(!modalVisible);
+            setModalVisible(!modalVisible)
           }}
           >
-          <Contact getContacts={getContacts} contact={contactData} token={token} close={()=>setModalVisible(false)}/>
+          <Contact getContacts={getContacts} contact={contactData} token={token} onClose={onClose} close={()=>{setModalVisible(false)}}/>
         </Modal>
           </ScrollView>
     );
