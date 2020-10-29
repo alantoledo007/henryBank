@@ -16,6 +16,7 @@ import Contacts from "./Contacts/Index";
 import DrawerContent from "./DrawerContent";
 import Graphics from "./graphics";
 import Transactions from './Transactions/Transactions';
+import Cuentas from './Cuentas';
 
 // UI
 import { Button, hbn, darkColors, lightColors, defaultColors} from '../Quantum';
@@ -61,6 +62,7 @@ export function Menu() {
     return (
         <MenuStack.Navigator drawerContent={ props => <DrawerContent {...props}/>} >
             <MenuStack.Screen name="Dashboard" component={DashboardRoutes} />
+            <MenuStack.Screen name="Cuentas" component={CuentasRoute} />
             <MenuStack.Screen name="Recarga" component={DepositRoute} />
             <MenuStack.Screen name="Transferencia" component={SendMoneyRoute} />
             <MenuStack.Screen name="Contactos" component={ContactRoute} />
@@ -118,6 +120,15 @@ export const TransactionsRoute = () => {
         <TransactionsStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
             <TransactionsStackNavigator.Screen name='Transferencias' component={Transactions} />
         </TransactionsStackNavigator.Navigator>
+    )
+}
+export const CuentasRoute = () => {
+    const CuentasStackNavigator = createStackNavigator();
+    const theme = useColorScheme();
+    return (
+        <CuentasStackNavigator.Navigator screenOptions={navigationOptionsHeader(theme)}>
+            <CuentasStackNavigator.Screen name='Mis cuentas' component={Cuentas} />
+        </CuentasStackNavigator.Navigator>
     )
 }
 

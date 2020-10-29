@@ -62,6 +62,18 @@ function DrawerContent(props) {
                                 label='Tablero'
                                 onPress={ () => navigation.navigate('Dashboard')}
                             />
+                            <DrawerItem
+                                icon={({ color, size }) => (
+                                    <IconsMCI2
+                                        name='logo-usd'
+                                        color={theme === 'dark' ? '#fff' : '#000'}
+                                        size={size}
+                                    />
+                                )}
+                                labelStyle={{ color:theme === 'dark' ? '#fff' : '#000' }}
+                                label='Mis cuentas'
+                                onPress={ () => navigation.navigate('Cuentas')}
+                            />
                             
                             <DrawerItem
                                 icon={({ color, size }) => (

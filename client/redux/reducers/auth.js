@@ -9,7 +9,8 @@ const initialState = {
         emailVerifiedAt: null,
         dataCompletedAt: null,
         recharge_code: null,
-        balance: null
+        balance: null,
+        accounts: null
     }
 }
 
