@@ -44,3 +44,10 @@ export const updateUserInfo = data => {
         payload: data
     }
 }
+
+export const updateBalances = data => {
+    return {
+        type: "UPDATE_BALANCES",
+        payload: data
+    }
+}
