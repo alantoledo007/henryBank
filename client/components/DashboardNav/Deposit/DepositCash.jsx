@@ -15,23 +15,6 @@ import colors from "../../style/colors";
 import { Container, Label, Button, QTLink } from "../../Quantum";
 
 const DepositCash = ({ recharge_code }) => {
-  const [state, setState] = useState({
-    value: "http://picturesofpeoplescanningqrcodes.tumblr.com/",
-    size: 128,
-    fgColor: "#000000",
-    bgColor: "#ffffff",
-    level: "L",
-    renderAs: "svg",
-    includeMargin: false,
-    includeImage: true,
-    imageH: 24,
-    imageW: 24,
-    imageX: 0,
-    imageY: 0,
-    imageSrc: "https://static.zpao.com/favicon.png",
-    imageExcavate: true,
-    centerImage: true,
-  });
   return (
    <View style={{paddingTop: 15}}>
       <Label
