@@ -65,58 +65,7 @@ function ChangeEmail({ token, email, sendEmailChangeCode, navigation }) {
     })
     .then(res => res.data);
   };
-  //   const verifyCode = (data) => {
-  //     data.email = email;
-  //     setState({
-  //       ...state,
-  //       loading: true,
-  //     });
-  //     emailVerify(data)
-  //       .then(() => {
-  //         setState({
-  //           ...state,
-  //           needCode: false,
-  //           loading: false,
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         setState({
-  //           ...state,
-  //           loading: false,
-  //         });
-  //         console.log(err.response.data);
-  //         if (err.response?.data?.code === 401) {
-  //           return Toast.show({
-  //             type: "error",
-  //             text1: "Código incorrecto",
-  //             text2: "Por favor, verifique el código ingresado.",
-  //           });
-  //         }
-  //         if (err.response?.data?.code === 422) {
-  //           return Toast.show({
-  //             type: "error",
-  //             text1: "Datos incorrectos",
-  //             text2:
-  //               "Uno o más campos no contienen información valida. Por favor verifique e intente nuevamente.",
-  //           });
-  //         }
-  //         if (err.response?.data?.code === 500) {
-  //           return Toast.show({
-  //             type: "error",
-  //             text1: "Error interno",
-  //             text2:
-  //               "Ocurrió un error interno y nuestro equipo ya está trabajando para solucionarlo.",
-  //           });
-  //         }
-
-  //         return Toast.show({
-  //           type: "error",
-  //           text1: "Error de conexión",
-  //           text2:
-  //             "Por favor, verifique su conexión a internet e intente nuevamente, si el problema persiste ponganse en contacto con el equipo técnico",
-  //         });
-  //       });
-  //   };
+  
   const switchNeedCode = () => {
     setState({
       ...state,
