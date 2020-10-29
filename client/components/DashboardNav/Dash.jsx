@@ -37,8 +37,6 @@ function Dash({user, navigation}){
         return 'https://ui-avatars.com/api/?name='+name+'+'+surname+'&background=FFBD69&color=000'
     }
 
-    console.log(user)
-
     const initialState = {
         user:{
             id: null,
@@ -224,7 +222,6 @@ const UsdScreen = ({accounts, navigation}) => {
     }
 
     useEffect(()=>{
-        console.log(accounts)
         if(!accounts) return;
         setState(state => {
             return {
