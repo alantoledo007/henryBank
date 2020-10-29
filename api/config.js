@@ -9,9 +9,10 @@ module.exports = {
 		"auth.register_confirmation",
 		"auth.send_code_email_reset",
 		"auth.email_reset_verify",
-		
+
 		"transactions.transaction",
 		"transactions.transaction_get",
+		"transactions.contact_transactions",
 
 		"stats.stats",
 
@@ -29,7 +30,6 @@ module.exports = {
 		"accounts.accounts_get",
 		"me.myprofile",
 		"me.updateprofile",
-		"me.updateAvatar"
-
+		"me.updateAvatar",
 	],
 };
