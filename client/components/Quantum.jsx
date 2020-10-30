@@ -8,12 +8,14 @@ import {
     ScrollView,
     StatusBar as statusBar,
     Dimensions,
-    useColorScheme
+    // useColorScheme
 } from 'react-native';
 import useBootnative from 'bootnative';
 import s from './style/styleSheet';
 import { StatusBar } from 'expo-status-bar';
 import { useHeaderHeight } from '@react-navigation/stack';
+
+import useColorScheme from './useCustomTheme'
 
 
 export const bootnative = useBootnative; //este no
@@ -165,7 +167,7 @@ export function Scroll({children, style}){
 export function Container({children, style, wihtHeader=false}){
     const theme = useColorScheme();
     const headerHeight = useHeaderHeight() || null;
-    
+    console.log(theme)
     return (
         <ScrollView>
             <View style={{ ...hbn('container p-3 bg-body',theme),
@@ -200,19 +202,19 @@ export function Logo({size, style}){
     const styles = {
         lg:{
             height:160,
-            width:160
+            width:155
         },
         sm: {
             height:100,
-            width: 100,
+            width: 95,
         },
         xs: {
-            height:32,
+            height:34,
             width:32
         }
     }
     return (
-        <Image source={require("../logo.png")} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
+        <Image source={require('../LogoLight.png')} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
     );
 };
 

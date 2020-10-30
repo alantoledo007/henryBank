@@ -56,7 +56,10 @@ module.exports = async (ctx) => {
 	}
 
 	//Verificacion de balance
-	if (usuario_emisor.accounts.find(item => item.currency === 'ars').balance < amount) {
+	if (
+		usuario_emisor.accounts.find((item) => item.currency === "ars")
+			.balance < amount
+	) {
 		throw new MoleculerError("Sos pobre", 409, "NOTENOUGH_BALANCE", {
 			nodeID: ctx.nodeID,
 			action: ctx.action.name,
@@ -66,7 +69,10 @@ module.exports = async (ctx) => {
 	const reference_code = await codeGenerator();
 
 	const emisor_account = await Account.findOne({
-		where: { id: usuario_emisor.accounts.find(item => item.currency === 'ars').id },
+		where: {
+			id: usuario_emisor.accounts.find((item) => item.currency === "ars")
+				.id,
+		},
 	});
 
 	const transaccion = await Transaction.create({
@@ -74,8 +80,11 @@ module.exports = async (ctx) => {
 		description: "Transferencia",
 		message: description,
 		amount: 0 - amount,
-		account_id: usuario_emisor.accounts.find(item => item.currency === 'ars').id,
+		account_id: usuario_emisor.accounts.find(
+			(item) => item.currency === "ars"
+		).id,
 		reference: reference_code,
+		currency: "ARS",
 	}).then(async (res) => {
 		emisor_account.balance = emisor_account.balance - amount;
 		await emisor_account.save();
@@ -85,11 +94,18 @@ module.exports = async (ctx) => {
 			description: "Transferencia",
 			message: description,
 			amount,
-			account_id: usuario_receptor.accounts.find(item => item.currency === 'ars').id,
+			account_id: usuario_receptor.accounts.find(
+				(item) => item.currency === "ars"
+			).id,
 			reference: reference_code,
+			currency: "ARS",
 		}).then(async () => {
 			const receptor_account = await Account.findOne({
-				where: { id: usuario_receptor.accounts.find(item => item.currency === 'ars').id },
+				where: {
+					id: usuario_receptor.accounts.find(
+						(item) => item.currency === "ars"
+					).id,
+				},
 			});
 
 			receptor_account.balance = receptor_account.balance + amount;
