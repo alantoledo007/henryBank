@@ -45,10 +45,12 @@ const Graphics = (props) => {
     });
 
     const [filterDay, setFilterDay] = useState(false);
+    const [widtDay, setWidtDay] = useState(800);
     
     const filter = (value) => {
-        value > 7 && value < 32 ?
-        next(period, income, value) : {}
+        value < 15 ? setWidtDay(800) : setWidtDay(1200);
+        value >= 7 && value <= 31 ?
+        next(period, income, value) : {};
     }
 
     useEffect(() => {
@@ -126,7 +128,7 @@ const Graphics = (props) => {
                                     data:stats.daily.data
                                 }]
                             }}
-                            width={1400} // from react-native
+                            width={widtDay} // from react-native
                             height={250}
                             yAxisLabel="$"
                             //yAxisSuffix="k"
@@ -158,7 +160,7 @@ const Graphics = (props) => {
                                     data:stats.weekly.data
                                 }]
                             }}
-                            width={700} // from react-native
+                            width={550} // from react-native
                             height={250}
                             yAxisLabel="$"
                             //yAxisSuffix="k"
@@ -189,7 +191,7 @@ const Graphics = (props) => {
                                     data:stats.monthly.data
                                 }]
                             }}
-                            width={450} // from react-native
+                            width={420} // from react-native
                             height={250}
                             yAxisLabel="$"
                             //yAxisSuffix="k"
