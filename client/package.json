@@ -37,6 +37,7 @@
     "react-native": "^0.63.3",
     "react-native-appearance": "~0.3.3",
     "react-native-chart-kit": "^6.6.1",
+    "react-native-credit-card-display": "^0.2.1",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-dotenv": "^2.4.1",
     "react-native-elements": "^2.3.2",

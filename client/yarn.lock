@@ -2393,6 +2393,11 @@ credit-card-type@^5.0.0:
   resolved "https://registry.yarnpkg.com/credit-card-type/-/credit-card-type-5.0.4.tgz#2dd9df280411ce2bb91ed95ac31e814605717aed"
   integrity sha1-LdnfKAQRziu5Htlawx6BRgVxeu0=
 
+creditcardutils@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/creditcardutils/-/creditcardutils-1.0.0.tgz#c94ad8e6f5ef249b0463e0e5ea8d7a7c4e9ce425"
+  integrity sha1-yUrY5vXvJJsEY+Dl6o16fE6c5CU=
+
 cross-spawn@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -5190,6 +5195,14 @@ react-native-chart-kit@^6.6.1:
     paths-js "^0.4.10"
     point-in-polygon "^1.0.1"
 
+react-native-credit-card-display@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/react-native-credit-card-display/-/react-native-credit-card-display-0.2.1.tgz#7546c03ee9c891f9b3ae41a03fdef66ae1957979"
+  integrity sha512-d3lsZVM4E6sfsY8rHjjYhcjYc6TDeRqf+XRC6Wb3gVf5GHnmzZI5Bc3MC7cCK+0jY88UYRt8LbX/cxNz4KZm9Q==
+  dependencies:
+    creditcardutils "^1.0.0"
+    react-native-flip-card "^3.5.6"
+
 react-native-credit-card-input@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/react-native-credit-card-input/-/react-native-credit-card-input-0.4.1.tgz#e62dd1a9beeab6787e5373ba23b93831cbf5f3de"
@@ -5230,7 +5243,7 @@ react-native-eva-icons@^1.3.1:
   resolved "https://registry.yarnpkg.com/react-native-eva-icons/-/react-native-eva-icons-1.3.1.tgz#1e6e019b0fd3cb1669db50bd6bbdaa6d89327593"
   integrity sha512-emd/aYXuOacuDVTx0SJoLi+xsOdCNdljQB3PTNCM9AQ3m/smG0X1TN0+ihelPO7MqoHzaH0h6lbANtwxGUy8Fw==
 
-react-native-flip-card@^3.4.1:
+react-native-flip-card@^3.4.1, react-native-flip-card@^3.5.6:
   version "3.5.6"
   resolved "https://registry.yarnpkg.com/react-native-flip-card/-/react-native-flip-card-3.5.6.tgz#de26f0285aa6f8ee10bb4b696c60c6fb43bb580f"
   integrity sha512-lqsjl4vF5DyHD7mjBJpyBoaLKVxalzoKfCosE63QF+TaCF9MKdJrxmGFQj/i64GDiMJqeS/5sNDcICUXtgFsVA==

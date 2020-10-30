@@ -22,6 +22,12 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 export default function App() {
   const theme = useColorScheme();
 
+  /*
+    theme = useColorScheme();
+    if reduxTheme not default
+      entonces: theme = reduxTheme. //dark, light
+  */
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

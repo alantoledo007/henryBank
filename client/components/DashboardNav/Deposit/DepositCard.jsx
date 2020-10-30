@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import {
   View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  ScrollView,
-  Modal,
   ActivityIndicator,
 } from "react-native";
 import { CreditCardInput } from "react-native-credit-card-input";
@@ -22,17 +16,17 @@ import axios from "axios";
 import env from "../../../env";
 
 //UI
-import { styles as s } from "../../style/styleSheet";
 import colors from "../../style/colors";
 import {
-  Container,
   Label,
-  Button,
-  DefaultButton,
-  Input,
-  QTLink,
+  bn
 } from "../../Quantum";
 import Toast from "react-native-toast-message";
+
+import { TabBar, TabView, Tab, Modal, Select, SelectItem, IndexPath, Input, Card, Icon, Layout, Text as KText, Button } from '@ui-kitten/components';
+import { useColorScheme } from "react-native-appearance";
+import CreditCardDisplay from "react-native-credit-card-display";
+
 
 const DepositCard = ({ token, close, updateBalance }) => {
   const [dis, setDis] = useState(false);
@@ -162,13 +156,14 @@ const DepositCard = ({ token, close, updateBalance }) => {
       });
   };
 
+  const theme = useColorScheme(); 
+
   return (
-    <View style={styles.container}>
-      <View style={styles.amountInputWrapper}>
-        <Label style={styles.text} text="Monto de la recarga:" />
+    <View>
         <Input
-          style={{ width: 100, alignSelf: "center", fontSize: 25 }}
+          label="Monto, mínimo $100 ARS"
           keyboardType="number-pad"
+          placeholder="00.00"
           onChangeText={(value) =>
             setForm({
               ...form,
@@ -176,137 +171,44 @@ const DepositCard = ({ token, close, updateBalance }) => {
             })
           }
         />
-        <Label
-          style={{ ...styles.text, fontSize: 15 }}
-          text="El monto mínimo es de $100."
-        />
-      </View>
-      <View style={styles.cardInputWrapper}>
-        <Label style={styles.text} text="Datos de tu tarjeta:" />
+      <View style={bn('my-3')}>
         <CreditCardInput
-          // inputStyle={styles.creditCardInputStyle}
+          cardImageFront={require("../../../assets/Frente.png")}
+          cardImageBack={require("../../../assets/Dorso.png")}
+          validColor={theme === 'dark' ? '#fff' : '#000'}
           requiresName={true}
           onChange={onChange}
-          cardScale={0.7}
-          labelStyle={{ color: "black", fontSize: 13 }}
+          allowScroll={true}
+          labelStyle={{ color: theme === 'dark' ? '#ccc' : '#aaa', fontSize: 13 }}
+          placeholders={{
+            name:'Como figura en la tarjetas'
+          }}
           labels={{
             number: "NÚMERO DE TARJETA",
             expiry: "VENC.",
             cvc: "CVC",
-            name: "NOMBRE",
+            name: "NOMBRE COMPLETO",
           }}
           // inputContainerStyle={{flexDirection: "column"}}
         />
+
       </View>
 
-      <View style={styles.submitWrapper}>
+      <View style={{}}>
         {dis && (
           <ActivityIndicator animating={dis} size="large" color={colors.pink} />
         )}
-        {error ? <Label style={styles.error} text={error} /> : null}
+        {error ? <Label text={error} /> : null}
         <Button
-          style={{
-            width: 200,
-            height: 60,
-            alignSelf: "center",
-            justifyContent: "center",
-            marginTop: 5
-          }}
           disabled={dis}
-          textStyle={{ fontSize: 25 }}
           onPress={onSubmit}
-          label="Confirmar"
-        />
+        >
+          Confirmar
+        </Button>
       </View>
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    justifyContent: "space-evenly",
-    alignItems: "center",
-    paddingBottom: 20
-    // backgroundColor: "red"
-  },
-  text: {
-    // ...s.font,
-    textAlign: "center",
-    ...s.size(4.5),
-    // ...s.textColor("white"),
-  },
-  amountInputWrapper: {
-    marginBottom: 30,
-  },
-  amountInput: {
-    ...s.input,
-    width: 250,
-    alignSelf: "center",
-    fontSize: 20,
-    marginBottom: 10,
-  },
-  creditCardInputStyle: {
-    ...s.input,
-    padding: 5,
-  },
-  input: {
-    ...s.input,
-    margin: 7,
-    fontSize: 20,
-  },
-  cardInputWrapper: {
-    //   backgroundColor: "orange",
-    height: 250,
-  },
-  cardInputLabel: {
-    ...s.font,
-    ...s.textColor("white"),
-    fontSize: 10,
-  },
-  submitWrapper: {
-    marginTop: 5,
-  },
-  error: {
-    color: colors.pink,
-    ...s.font,
-    fontSize: 20,
-    alignSelf: "center",
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  successText: {
-    color: colors.pink,
-  },
-  successButton: {
-    ...s.btn(),
-    height: 40,
-    width: 80,
-    marginTop: 25,
-    paddingBottom: 10,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 const mapStateToProps = (state) => {
   return {
