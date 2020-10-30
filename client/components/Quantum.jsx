@@ -200,19 +200,19 @@ export function Logo({size, style}){
     const styles = {
         lg:{
             height:160,
-            width:160
+            width:155
         },
         sm: {
             height:100,
-            width: 100,
+            width: 95,
         },
         xs: {
-            height:32,
+            height:34,
             width:32
         }
     }
     return (
-        <Image source={require("../logo.png")} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
+        <Image source={require('../LogoLight.png')} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
     );
 };
 
