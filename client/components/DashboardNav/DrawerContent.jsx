@@ -2,6 +2,7 @@ import React from 'react'
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 // Redux
 import { connect } from 'react-redux';
+import { switchTheme } from '../../redux/actions/theme';
 
 import {
     DrawerContentScrollView,
@@ -21,15 +22,22 @@ import IconsMCI from 'react-native-vector-icons/MaterialCommunityIcons';
 import IconsMCI2 from 'react-native-vector-icons/Ionicons';
 import { useState } from 'react';
 import { hbn } from '../Quantum';
-import { useColorScheme } from 'react-native';
+import useColorScheme from '../useCustomTheme';
+// import { useColorScheme } from 'react-native';
 
 function DrawerContent(props) {
-    const { user, navigation } = props
-    const [ isDarkTheme, setIsDarkTheme ] = useState(false);
+    const { user, navigation, switchTheme } = props
+    // const [ isDarkTheme, setIsDarkTheme ] = useState(false);
     const theme = useColorScheme();
 
     const toggleTheme = () =>{
-        setIsDarkTheme(!isDarkTheme);
+        // setIsDarkTheme(!isDarkTheme);
+        if(theme == 'light'){
+            switchTheme('dark');
+        }
+        if(theme == 'dark'){
+            switchTheme('light');
+        }
     }
     
     // console.log(user)
@@ -139,7 +147,7 @@ function DrawerContent(props) {
                                 <View style={styles.preference}>
                                     <Text style={{ color:theme === 'dark' ? '#fff' : '#000' }}>Tema Oscuro</Text>
                                     <View pointerEvents="none">
-                                        <Switch value={isDarkTheme} />
+                                        <Switch value={theme == "dark"} />
                                     </View>
                                 </View>
                             </TouchableRipple>
@@ -217,4 +225,10 @@ const mapStateToProps = state => {
         user: state.auth.user,
     }
 }
-export default connect(mapStateToProps)(DrawerContent)
+
+const mapDispatchToProps = dispatch => {
+    return {
+        switchTheme: theme => dispatch(switchTheme(theme))
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent)
