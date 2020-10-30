@@ -54,28 +54,6 @@ const SendMoney = (props) => {
     closeModal();
   }
 
-  const contancts = () => {
-    getContacts()
-    // axios
-    //   .get(`${env.API_URI}/contacts`, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then((response) => {
-    //     if (response.data.data.length === 0) {
-    //       setSelectedValue("Sin contactos");
-    //       setFlag(true);
-    //     }
-    //     setFriends(response.data.data);
-    //     setFlag(true);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-  };
-
   const format = (amount) => {
     return Number(amount)
       .toFixed(2)
@@ -161,9 +139,11 @@ const SendMoney = (props) => {
       });
   }
   useEffect(() => {
-    getContacts()
-    contancts()
-  });
+    //Arregle un get infinito que hacía este componente
+    if(selectedValue != "Enviar sin agendar"){
+      getContacts(token);
+    }
+  }, [find]);
 
   const back = () => {
     setFind(false), setSelectedValue("Contactos");
@@ -362,7 +342,7 @@ const styles = StyleSheet.create({
 function mapStateToProps(state) {
   return {
     token: state.auth.token,
-    balance: state.auth.user.accounts[1].balance,
+    balance: state.auth.user.accounts.find(acc => acc.currency === 'ars').balance,
     list: state.contacts.list
   };
 }
@@ -370,8 +350,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     updateBalance: balance => dispatch(updateBalance(balance)),
-    getContacts: () => dispatch(getContacts())
-    
+    getContacts: (token) => dispatch(getContacts(token))
   };
 }
 
