@@ -5,10 +5,10 @@ const RECEIVE_TRANSACTIONS = 'RECEIVE_TRANSACTIONS';
 const REQUEST_TRANSACTIONS = 'REQUEST_TRANSACTIONS';
 export const UPDATE_BALANCE = "UPDATE_BALANCE";
 
-export const updateBalance = (balace) => {
+export const updateBalance = (balance) => {
     return {
         type: UPDATE_BALANCE,
-        payload: balace
+        payload: balance
     }
 }
 

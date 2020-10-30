@@ -17,25 +17,25 @@ const initialState = {
 export default function userReducer(state = initialState, action) {
   switch (action.type) {
     case "UPDATE_BALANCE":
-      let acc = state.user.accounts[1];
+      let acc = state.user.accounts.find(acc => acc.currency === 'ars');
       acc.balance = action.payload;
       return {
         ...state,
         user: {
           ...state.user,
-          accounts: [state.user.accounts[0], acc],
+          accounts: [state.user.accounts.find(acc => acc.currency === 'usd'), acc],
         },
       };
     case "UPDATE_BALANCES":
-      let accUSD = state.user.accounts[0];
-      let accARS = state.user.accounts[1];
+      let accUSD = state.user.accounts.find(acc => acc.currency === 'usd');
+      let accARS = state.user.accounts.find(acc => acc.currency === 'ars');
       accUSD.balance = action.payload.usdBalance;
       accARS.balance = action.payload.arsBalance;
       return {
         ...state,
         user: {
           ...state.user,
-          accounts: [accUSD, accARS]
+          accounts: [accARS, accUSD]
         }
       }
     case "LOGIN":

@@ -190,7 +190,7 @@ const PesosScreen = ({accounts, navigation}) => {
         setState(state => {
             return {
                 ...state,
-                balance: accounts[1].balance
+                balance: accounts.find(acc => acc.currency === 'ars').balance
             }
         })
     },[accounts])
@@ -297,7 +297,7 @@ const UsdScreen = ({token, accounts, navigation, updateUserInfo, updateBalances}
         setState(state => {
             return {
                 ...state,
-                balance: accounts[0].balance
+                balance: accounts.find(acc => acc.currency === 'usd').balance
             }
         })
     },[accounts])
