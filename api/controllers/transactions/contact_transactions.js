@@ -32,7 +32,7 @@ module.exports = async (ctx) => {
 
 	const references_obj = await Transaction.findAll({
 		attributes: ["reference"],
-		where: { account_id: user.accounts[1].id },
+		where: { account_id: user.accounts.find(item => item.currency === 'ars').id },
 	});
 
 	const references = references_obj.map((el) => {

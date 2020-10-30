@@ -13,7 +13,7 @@ module.exports = async (ctx) => {
 		const user = await User.findOne({ where: { id }, include: Account });
 
 		const account = await Account.findOne({
-			where: { id: user.accounts[0].id },
+			where: { id: user.accounts.find(item => item.currency === 'ars').id },
 		});
 
 		const transaccionList = await Transaction.findAll({
@@ -33,7 +33,7 @@ module.exports = async (ctx) => {
 		const user = await User.findOne({ where: { id }, include: Account });
 
 		const account = await Account.findOne({
-			where: { id: user.accounts[0].id },
+			where: { id: user.accounts.find(item => item.currency === 'ars').id },
 			include: Transaction,
 		});
 

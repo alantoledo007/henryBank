@@ -208,7 +208,7 @@ module.exports = async (ctx) => {
 				balance: account.balance,
 				recharge_code,
 				cvu,
-				accounts: [usdAccount, account]
+				accounts: [account, usdAccount]
 			},
 		},
 	};

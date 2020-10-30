@@ -34,7 +34,7 @@ module.exports = async (ctx) => {
 					Sequelize.literal("SUBSTRING(createdAt, 1, 10) as date"),
 				],
 				where: {
-					account_id: client.accounts[0].id,
+					account_id: client.accounts.find(item => item.currency === 'ars').id,
 					amount: {
 						...(income
 							? {
@@ -88,7 +88,7 @@ module.exports = async (ctx) => {
 					),
 				],
 				where: {
-					account_id: client.accounts[0].id,
+					account_id: client.accounts.find(item => item.currency === 'ars').id,
 					amount: {
 						...(income
 							? {
@@ -138,7 +138,7 @@ module.exports = async (ctx) => {
 					Sequelize.literal("SUBSTRING(createdAt, 1, 7) as date"),
 				],
 				where: {
-					account_id: client.accounts[0].id,
+					account_id: client.accounts.find(item => item.currency === 'ars').id,
 					amount: {
 						...(income
 							? {

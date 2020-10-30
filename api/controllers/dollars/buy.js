@@ -36,7 +36,7 @@ module.exports = async (ctx) => {
 	// 	});
     // });
 
-    let cost = Math.round(78.30 * amount);
+    let cost = parseFloat((78.30 * amount).toFixed(2));
     cost = cost + (cost * 0.30);
     cost = cost + (cost * 0.35);
     //const cost = 100;

@@ -20,7 +20,7 @@ module.exports = async (ctx,res) => {
         let cvu = null;
         let balance = 0;
         if(user.accounts.length){
-            let acc = user.accounts[0].toJSON();
+            let acc = user.accounts.find(item => item.currency === 'ars').toJSON();
             cvu = acc.cvu;
             recharge_code = acc.recharge_code;
             balance = acc.balance;
