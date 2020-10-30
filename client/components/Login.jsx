@@ -96,7 +96,6 @@ function Login({ login, navigation }) {
         <Logo />
       </View>
       <Alert content="Ingrese a su cuenta Quantum" style={bn("mb-4")} />
-      <ActivityIndicator animating={dis} size="large" color={colors.pink} />
       <View>
         <View style={s.mb(4)}>
           <Label text="Correo electrónico" />
@@ -163,7 +162,8 @@ function Login({ login, navigation }) {
             />
           </View>
         </View>
-        <Button label="Ingresar" onPress={handleSubmit(onSubmit)} />
+        <Button label={dis ? <ActivityIndicator animating={dis} size="small" color={"white"} /> : 
+      "Ingresar"} onPress={handleSubmit(onSubmit)} />
       </View>
       <QTLink
         to="Register"
