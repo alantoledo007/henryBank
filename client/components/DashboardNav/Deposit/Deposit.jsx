@@ -28,6 +28,7 @@ const Deposit = ({ closeModal, navigation }) => {
 
   const renderOption = (title) => (
     <SelectItem title={title} key={title}/>
+
   );
 
   const close = () => {

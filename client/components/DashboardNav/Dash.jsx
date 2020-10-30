@@ -22,6 +22,7 @@ function SvgComponent(props){
 }
 
 function Dash({user, navigation}){
+    // let theme = useColorScheme();
     const [showModal, setShowModal] = useState(false);
 
     const urlAvatar = (name,surname) => {
