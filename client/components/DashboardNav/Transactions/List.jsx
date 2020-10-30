@@ -10,8 +10,6 @@ import moment from 'moment';
 
 export default function List({ isFetching, transactions, select }) {
 
-  console.log(transactions)
-
   const theme = useColorScheme();
 
   const format = (amount) => {
