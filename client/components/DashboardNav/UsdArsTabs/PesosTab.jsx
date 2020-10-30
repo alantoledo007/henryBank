@@ -4,6 +4,8 @@ import { TabBar, TabView, Tab, Modal, Input, Card, Icon, Layout, Text as KText, 
 
 import { bn, Container, hbn, Label, QTLink, toastConfig } from '../../Quantum';
 
+import currency from '../../currency';
+
 import { connect } from 'react-redux';
 
 const PesosTab = ({accounts, navigation}) => {
@@ -24,7 +26,7 @@ const PesosTab = ({accounts, navigation}) => {
     },[accounts])
 
     return (<Layout style={{flex:1,...bn('py-6 px-6')}}>
-        <KText category='h2' style={bn('mb-4 text-center')}>ARS {state.balance.toFixed(2)}</KText>
+        <KText category='h2' style={bn('mb-4 text-center')}>{currency(state.balance)}</KText>
         <View style={bn('row')}>
             <View style={bn('col-6 pr-2')}>
                 <Button size="small" onPress={() => navigation.navigate('Transferencia')}>
