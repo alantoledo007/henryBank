@@ -24,19 +24,19 @@ module.exports = async (ctx) => {
 		});
     }
 
-    // const usd = await Axios.get('https://free.currconv.com/api/v7/convert?q=USD_ARS&compact=ultra&apiKey=771ba0bd5ac4f83cd414')
-    // .then(res => res.data)
-    // .then(res => {
-    //     return res.USD_ARS;
-    // })
-    // .catch(err => {
-    //     throw new MoleculerError("Requests exceeded on external API", 417, "TRY_AGAIN_ON_1_HOUR", {
-	// 		nodeID: ctx.nodeID,
-	// 		action: ctx.action.name,
-	// 	});
-    // });
+    const usd = await Axios.get('https://free.currconv.com/api/v7/convert?q=USD_ARS&compact=ultra&apiKey=771ba0bd5ac4f83cd414')
+    .then(res => res.data)
+    .then(res => {
+        return res.USD_ARS;
+    })
+    .catch(err => {
+        throw new MoleculerError("Requests exceeded on external API", 417, "TRY_AGAIN_ON_1_HOUR", {
+			nodeID: ctx.nodeID,
+			action: ctx.action.name,
+		});
+    });
 
-    let cost = parseFloat((78.30 * amount).toFixed(2));
+    let cost = parseFloat((usd * amount).toFixed(2));
     cost = cost + (cost * 0.30);
     cost = cost + (cost * 0.35);
     //const cost = 100;
