@@ -49,7 +49,7 @@ export default function List({ contacts, isFetching, token, getContacts, onClose
                   }}
                 />
                 <View style={{display: "flex", justifyContent: "center", marginTop: -5}}>
-                                    <Text style={{...bn("text-dark"), fontSize: 23}}>{contact.nickname}</Text>
+                                    <Label style={bn("h4")} text={contact.nickname} />
                                     </View>
                 <IonIcon
                   style={{
