@@ -27,7 +27,7 @@ const Deposit = ({ closeModal, navigation }) => {
   const displayValue = data[selectedIndex.row];
 
   const renderOption = (title) => (
-    <SelectItem title={title}/>
+    <SelectItem title={title} key={title}/>
   );
 
   const close = () => {
