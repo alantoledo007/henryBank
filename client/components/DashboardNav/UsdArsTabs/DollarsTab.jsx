@@ -75,7 +75,7 @@ const DollarsTab = ({token, navigation, USDbalance, ARSbalance, updateBalances})
             Toast.show({
                 type: "success",
                 text1: "¡Listo!",
-                text2: `Se te acreditaron USD ${state.usdAmount}.`,
+                text2: `Se te acreditaron:\nUSD ${state.usdAmount}.`,
                 onHide: cancel
             })
         })
@@ -130,7 +130,7 @@ const DollarsTab = ({token, navigation, USDbalance, ARSbalance, updateBalances})
             Toast.show({
                 type: "success",
                 text1: "¡Listo!",
-                text2: `Se te acreditaron ARS ${gananciaARS}`,
+                text2: `Se te acreditaron:\nARS ${gananciaARS}`,
                 onHide: cancel
             })
         })
