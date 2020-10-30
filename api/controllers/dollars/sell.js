@@ -95,7 +95,7 @@ module.exports = async (ctx) => {
 	await account_usd.save();
 	await account_ars.save();
 
-	const reference = codeGenerator();
+	const reference = await codeGenerator();
 
 	await Transaction.create({
 		title: `Vendiste $${amount} dolares`,
@@ -106,6 +106,7 @@ module.exports = async (ctx) => {
 			(item) => item.currency === "ars"
 		).id,
 		reference,
+		currency: "ARS",
 	});
 
 	await Transaction.create({
@@ -117,6 +118,7 @@ module.exports = async (ctx) => {
 			(item) => item.currency === "usd"
 		).id,
 		reference,
+		currency: "USD",
 	});
 
 	return {
