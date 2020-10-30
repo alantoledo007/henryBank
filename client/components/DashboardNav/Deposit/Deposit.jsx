@@ -26,8 +26,9 @@ const Deposit = ({ closeModal, navigation }) => {
   const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
   const displayValue = data[selectedIndex.row];
 
-  const renderOption = (title, index) => (
-    <SelectItem title={title} key={index}/>
+  const renderOption = (title) => (
+    <SelectItem title={title} key={title}/>
+
   );
 
   const close = () => {

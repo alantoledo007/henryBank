@@ -1,6 +1,19 @@
 const { User, Transaction, Account } = require("../../db");
 const { MoleculerError } = require("moleculer").Errors;
 
+const codeGenerator = async () => {
+	let code = Math.floor(Math.random() * 100000000);
+
+	const transaction = await Transaction.findOne({
+		where: { reference: code },
+	});
+	if (!transaction) {
+		return code;
+	} else {
+		return codeGenerator();
+	}
+};
+
 module.exports = async (ctx) => {
 	const { amount, recharge_code } = ctx.params;
 	const cce_user_id = ctx.meta.user.id;
@@ -55,11 +68,15 @@ module.exports = async (ctx) => {
 		);
 	}
 
+	const reference = await codeGenerator();
+
 	const recharge = await Transaction.create({
 		title: `Recargaste $ ${amount}`,
 		description: "Recarga de saldo",
 		amount,
 		account_id: client.accounts[1].id,
+		reference,
+		currency: "ARS",
 	});
 
 	const account = await Account.findOne({

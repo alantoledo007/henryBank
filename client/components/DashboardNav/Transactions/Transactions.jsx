@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Dimensions, StatusBar,  Button, ScrollView, View, TouchableOpacity, Platform, Text} from "react-native";
+import { Modal, useColorScheme, Dimensions, StatusBar,  Button, ScrollView, View, TouchableOpacity, Platform, Text} from "react-native";
 import { connect } from "react-redux";
 import { getTransactions } from "../../../redux/actions/transactions";
 
@@ -13,6 +13,8 @@ import moment from 'moment';
 
 export function Transactions (props) {
 
+  const theme = useColorScheme();
+
   const { user, token, getTransactions, isFetching, transactions } = props;
   const headerHeight = useHeaderHeight();
   const { id, name, surname, avatar } = user;
@@ -25,8 +27,6 @@ export function Transactions (props) {
     },
     transactions: [],
   });
-
-  console.log(transactions)
   
   const [date, setDate] = useState(new Date(2020, 9, 1));
   const [mode, setMode] = useState('date');
@@ -107,7 +107,7 @@ export function Transactions (props) {
     });
   }, []);
   return (
-    <Container wihtHeader={true}>
+    <Container >
        {transactions.length ? <Alert content="Mis movimientos" /> : <Alert content="Sin movimientos" />} 
 
       <View>
@@ -116,11 +116,11 @@ export function Transactions (props) {
 
           <View style={{...s.row, justifyContent:'space-between'}}>  
             <TouchableOpacity style={{...s.btn(), ...s.my(2), ...s.py(2), ...s.col(6.4)}} onPress={showDatepicker}>
-                <Label text={`Desde  ${moment(date).format('DD/MM/YY').slice(0,5)}`} />
+                <Label text={`Desde  ${moment(date).format('DD/MM/YY').slice(0,5)}`}  style={{color:"white"}}/>
             </TouchableOpacity>
 
             <TouchableOpacity style={{...s.btn(), ...s.my(2), ...s.py(2), ...s.col(6.4)}} onPress={showDatepicker2}>
-                <Label text={`Hasta  ${moment(date2).format('DD/MM/YY').slice(0,5)}`} />
+                <Label text={`Hasta  ${moment(date2).format('DD/MM/YY').slice(0,5)}`} style={{color:"white"}}/>
             </TouchableOpacity>
       </View>
           
