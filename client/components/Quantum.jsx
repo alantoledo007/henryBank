@@ -16,6 +16,7 @@ import { StatusBar } from 'expo-status-bar';
 import { useHeaderHeight } from '@react-navigation/stack';
 
 import useColorScheme from './useCustomTheme'
+import { colors } from 'react-native-elements';
 
 
 export const bootnative = useBootnative; //este no
@@ -167,7 +168,7 @@ export function Scroll({children, style}){
 export function Container({children, style, wihtHeader=false}){
     const theme = useColorScheme();
     const headerHeight = useHeaderHeight() || null;
-    console.log(theme)
+    // console.log(theme)
     return (
         <ScrollView>
             <View style={{ ...hbn('container p-3 bg-body',theme),
@@ -192,13 +193,15 @@ export function Alert({variant, content, style, textStyle}){
     return (
         <View style={bn('row')}>
             <View style={{ ...hbn('col-12 p-3 bg-'+(variant||'light2')+' borderRadius-5 mt-5',theme),...style }}>
-                <Text style={{ ...hbn('text-center text-light3',theme),...s.size(3.5),...textStyle }}>{content}</Text>
+                <Text style={{ ...hbn('text-center text-light3',theme),...s.size(3.5),...textStyle, color: colors.blue }}>{content}</Text>
             </View>
         </View>
     );
 }
 
-export function Logo({size, style}){
+export function Logo({size, style, full}){
+    const theme = useColorScheme();
+    console.log('PROP FULL',full)
     const styles = {
         lg:{
             height:160,
@@ -213,6 +216,13 @@ export function Logo({size, style}){
             width:32
         }
     }
+    if(full){
+        console.log('LOGO FULL!!')
+        return (
+            <Image source={theme == 'dark' ? require('../LogoFullDark.png') : require('../LogoFullLight.png')} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
+        )
+    }
+    console.log('LOGO!!')
     return (
         <Image source={require('../LogoLight.png')} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
     );

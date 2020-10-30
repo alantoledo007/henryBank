@@ -91,7 +91,7 @@ function Login({ login, navigation }) {
 
   //Pantalla de carga para mostrar mientras no hayan cargado aún las fonts
   return (
-    <Container>
+    <Container style={{paddingTop: 25}}>
       <View>
         <Logo />
       </View>
