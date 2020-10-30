@@ -27,8 +27,8 @@ export default function userReducer(state = initialState, action) {
         },
       };
     case "UPDATE_BALANCES":
-      let accUSD = state.user.accounts.find(acc => acc.currency === 'usd');
-      let accARS = state.user.accounts.find(acc => acc.currency === 'ars');
+      let accUSD = Object.assign({}, state.user.accounts.find(acc => acc.currency === 'usd'));
+      let accARS = Object.assign({}, state.user.accounts.find(acc => acc.currency === 'ars'));
       accUSD.balance = action.payload.usdBalance;
       accARS.balance = action.payload.arsBalance;
       return {
