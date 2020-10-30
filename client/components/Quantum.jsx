@@ -216,10 +216,25 @@ export function Logo({size, style, full}){
             width:32
         }
     }
+
+    const stylesFull = {
+        lg:{
+            height:125,
+            width:300
+        },
+        sm: {
+            height:65,
+            width:290
+        },
+        xs: {
+            height:125,
+            width:300
+        }
+    }
     if(full){
         console.log('LOGO FULL!!')
         return (
-            <Image source={theme == 'dark' ? require('../LogoFullDark.png') : require('../LogoFullLight.png')} style={{ ...styles[size||'sm'], alignSelf: "center",...style }}></Image>
+            <Image source={theme == 'dark' ? require('../LogoFullDark.png') : require('../LogoFullLight.png')} style={{ ...stylesFull[size||'sm'], alignSelf: "center",...style }}></Image>
         )
     }
     console.log('LOGO!!')

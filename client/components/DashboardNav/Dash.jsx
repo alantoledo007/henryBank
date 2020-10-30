@@ -81,7 +81,7 @@ function Dash({user, navigation}){
             </Layout>
             <UsdArs />
             <Layout style={{flex:1}}>
-                <Button status="info"
+                <Button
                     style={bn('mt-10 mr-auto ml-auto borderRadius-40 h-80 w-80')}
                     size="large"
                     appearance="outline"

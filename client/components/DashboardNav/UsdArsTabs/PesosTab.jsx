@@ -25,7 +25,7 @@ const PesosTab = ({accounts, navigation}) => {
 
     return (<Layout style={{flex:1,...bn('py-6 px-6')}}>
         <KText category='h2' style={bn('mb-4 text-center')}>ARS {state.balance.toFixed(2)}</KText>
-        <View style={bn('row')}>
+        <View style={{...bn('row'), paddingBottom: 100}}>
             <View style={bn('col-6 pr-2')}>
                 <Button size="small" onPress={() => navigation.navigate('Transferencia')}>
                     TRANSFERIR

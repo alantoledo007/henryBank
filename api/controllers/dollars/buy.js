@@ -100,9 +100,9 @@ module.exports = async (ctx) => {
 	await Transaction.create({
 		title: `Compraste $${amount} dolares`,
 		description: "Compra de dolares",
-		message: description,
+		message: null,
 		amount: 0 - cost,
-		account_id: usuario_emisor.accounts.find(
+		account_id: user.accounts.find(
 			(item) => item.currency === "ars"
 		).id,
 		reference,
@@ -112,9 +112,9 @@ module.exports = async (ctx) => {
 	await Transaction.create({
 		title: `Compraste $${amount} dolares`,
 		description: "Compra de dolares",
-		message: description,
+		message: null,
 		amount: amount,
-		account_id: usuario_emisor.accounts.find(
+		account_id: user.accounts.find(
 			(item) => item.currency === "usd"
 		).id,
 		reference,
