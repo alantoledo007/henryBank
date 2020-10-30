@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -19,10 +19,23 @@ import { Picker, PickerIOS } from "@react-native-community/picker";
 //Sub-components
 import DepositCash from "./DepositCash";
 import DepositCard from "./DepositCard";
-import { Container, Label, Button, QTLink } from "../../Quantum";
+import { Container, Label } from "../../Quantum";
+
+//UI
+import { TabBar, TabView, Tab, Modal, Select, SelectItem, IndexPath, Input, Card, Icon, Layout, Text as KText, Button } from '@ui-kitten/components';
 
 const Deposit = ({ closeModal, navigation }) => {
   const [paymentMethod, setPaymentMethod] = useState("QRCode");
+  const [selectedIndex, setSelectedIndex] = useState(new IndexPath(0));
+  const methods = [
+    "qr",
+    "card"
+  ]
+
+  // useEffect(()=>{
+  //   console.log(selectedIndex);
+  // },[selectedIndex]);
+
 
   //armé esta función por si se puede llegar a este componente desde el modal en Dash Y otra manera que involucre react navigation
   //Maneja los dos casos para salir del componente
@@ -36,35 +49,18 @@ const Deposit = ({ closeModal, navigation }) => {
   };
 
   return (
-    <Container style={styles.container}  >
-{/* <LinearGradient
-        // Background Linear Gradient
-        colors={["rgba(0,0,0,0.8)", "#6b538a"]}
-        style={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 50,
-          height: 1000,
-        }}
-      /> */}
-
-      <View style={{ marginBottom: 15, alignSelf: "flex-end" }}>
-        {closeModal && (
-          <TouchableWithoutFeedback onPress={close}>
-            <Image
-              style={{ height: 15 }}
-              source={require("../../../assets/close-pink.png")}
-            />
-          </TouchableWithoutFeedback>
-        )}
-      </View>
+    <Layout>
       <View style={styles.pickerWrapper}>
-        <Label
-          text="Recargar dinero"
-          style={{ fontSize: 40, alignSelf: "center" }}
-        />
-        <View style={{ ...s.input, justifyContent: "center", width: 200, alignSelf: "center" }}>
+
+        <Select
+          placeholder='Default'
+          selectedIndex={selectedIndex}
+          onSelect={(index) => setSelectedIndex(index)}>
+          <SelectItem title='QR'/>
+          <SelectItem title='Tarjeta'/>
+        </Select>
+
+        {/* <View style={{ ...s.input, justifyContent: "center", width: 200, alignSelf: "center" }}>
           <Picker
             style={styles.picker}
             // itemStyle={{ ...styles.text, color: "green" }}
@@ -75,11 +71,11 @@ const Deposit = ({ closeModal, navigation }) => {
             <Picker.Item label="Código QR" value="QRCode"></Picker.Item>
             <Picker.Item label="Tarjeta" value="card"></Picker.Item>
           </Picker>
-        </View>
+        </View> */}
       </View>
       {/* Según el state paymentMethod, renderizamos un componente u otro: */}
-      {paymentMethod === "QRCode" && <DepositCash />}
-      {paymentMethod === "card" && (
+      {methods[selectedIndex.row] === "qr" && <DepositCash />}
+      {methods[selectedIndex.row] === "card" && (
         <DepositCard close={close} navigation={navigation} />
       )}
 
@@ -88,7 +84,7 @@ const Deposit = ({ closeModal, navigation }) => {
       : 
         <Label style={styles.needHelp}text="¿Necesitás ayuda?" onPress={close} />
       } */}
-    </Container>
+    </Layout>
   );
 };
 
