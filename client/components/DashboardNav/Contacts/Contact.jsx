@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import moment from 'moment';
 import {
   View,
   Image,
@@ -11,7 +12,8 @@ import colors from "../../style/colors";
 import { bn, Scroll, Label, DefaultButton, NoScrollContainer, Input } from "../../Quantum";
 import { deleteContact, updateContact, getContactTransactions } from '../../../redux/actions/contact';
 
-function Contact({ contact, token, close, onClose, deleteContact, updateContact, getContactTransactions }) {
+function Contact({ navigation, contact, token, close, onClose, deleteContact, updateContact, getContactTransactions, transactions }) {
+
   const { name, surname, email, avatar } = contact.User;
   const { nickname, id } = contact;
 
@@ -19,11 +21,6 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
   const [modalDelete, setModalDelete] = useState(false);
 
   const [updateValue, setUpdateValue] = useState("");
-
-  const navigateToTransfer = () => {
-    close();
-    // navigation.navigate("Panel");
-  }
 
   const handleDelete = () => {
     setDis(true);
@@ -53,25 +50,14 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
     const contactId = id;
     getContactTransactions(contactId, token);
   }, [])
-  const testLastTransactions = [
-    {
-      date: "14/08/20",
-      profilePic:
-        "https://media.istockphoto.com/photos/smiling-man-picture-id580109640?k=6&m=580109640&s=612x612&w=0&h=5pUh9Mano2tmYyrUoU6Nyz0RqUm3P45Os_KK9JkttIM=",
-      description: "Pago de deuda (cuota 01/03)",
-      amount: 763.47,
-    },
-    {
-      date: "06/03/20",
-      profilePic:
-        "https://elpersonalista.com/wp-content/uploads/2020/03/papada-hombre-perfil-barba.jpg",
-      description: "Pago por servicio de Hosting",
-      amount: -1500.0,
-    },
 
-  ];
   const [dis, setDis] = useState(false);
   // const { id } = useParams();
+
+  const navigateToSendMoney = () => {
+    close();
+    navigation.navigate('Transferencia');
+  }
 
   return (
     <>
@@ -91,17 +77,17 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
           <View>
             <View style={bn("row")}>
               <IonIcon
-                style={bn("mr-2 bg-#FBC230 p-2 borderRadius-90")}
+                style={bn("mr-2 py-2 borderRadius-90")}
                 name="account-edit"
-                size={25}
-                color="white"
+                size={30}
+                color="#FBC230"
                 onPress={() => setModal(true)}
               />
               <IonIcon
-                style={bn("bg-#DD4145 p-2 borderRadius-90")}
+                style={bn("py-2 borderRadius-90")}
                 name="account-remove"
-                size={25}
-                color="white"
+                size={30}
+                color="#DD4145"
                 onPress={() => setModalDelete(true)}
               />
             </View>
@@ -154,38 +140,39 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
           </Modal>
         </View>
         <View>
-          <DefaultButton label="Enviar dinero" onPress={navigateToTransfer} style={bn("mt-3")} />
+          <DefaultButton label="Enviar dinero" onPress={() => navigateToSendMoney()} style={bn("mt-3")} />
 
         </View>
         <View style={bn("mt-3")}>
-          <Label text="Últimas transacciones" style={{ fontSize: 25 }} />
+          <Label text="Transacciones anteriores" style={{ fontSize: 25 }} />
         </View>
       </NoScrollContainer>
       <Scroll>
         <View>
-          {testLastTransactions && testLastTransactions.length ?
-            testLastTransactions.map((transaction, index) => (
-              <View key={index} style={{ ...bn("row mb-3") }}>
-                <View style={{ ...bn("row"), width: "70%" }}>
-                  <IonIcon
-                    style={bn("mr-3 borderRadius-90")}
-                    name={transaction.amount < 0 ? "bank-transfer-out" : "bank-transfer-in"}
-                    size={35}
-                    color={transaction.amount < 0 ? "red" : "green"}
-                  />
-                  <View style={{ justifyContent: "space-evenly" }}>
-                    <Label text={transaction.amount < 0 ? "Enviaste $" + Math.abs(transaction.amount.toFixed(2)) : "Recibiste $" + transaction.amount.toFixed(2)} />
-                    <Label text={"Descripción: \n" + transaction.description} style={bn("h6")} />
+          {transactions && transactions.length ?
+            transactions.map((transaction, index) => (
+                <View key={index} style={{ ...bn("row mb-3") }}>
+                  <View style={{ ...bn("row"), width: "70%" }}>
+                    <IonIcon
+                      style={bn("mr-3 borderRadius-90")}
+                      name={transaction.amount < 0 ? "bank-transfer-out" : "bank-transfer-in"}
+                      size={35}
+                      color={transaction.amount < 0 ? "red" : "green"}
+                    />
+                    <View style={{justifyContent: "space-around"}}>
+                      <Label style={{padding: 0, margin: 0}} text={transaction.amount < 0 ? "Enviaste $" + Math.abs(transaction.amount.toFixed(2)) : "Recibiste $" + transaction.amount.toFixed(2)} />
+                      <Label text={'"' + transaction.message + '"'} style={{...bn("h6"), marginTop: -3}} />
+                    </View>
                   </View>
+                  <View style={{ width: "30%", alignItems: "flex-end" }}>
+                    <Label text={moment(transaction.createdAt).format("DD/MM/YYYY")} style={bn("h6")} />
+                    <Label text={moment(transaction.createdAt).format("HH:mm")} style={bn("h6")} />
+                  </View>
+                  {index < transactions.length - 1 &&
+                    <View style={bn("borderBottom-1-lightgray")} />
+                  }
                 </View>
-                <View style={{ width: "30%", alignItems: "flex-end" }}>
-                  <Label text={transaction.date} style={bn("h6")} />
-                </View>
-                {index < testLastTransactions.length - 1 &&
-                  <View style={bn("borderBottom-1-lightgray")} />
-                }
-              </View>
-            )) :
+              )) :
             (
               <View>
                 <Label text={"No tienes transacciones registradas con " + nickname + "."} style={bn("h6")} />
@@ -199,6 +186,7 @@ function Contact({ contact, token, close, onClose, deleteContact, updateContact,
 
 function mapStateToProps(state) {
   return {
+    transactions: state.contacts.transactions
   };
 }
 

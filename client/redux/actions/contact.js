@@ -5,13 +5,12 @@ import env from '../../env';
 
 export const REQUEST_CONTACTS = "REQUEST_CONTACTS";
 export const RECEIVE_CONTACTS = "RECEIVE_CONTACTS";
-const ADD_CONTACT = "ADD_CONTACT";
-const DELETE_CONTACT = "DELETE_CONTACT";
-const UPDATE_CONTACT = "UPDATE_CONTACT";
-const GET_CONTACT_TRANSACTIONS = "GET_CONTACT_TRANSACTIONS";
+export const ADD_CONTACT = "ADD_CONTACT";
+export const DELETE_CONTACT = "DELETE_CONTACT";
+export const UPDATE_CONTACT = "UPDATE_CONTACT";
+export const GET_CONTACT_TRANSACTIONS = "GET_CONTACT_TRANSACTIONS";
 
 export function getContactTransactions(contactId, token) {
-    console.log(contactId, token)
     return dispatch => {
         return axios.post(env.API_URI + "/transactions/contact_transactions", {contactId}, {
             headers: {
@@ -20,11 +19,11 @@ export function getContactTransactions(contactId, token) {
             }
         })
         .then(res => {
-            dispatch({type: GET_CONTACT_TRANSACTIONS, payload: res})
-            console.log("===================>" + res);
+            const data = res.data
+            dispatch({type: GET_CONTACT_TRANSACTIONS, payload: data})
         })
         .catch(err => {
-            console.log("error ==================>" + err);
+            console.log(err);
         })
     }
 }
@@ -111,4 +110,3 @@ export const getContacts = token => {
         .catch(err => console.log(err));
     }
 }
-

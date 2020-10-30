@@ -42,6 +42,5 @@ module.exports = async (ctx) => {
 	const filtered = transactions.filter((transaction) =>
 		references.includes(transaction.reference)
 	);
-
 	return filtered;
 };
