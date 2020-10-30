@@ -24,5 +24,9 @@ module.exports = (sequelize) => {
 		reference: {
 			type: DataTypes.STRING(8),
 		},
+		currency: {
+			type: DataTypes.ENUM(["ARS", "USD"]),
+			allowNull: false,
+		},
 	});
 };
