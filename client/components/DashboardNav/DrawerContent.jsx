@@ -26,7 +26,7 @@ import useColorScheme from '../useCustomTheme';
 // import { useColorScheme } from 'react-native';
 
 function DrawerContent(props) {
-    const { user, navigation, switchTheme } = props
+    const { user, navigation, switchTheme, currentReduxTheme } = props
     // const [ isDarkTheme, setIsDarkTheme ] = useState(false);
     const theme = useColorScheme();
 
@@ -147,7 +147,7 @@ function DrawerContent(props) {
                                 <View style={styles.preference}>
                                     <Text style={{ color:theme === 'dark' ? '#fff' : '#000' }}>Tema Oscuro</Text>
                                     <View pointerEvents="none">
-                                        <Switch value={theme == "dark"} />
+                                        <Switch value={currentReduxTheme == "dark"} />
                                     </View>
                                 </View>
                             </TouchableRipple>
@@ -223,6 +223,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => {
     return {
         user: state.auth.user,
+        currentReduxTheme: state.theme.theme
     }
 }
 
