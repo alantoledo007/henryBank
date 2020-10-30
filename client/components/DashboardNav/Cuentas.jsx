@@ -6,6 +6,8 @@ import { Card } from 'react-native-elements';
 import s from '../style/styleSheet';
 import { useState } from 'react';
 import { Icon } from 'react-native-elements'
+import currency from '../currency';
+
 
 const Cuentas = (props) => {
 
@@ -21,19 +23,13 @@ const Cuentas = (props) => {
         Clipboard.setString(`${usd.cvu}`)
     }
 
-    const format = (amount) => {
-        return Number(amount)
-          .toFixed(2)
-          .replace(/\d(?=(\d{3})+\.)/g, "$&,");
-      };
-
     return (
         <Container wihtHeader={true}>
             <Card containerStyle={hbn('borderRadius-6 borderColor-accounts',theme)}>
             <Label text='Cuenta ARS' style={hbn('text-label text-center mb-2',theme)} />
                 <Card.Divider style={{borderColor:'#E94560', borderWidth:0.6}}/>
                 <Label text='Balance :' style={{...s.size(3)}}/>
-                <Label text={`$${format(arg.balance)}`} />
+                <Label text={currency(arg.balance)} />
                 <Label text='CVU :' style={{...s.size(3)}}/>
                 <Label text={arg.cvu}/>    
                 <Icon
@@ -47,7 +43,7 @@ const Cuentas = (props) => {
                 <Label text='Cuenta USD' style={hbn('text-label text-center mb-2',theme)} />
                 <Card.Divider  style={{borderColor:'#E94560', borderWidth:0.6}}/>
                 <Label text='Balance :' style={{...s.size(3)}} />
-                <Label text={`U$${format(usd.balance)}`}/>    
+                <Label text={currency(usd.balance, "usd")}/>    
                 <Label text='CVU :' style={{...s.size(3)}} />
                 <Label text={usd.cvu}/>       
                 <Icon
