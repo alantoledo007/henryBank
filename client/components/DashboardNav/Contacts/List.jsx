@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -17,8 +17,8 @@ import { Label } from "../../Quantum";
 
 const bn = bootnative();
 
-export default function List({ contacts, isFetching, token, getContacts, onClose }) {
-  const [modalVisible, setModalVisible] = useState(false);
+export default function List({ contacts, isFetching, token, getContacts, onClose, navigation }) {
+   const [modalVisible, setModalVisible] = useState(false);
   const [contactData, setContactData] = useState({
     nickname: "",
     User: {
@@ -80,7 +80,7 @@ export default function List({ contacts, isFetching, token, getContacts, onClose
             setModalVisible(!modalVisible)
           }}
           >
-          <Contact getContacts={getContacts} contact={contactData} token={token} onClose={onClose} close={()=>{setModalVisible(false)}}/>
+          <Contact navigation={navigation} getContacts={getContacts} contact={contactData} token={token} onClose={onClose} close={()=>{setModalVisible(false)}}/>
         </Modal>
           </ScrollView>
     );

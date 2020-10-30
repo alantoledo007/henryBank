@@ -8,7 +8,8 @@ import { getContacts, addContact } from '../../../redux/actions/contact';
 import List from './List';
 import { bn, NoScrollContainer, Scroll, Container, Label, Input, Button } from '../../Quantum';
 
-function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
+function Index({ token, user, getContacts, contacts, isFetching, addContact, navigation }) {
+    
     const { control, errors, handleSubmit } = useForm();
     const [reload, setReload] = useState(false);
     const [state, setState] = useState({
@@ -86,6 +87,7 @@ function Index({ token, user, getContacts, contacts, isFetching, addContact }) {
                         token={token}
                         getContacts={getContacts}
                         onClose={() => setReload(true)}
+                        navigation={navigation}
                     />
                 </View>
             </Scroll>

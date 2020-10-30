@@ -32,8 +32,7 @@ export default (state = initialState, action) => {
                 return {
                     ...state
                 }
-            case GET_CONTACT_TRANSACTIONS: 
-                console.log("=======================> NO LLEGA")
+            case GET_CONTACT_TRANSACTIONS:
                 return {
                     ...state,
                     transactions: action.payload
