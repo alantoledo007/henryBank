@@ -67,8 +67,8 @@ const Cuentas = (props) => {
 const mapStateToProps = (state) => {
     return {
         
-        usd: state.auth.user.accounts[0],
-        arg: state.auth.user.accounts[1]
+        usd: state.auth.user.accounts.find(acc => acc.currency == "usd"),
+        arg: state.auth.user.accounts.find(acc => acc.currency == "ars")
 
     }
 }

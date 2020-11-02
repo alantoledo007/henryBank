@@ -161,7 +161,7 @@ const DepositCard = ({ token, close, updateBalance }) => {
   return (
     <View>
         <Input
-          label="Monto, mínimo $100 ARS"
+          label="Monto mínimo $100 ARS"
           keyboardType="number-pad"
           placeholder="00.00"
           onChangeText={(value) =>
@@ -170,6 +170,7 @@ const DepositCard = ({ token, close, updateBalance }) => {
               amount: value,
             })
           }
+          textAlign= "center"
         />
       <View style={bn('my-3')}>
         <CreditCardInput

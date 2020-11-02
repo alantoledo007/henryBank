@@ -14,9 +14,9 @@ import { DataTable,} from 'react-native-paper';
 
 export default function Transaction({ data, close }) {
   const theme = useColorScheme();
-  const { title, description, amount, createdAt, message, reference } = data;
+  const { title, description, amount, createdAt, message, reference, currency } = data;
 
-  const code = Math.floor(Math.random() * 100000000);
+  // const code = Math.floor(Math.random() * 100000000);
 
   const fecha = `${createdAt.slice(0, 10)}`;
   const hora = `${createdAt.slice(11,16)}`;
@@ -52,8 +52,8 @@ export default function Transaction({ data, close }) {
           <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Descripción:  " + description} /></DataTable.Cell></DataTable.Row>
           <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Fecha:  " + moment(fecha).format('DD/MM/YYYY')} /></DataTable.Cell></DataTable.Row>
           <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Hora:  " + hora} /></DataTable.Cell></DataTable.Row>
-          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Referencia:  " +  (reference ? reference : code)} /></DataTable.Cell></DataTable.Row>
-          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Moneda:  ARS" } /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={"Referencia:  " +  reference} /></DataTable.Cell></DataTable.Row>
+          <DataTable.Row><DataTable.Cell><Label style={bn('h6')} text={`Moneda: ${currency}` } /></DataTable.Cell></DataTable.Row>
           <DataTable.Row><DataTable.Cell>{ message ? <Label style={bn('h6')} text={"Mensaje:  " + message} /> : <Label style={bn('h6')} text={""} />}</DataTable.Cell></DataTable.Row>
         </DataTable>
         </View>

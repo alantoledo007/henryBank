@@ -12,7 +12,7 @@ function Home({navigation}) {
         <Container>
             <View style={bn('row')}>
                 <View style={bn('col-12')}>
-                    <Logo />
+                    <Logo full={true} />
                 </View>
             </View>
 

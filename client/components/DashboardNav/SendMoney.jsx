@@ -14,6 +14,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
   Image,
+  ActivityIndicator
 } from "react-native";
 import CheckBox from "@react-native-community/checkbox";
 import validator from "email-validator";
@@ -25,12 +26,14 @@ import { connect } from "react-redux";
 
 //UI
 import s from "../style/styleSheet";
+import colors from "../style/colors";
 import { Container, Label, Input, Alert, toastConfig } from "../Quantum";
 import Toast from 'react-native-toast-message';
 
 const SendMoney = (props) => {
   const { token, balance, closeModal, navigation, updateBalance, getContacts, list } = props;
 
+  const [ dis, setDis ] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedValue, setSelectedValue] = useState("Contactos");
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
@@ -62,6 +65,7 @@ const SendMoney = (props) => {
 
   const [error, setError] = useState("");
   const mostrarError = (err) => {
+    setDis(false);
     setError(err);
     setTimeout(() => {
       setError("");
@@ -69,6 +73,7 @@ const SendMoney = (props) => {
   };
 
   function next() {
+    setDis(true);
     if (
       selectedValue === "Contactos" ||
       selectedValue === "Sin contactos" ||
@@ -111,6 +116,7 @@ const SendMoney = (props) => {
         console.log('TRANSFER SUCCESS',response.data)
         //actualizamos el balance en redux
         updateBalance(response.data.balance);
+        setDis(false);
         //Mostramos el toast de transferencia completa y cerramos el modal:
         navigation.navigate("Dashboard")
         Toast.show({
@@ -125,6 +131,7 @@ const SendMoney = (props) => {
         // });
       })
       .catch((error) => {
+        setDis(false);
         if (error.message.includes("409")) {
           setTitleError("Dinero insuficiente");
         }
@@ -276,9 +283,10 @@ const SendMoney = (props) => {
       </View>
 
       {error ? <Text style={styles.errorMessage}>{error}</Text> : null}
+      <ActivityIndicator style={{marginBottom: 3}} animating={dis} size="large" color={colors.pink} />
 
       <View>
-        <TouchableOpacity style={{ ...s.btn() }} onPress={() => next()}>
+        <TouchableOpacity style={{ ...s.btn() }} onPress={() => next()} disabled={dis}>
           <Text style={{ ...s.textWhite, ...s.textButton() }}>Enviar</Text>
         </TouchableOpacity>
       </View>
